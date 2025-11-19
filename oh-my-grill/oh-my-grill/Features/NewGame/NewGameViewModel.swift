@@ -9,5 +9,6 @@ import Foundation
 
 @Observable
 class NewGameViewModel: NewGameViewModelProtocol {
+    var transport: (any TransportSessionProtocol)?
     var username: String = ""
 }
