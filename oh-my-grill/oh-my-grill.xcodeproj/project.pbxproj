@@ -29,22 +29,9 @@
 		FF842C912ECD072B0029963B /* oh-my-grillUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "oh-my-grillUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		3F484FEA2ED0D70800DE8EF5 /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = FF842C792ECD072A0029963B /* oh-my-grill */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FF842C7C2ECD072A0029963B /* oh-my-grill */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				3F484FEA2ED0D70800DE8EF5 /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */,
-			);
 			path = "oh-my-grill";
 			sourceTree = "<group>";
 		};

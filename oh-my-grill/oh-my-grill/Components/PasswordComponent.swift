@@ -7,30 +7,39 @@
 
 import SwiftUI
 
-enum Size { case large, small }
+enum Size {
+    case large
+    case small
+
+    var frameSize: CGFloat {
+        switch self {
+        case .large: 86
+        case .small: 70
+        }
+    }
+    
+    var fontSize: CGFloat {
+        switch self {
+        case .large: 38
+        case .small: 31
+        }
+    }
+}
 
 struct PasswordComponent: View {
     var buttonAction: (() -> Void)? = nil
     var text: String
     var isDisabled: Bool = false
     var size: Size = .large
-    
-    var frameSize: CGFloat {
-        size == .large ? 86 : 70
-    }
-    
-    var fontSize: CGFloat {
-        size == .large ? 38 : 31
-    }
 
     var body: some View {
         Button {
             self.buttonAction?()
         } label: {
             Text(text)
-                .font(.custom("Toy Block Maestro", size: 31))
+                .font(.custom("Toy Block Maestro", size: size.fontSize))
                 .foregroundStyle(.white)
-                .frame(width: frameSize, height: frameSize)
+                .frame(width: size.frameSize, height: size.frameSize)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .foregroundStyle(.texasCherry)
