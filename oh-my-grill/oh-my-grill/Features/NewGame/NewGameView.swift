@@ -11,16 +11,16 @@ struct NewGameView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State var viewModel: any NewGameViewModelProtocol
-
+    
     var body: some View {
         ZStack(alignment: .center) {
-
+            
             //MARK: Background
             Image(.backgroundOut)
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-
+            
             Button {
                 dismiss()
             } label: {
@@ -48,7 +48,7 @@ struct NewGameView: View {
             )
             .padding(.top, 16)
             .padding(.leading, 16)
-
+            
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
                     Text("NEW MATCH")
@@ -60,7 +60,7 @@ struct NewGameView: View {
                     .multilineTextAlignment(.center)
                 }
                 .foregroundColor(.texasBlack)
-
+                
                 TextField(
                     "",
                     text: $viewModel.username,
@@ -81,56 +81,29 @@ struct NewGameView: View {
                         )
                 )
                 .frame(width: 350)
-
+                
                 //MARK: Buttons
                 HStack(spacing: 32) {
-                    Button {
-                        guard !viewModel.username.isEmpty else { return }
-                        viewModel.transport = TransportSession(
-                            userName: viewModel.username
-                        )
-                    } label: {
-                        Text("CREATE")
-                            .font(.custom("Toy Block Maestro", size: 23))
-                            .tint(.white)
-                            .padding(.horizontal, 38)
-                            .padding(.top, 15)
-                            .padding(.bottom, 12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 11)
-                                    .foregroundStyle(.accent)
-                                    .shadow(
-                                        color: .texasBrown,
-                                        radius: 0.5,
-                                        x: 0,
-                                        y: 7
-                                    )
+                    ButtonComponent (
+                        buttonAction: {
+                            guard !viewModel.username.isEmpty else { return }
+                            viewModel.transport = TransportSession(
+                                userName: viewModel.username
                             )
-                    }
-
-                    Button {
-                        guard !viewModel.username.isEmpty else { return }
-                        viewModel.transport = TransportSession(
-                            userName: viewModel.username
-                        )
-                    } label: {
-                        Text("JOIN")
-                            .font(.custom("Toy Block Maestro", size: 23))
-                            .tint(.white)
-                            .padding(.horizontal, 54)
-                            .padding(.top, 15)
-                            .padding(.bottom, 12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 11)
-                                    .foregroundStyle(.accent)
-                                    .shadow(
-                                        color: .texasBrown,
-                                        radius: 0.5,
-                                        x: 0,
-                                        y: 7
-                                    )
+                        },
+                        text: "Create",
+                        paddingHorizontal: 38
+                    )
+                    
+                    ButtonComponent (
+                        buttonAction: {
+                            guard !viewModel.username.isEmpty else { return }
+                            viewModel.transport = TransportSession(
+                                userName: viewModel.username
                             )
-                    }
+                        },
+                        text: "Join",
+                    )
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
