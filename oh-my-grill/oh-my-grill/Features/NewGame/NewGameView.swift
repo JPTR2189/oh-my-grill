@@ -8,18 +8,21 @@
 import SwiftUI
 
 struct NewGameView: View {
-    @State var viewModel: any NewGameViewModelProtocol
+    @Environment(\.dismiss) private var dismiss
     
+    @State var viewModel: any NewGameViewModelProtocol
+
     var body: some View {
         ZStack(alignment: .center) {
+
             //MARK: Background
             Image(.backgroundOut)
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-            
+
             Button {
-                //TO DO: Button action
+                dismiss()
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.title2)
@@ -38,24 +41,33 @@ struct NewGameView: View {
                             )
                     )
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity,
+                alignment: .topLeading
+            )
             .padding(.top, 16)
             .padding(.leading, 16)
-            
+
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    Text("NOVA PARTIDA")
+                    Text("NEW MATCH")
                         .font(.custom("Toy Block Maestro", size: 55))
-                    Text("Digite seu nome, entre em uma sala existente\nou crie a sua para começar o jogo.")
-                        .font(.custom("Poppins Regular", size: 15))
-                        .multilineTextAlignment(.center)
+                    Text(
+                        "Type your name and enter a existing match/create your own to start playing!"
+                    )
+                    .font(.custom("Poppins Regular", size: 15))
+                    .multilineTextAlignment(.center)
                 }
                 .foregroundColor(.texasBlack)
-                
-                TextField("", text: $viewModel.username,
-                          prompt: Text("USERNAME")
-                    .font(.custom("Toy Block Maestro", size: 23))
-                    .foregroundStyle(.texasWhite))
+
+                TextField(
+                    "",
+                    text: $viewModel.username,
+                    prompt: Text("USERNAME")
+                        .font(.custom("Toy Block Maestro", size: 23))
+                        .foregroundStyle(.texasWhite)
+                )
                 .padding(.vertical, 15)
                 .multilineTextAlignment(.center)
                 .background(
@@ -69,11 +81,14 @@ struct NewGameView: View {
                         )
                 )
                 .frame(width: 350)
-                
+
                 //MARK: Buttons
                 HStack(spacing: 32) {
                     Button {
-                        //TO DO: Button action
+                        guard !viewModel.username.isEmpty else { return }
+                        viewModel.transport = TransportSession(
+                            userName: viewModel.username
+                        )
                     } label: {
                         Text("CREATE")
                             .font(.custom("Toy Block Maestro", size: 23))
@@ -92,9 +107,12 @@ struct NewGameView: View {
                                     )
                             )
                     }
-                    
+
                     Button {
-                        //TO DO: Button action
+                        guard !viewModel.username.isEmpty else { return }
+                        viewModel.transport = TransportSession(
+                            userName: viewModel.username
+                        )
                     } label: {
                         Text("JOIN")
                             .font(.custom("Toy Block Maestro", size: 23))
@@ -118,5 +136,6 @@ struct NewGameView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.top, 25)
         }
+        .navigationBarBackButtonHidden(true)
     }
 }

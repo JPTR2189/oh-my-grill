@@ -8,25 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
-    var body: some View {
-        ZStack(alignment: .center) {
-            //MARK: Fundo
-            Image(.backgroundOut)
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
 
-            //MARK: Conteúdo
-            VStack(spacing: 25){
-                Image(.logo)
+    @State private var start: Bool = false
+
+    var body: some View {
+
+        NavigationStack {
+            ZStack(alignment: .center) {
+                //MARK: Fundo
+                Image(.backgroundOut)
                     .resizable()
-                    .scaledToFit()
-                    .padding(.horizontal, 243)
-                
-                Button {
-                    
-                } label: {
-                        
+                    .scaledToFill()
+                    .ignoresSafeArea()
+
+                //MARK: Conteúdo
+                VStack(spacing: 25) {
+                    Image(.logo)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 243)
+
+                    Button {
+                        start = true
+                    } label: {
+
                         Text("Start Game")
                             .font(.custom("Toy Block Maestro", size: 23))
                             .tint(.white)
@@ -43,9 +48,13 @@ struct HomeView: View {
                                         y: 7
                                     )
                             )
+                    }
                 }
+                .padding(.top, 30)
             }
-            .padding(.top, 30)
+            .navigationDestination(isPresented: $start) {
+                NewGameView(viewModel: NewGameViewModel())
+            }
         }
     }
 }

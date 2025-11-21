@@ -11,8 +11,7 @@ import SwiftUI
 struct oh_my_grillApp: App {
     var body: some Scene {
         WindowGroup {
-//            HomeView()
-            NewGameView(viewModel: NewGameViewModel())
+            HomeView()
         }
     }
 }
