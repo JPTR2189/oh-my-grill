@@ -7,12 +7,21 @@
 
 import SwiftUI
 
+enum Size { case large, small }
+
 struct PasswordComponent: View {
     var buttonAction: (() -> Void)? = nil
     var text: String
-    var paddingVertical: CGFloat
-    var paddingHorizontal: CGFloat
     var isDisabled: Bool = false
+    var size: Size = .large
+    
+    var frameSize: CGFloat {
+        size == .large ? 86 : 70
+    }
+    
+    var fontSize: CGFloat {
+        size == .large ? 38 : 31
+    }
 
     var body: some View {
         Button {
@@ -21,8 +30,7 @@ struct PasswordComponent: View {
             Text(text)
                 .font(.custom("Toy Block Maestro", size: 31))
                 .foregroundStyle(.white)
-                .padding(.horizontal, paddingHorizontal)
-                .padding(.vertical, paddingVertical)
+                .frame(width: frameSize, height: frameSize)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .foregroundStyle(.texasCherry)
