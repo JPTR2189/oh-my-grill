@@ -29,9 +29,22 @@
 		FF842C912ECD072B0029963B /* oh-my-grillUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "oh-my-grillUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FFD736172ED103B5000BB8EE /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FF842C792ECD072A0029963B /* oh-my-grill */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FF842C7C2ECD072A0029963B /* oh-my-grill */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FFD736172ED103B5000BB8EE /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */,
+			);
 			path = "oh-my-grill";
 			sourceTree = "<group>";
 		};
@@ -397,7 +410,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 92RP42WR9X;
+				DEVELOPMENT_TEAM = W36X2T5DD4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "oh-my-grill/Info.plist";
@@ -435,7 +448,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 92RP42WR9X;
+				DEVELOPMENT_TEAM = W36X2T5DD4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "oh-my-grill/Info.plist";
