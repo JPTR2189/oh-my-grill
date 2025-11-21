@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
-
+    
     @State private var start: Bool = false
-
+    
     var body: some View {
-
+        
         NavigationStack {
             ZStack(alignment: .center) {
                 //MARK: Fundo
@@ -20,35 +20,20 @@ struct HomeView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-
+                
                 //MARK: Conteúdo
                 VStack(spacing: 25) {
                     Image(.logo)
                         .resizable()
                         .scaledToFit()
                         .padding(.horizontal, 243)
-
-                    Button {
-                        start = true
-                    } label: {
-
-                        Text("Start Game")
-                            .font(.custom("Toy Block Maestro", size: 23))
-                            .tint(.white)
-                            .padding(.horizontal, 54)
-                            .padding(.top, 15)
-                            .padding(.bottom, 12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 11)
-                                    .foregroundStyle(.accent)
-                                    .shadow(
-                                        color: .texasBrown,
-                                        radius: 0.5,
-                                        x: 0,
-                                        y: 7
-                                    )
-                            )
-                    }
+                    
+                    ButtonComponent (
+                        buttonAction: {
+                            start = true
+                        },
+                        text: "Start Game",
+                    )
                 }
                 .padding(.top, 30)
             }
