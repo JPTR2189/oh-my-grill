@@ -41,7 +41,10 @@ struct JoinView: View {
                     
                     ForEach(1...4, id: \.self) { number in
                         PasswordComponent(
-                            buttonAction: {print(number)},//TO DO: Button action
+                            buttonAction: {
+                                vc.insertToPassword(String(number))
+                                print(vc.rawPassword)
+                            },
                             text: String(number),
                             size: .small
                         )
@@ -51,7 +54,10 @@ struct JoinView: View {
                 HStack(spacing: 28) {
                     ForEach(5...8, id: \.self) { number in
                         PasswordComponent(
-                            buttonAction: {print(number)}, //TO DO: Button action
+                            buttonAction: {
+                                vc.insertToPassword(String(number))
+                                print(vc.rawPassword)
+                            },
                             text: String(number),
                             size: .small
                         )
@@ -60,12 +66,18 @@ struct JoinView: View {
                 
                 ButtonComponent(
                     buttonAction: {
-                        print("") //TO DO: Button action
+                        vc.tryToJoin(withPassword: vc.rawPassword)
                     },
                     text: "Start Game",
                 )
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            vc.transport.startBrowsing()
+        }
+        .onDisappear {
+            vc.transport.stopBrowsing()
+        }
     }
 }

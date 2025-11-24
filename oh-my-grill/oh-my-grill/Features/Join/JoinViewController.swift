@@ -8,9 +8,28 @@
 import Foundation
 
 class JoinViewController: JoinViewControllerProtocol {
-    let transport: any TransportSessionProtocol
-    
     init(transport: any TransportSessionProtocol) {
         self.transport = transport
+    }
+
+    let transport: any TransportSessionProtocol
+    var password: [String] = []
+
+    var rawPassword: String {
+        password.joined()
+    }
+
+    func insertToPassword(_ char: String) {
+        if password.count < transport.passwordLength {
+            password.append(char)
+        }
+    }
+
+    func removeFromPassword() {
+        password.removeLast()
+    }
+
+    func tryToJoin(withPassword password: String) {
+        transport.tryToJoin(withPassword: password)
     }
 }

@@ -30,7 +30,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A3C233B42ED1011D00AF6607 /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */ = {
+		3FBDC9382ED4C7B1001077FA /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -43,7 +43,7 @@
 		FF842C7C2ECD072A0029963B /* oh-my-grill */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A3C233B42ED1011D00AF6607 /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */,
+				3FBDC9382ED4C7B1001077FA /* Exceptions for "oh-my-grill" folder in "oh-my-grill" target */,
 			);
 			path = "oh-my-grill";
 			sourceTree = "<group>";
@@ -410,7 +410,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 35TR9MZ343;
+				DEVELOPMENT_TEAM = 92RP42WR9X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "oh-my-grill/Info.plist";
@@ -448,7 +448,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 35TR9MZ343;
+				DEVELOPMENT_TEAM = 92RP42WR9X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "oh-my-grill/Info.plist";

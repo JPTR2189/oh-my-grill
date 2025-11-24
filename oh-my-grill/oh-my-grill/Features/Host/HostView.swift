@@ -53,9 +53,11 @@ struct HostView: View {
             .padding(.top, 25)
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            vc.transport.startAdvertising(withPassword: vc.rawPassword)
+        }
+        .onDisappear {
+            vc.transport.stopAdvertising()
+        }
     }
-}
-
-#Preview {
-    HostView(transport: TransportSession(userName: "Teste"))
 }
