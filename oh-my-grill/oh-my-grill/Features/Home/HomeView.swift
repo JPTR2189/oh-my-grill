@@ -38,8 +38,7 @@ struct HomeView: View {
                 .padding(.top, 30)
             }
             .navigationDestination(isPresented: $start) {
-                LoadingView()
-                //NewGameView(viewModel: NewGameViewModel())
+                NewGameView(viewModel: NewGameViewModel())
             }
         }
     }
