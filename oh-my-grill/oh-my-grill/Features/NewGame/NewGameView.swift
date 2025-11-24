@@ -30,14 +30,14 @@ struct NewGameView: View {
                         Text("NEW MATCH")
                             .font(.custom("Toy Block Maestro", size: 55))
                         Text(
-                            "Type your name and enter a existing match/create your own to start playing!"
+                            "Type your name and enter a existing match/create\nyour own to start playing!"
                         )
                         .font(.custom("Poppins Regular", size: 15))
                         .multilineTextAlignment(.center)
                     }
                     .foregroundColor(.texasBlack)
                     
-                    TextField(
+            TextField(
                         "USERNAME",
                         text: $viewModel.username
                     )
@@ -78,6 +78,7 @@ struct NewGameView: View {
                                 viewModel.transport = TransportSession(
                                     userName: viewModel.username
                                 )
+                                gotoJoin = true
                             },
                             text: "Join",
                         )
@@ -90,6 +91,11 @@ struct NewGameView: View {
             .navigationDestination(isPresented: $gotoHost) {
                 if let transport = viewModel.transport {
                     HostView(transport: transport)
+                }
+            }
+            .navigationDestination(isPresented: $gotoJoin) {
+                if let transport = viewModel.transport {
+                    JoinView(transport: transport)
                 }
             }
         }
