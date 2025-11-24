@@ -25,7 +25,7 @@ public class Ball: GKEntity {
         super.init()
 
 //        let node = SKShapeNode(circleOfRadius: ballSize)
-        let node = SKSpriteNode(imageNamed: "jogar")
+        let node = SKSpriteNode(imageNamed: "tomato-base")
         
         node.name = "ball"
         
