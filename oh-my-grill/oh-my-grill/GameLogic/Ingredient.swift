@@ -17,9 +17,10 @@ public struct Ingredient: Codable {
 public enum IngredientType: String, Codable {
     case lettuce
     case tomato
-    case bread
-    case patty
+    case bun
+    case burger
     case potato
+    case cheese
     
     case genericParcel
 }
@@ -27,7 +28,10 @@ public enum IngredientType: String, Codable {
 // Ingredient state - used to manage different states from ingredients
 public enum IngredientState: String, Codable {
     case base
-    case chopped
+    case sliced
     case cooked
     case burnt
+    case cheesed
+    case top
+    case bottom
 }
