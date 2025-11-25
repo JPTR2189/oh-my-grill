@@ -9,17 +9,17 @@ import SwiftUI
 
 struct HostView: View {
     private var vc: any HostViewControllerProtocol
-    
+
     @State private var nextView: Bool = false
-    
+
     init(transport: any TransportSessionProtocol) {
         self.vc = HostViewController(transport: transport)
     }
-    
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .center) {
-                
+
                 // Background
                 Image(.backgroundOut)
                     .resizable()
@@ -51,7 +51,7 @@ struct HostView: View {
                         .multilineTextAlignment(.center)
                     }
                     .foregroundColor(.texasBlack)
-                    
+
                     HStack(spacing: 24) {
                         ForEach(vc.password, id: \.self) { char in
                             PasswordComponent(
@@ -68,19 +68,6 @@ struct HostView: View {
                     )
                     
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.top, 25)
-            }
-            .navigationBarBackButtonHidden(true)
-            .navigationDestination(isPresented: $nextView) {
-                HostAssignView(transport: vc.transport)
-            }
-            .onAppear {
-                vc.transport.setNotificationHandler(self)
-                vc.transport.startAdvertising(withPassword: vc.rawPassword)
-            }
-            .onDisappear {
-                vc.transport.stopAdvertising()
             }
         }
     }
@@ -92,7 +79,7 @@ extension HostView: MPCNotificationDelegate {
         switch notification {
         case .nextView:
             self.nextView = true
-            
+
         default: break
         }
     }
