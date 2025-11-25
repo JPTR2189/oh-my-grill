@@ -11,4 +11,8 @@ import Foundation
 class NewGameViewModel: NewGameViewModelProtocol {    
     var transport: (any TransportSessionProtocol)?
     var username: String = ""
+    
+    func clearTextfield() {
+        self.username = ""
+    }
 }

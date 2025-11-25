@@ -11,4 +11,6 @@ import Foundation
 protocol NewGameViewModelProtocol {
     var username: String { get set }
     var transport: TransportSessionProtocol? { get set }
+    
+    func clearTextfield()
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+@Observable
 class JoinViewController: JoinViewControllerProtocol {
     init(transport: any TransportSessionProtocol) {
         self.transport = transport
@@ -14,7 +15,7 @@ class JoinViewController: JoinViewControllerProtocol {
 
     let transport: any TransportSessionProtocol
     var password: [String] = []
-
+    
     var rawPassword: String {
         password.joined()
     }
@@ -26,6 +27,7 @@ class JoinViewController: JoinViewControllerProtocol {
     }
 
     func removeFromPassword() {
+        if password.count == 0 { return }
         password.removeLast()
     }
 

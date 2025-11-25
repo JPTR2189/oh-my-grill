@@ -9,19 +9,30 @@ import SwiftUI
 
 enum Size {
     case large
+    case medium
     case small
 
     var frameSize: CGFloat {
         switch self {
         case .large: 86
-        case .small: 70
+        case .medium: 58
+        case .small: 35
         }
     }
     
     var fontSize: CGFloat {
         switch self {
         case .large: 38
-        case .small: 31
+        case .medium: 25
+        case .small: 16
+        }
+    }
+    
+    var cornerRadius: CGFloat {
+        switch self {
+        case .large: 8
+        case .medium: 8
+        case .small: 5
         }
     }
 }
@@ -31,6 +42,7 @@ struct PasswordComponent: View {
     var text: String
     var isDisabled: Bool = false
     var size: Size = .large
+    var bgColor: Color?
 
     var body: some View {
         Button {
@@ -41,8 +53,8 @@ struct PasswordComponent: View {
                 .foregroundStyle(.white)
                 .frame(width: size.frameSize, height: size.frameSize)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .foregroundStyle(.texasCherry)
+                    RoundedRectangle(cornerRadius: size.cornerRadius)
+                        .foregroundStyle(bgColor ?? .texasCherry)
                         .shadow(
                             color: .texasBrown,
                             radius: 0.5,
