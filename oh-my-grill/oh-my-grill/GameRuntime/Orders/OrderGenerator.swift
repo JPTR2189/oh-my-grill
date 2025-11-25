@@ -16,7 +16,7 @@ final class OrderGenerator {
 
     private func generateMeal() -> Meal {
         let ingredients = generateIngredients()
-        let hasFries = Bool.random()
+        let hasFries = true
         return Meal(ingredients: ingredients, hasFries: hasFries)
     }
 
