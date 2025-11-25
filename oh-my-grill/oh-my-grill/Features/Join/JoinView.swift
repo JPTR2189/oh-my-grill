@@ -136,3 +136,4 @@ extension JoinView: MPCNotificationDelegate {
         default: break
         }
     }
+}
