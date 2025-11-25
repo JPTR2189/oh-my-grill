@@ -9,4 +9,11 @@ import Foundation
 
 protocol JoinViewControllerProtocol {
     var transport: any TransportSessionProtocol { get }
+    var password: [String] { get }
+    var rawPassword: String { get }
+    
+    func insertToPassword(_ char: String)
+    func removeFromPassword()
+    
+    func tryToJoin(withPassword password: String)
 }

@@ -10,5 +10,5 @@ import Foundation
 protocol HostViewControllerProtocol {
     var transport: any TransportSessionProtocol { get }
     var password: [String] { get }
-    
+    var rawPassword: String { get }
 }

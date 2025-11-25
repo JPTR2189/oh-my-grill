@@ -28,6 +28,8 @@ public final class TransportSession: NSObject, ObservableObject,
     fileprivate var browser: MCNearbyServiceBrowser?
     fileprivate var notificationHandler: MPCNotificationDelegate?
     fileprivate var peerName: String
+    public var passwordLength: Int = 4
+    
 
     // HMAC
     fileprivate var hostPassword: String?
@@ -99,8 +101,14 @@ extension TransportSession {
     public func sendInvite(to peerID: MCPeerID) {
         browser?.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
     }
+    
+    public func tryToJoin(withPassword password: String) {
+        for peer in getPossiblePeers() {
+            invite(peer, withPassword: password)
+        }
+    }
 
-    public func invite(_ peer: MCPeerID, withPassword password: String) {
+    private func invite(_ peer: MCPeerID, withPassword password: String) {
         if let info = discoveryInfoByPeer[peer],
             let nonce = info["nonce"],
             let expectedProof = info["proof"]
