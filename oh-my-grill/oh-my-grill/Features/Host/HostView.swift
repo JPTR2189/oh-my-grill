@@ -61,7 +61,6 @@ struct HostView: View {
                         }
                     }
                     
-                    
                     ButtonComponent (
                         buttonAction: { vc.startGame() },
                         text: "START GAME",
@@ -69,6 +68,8 @@ struct HostView: View {
                     
                 }
             }
+            .navigationBarBackButtonHidden(true)
+
         }
     }
 }
