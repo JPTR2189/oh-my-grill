@@ -120,7 +120,6 @@ NavigationStack {
             .onDisappear {
                 vc.transport.stopBrowsing()
             }
-                .padding(.top, 25)
   
         }
     }

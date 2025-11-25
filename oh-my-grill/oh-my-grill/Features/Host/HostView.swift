@@ -25,9 +25,9 @@ struct HostView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-
+                
                 BackButtonComponent()
-
+                
                 Text("Players:  \(vc.players) / 4")
                     .font(.custom("Poppins Bold", size: 17))
                     .foregroundColor(.texasBlack)
@@ -38,7 +38,8 @@ struct HostView: View {
                     )
                     .padding(.top, 24)
                     .padding(.trailing, 24)
-
+                
+                
                 VStack(spacing: 24) {
                     VStack(spacing: 8) {
                         Text("ROOM CODE")
@@ -59,46 +60,13 @@ struct HostView: View {
                             )
                         }
                     }
-
-                    BackButtonComponent()
-
-                    VStack(spacing: 24) {
-                        VStack(spacing: 8) {
-                            Text("ROOM CODE")
-                                .font(.custom("Toy Block Maestro", size: 55))
-                            Text(
-                                "Share the room code so your friends can join!"
-                            )
-                            .font(.custom("Poppins Regular", size: 15))
-                            .multilineTextAlignment(.center)
-                        }
-                        .foregroundColor(.texasBlack)
-
-                        HStack(spacing: 24) {
-                            ForEach(vc.password, id: \.self) { char in
-                                PasswordComponent(text: char)
-                            }
-                        }
-
-                        ButtonComponent(
-                            buttonAction: { vc.startGame() },
-                            text: "START GAME",
-                        )
-
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.top, 25)
-                }
-                .navigationBarBackButtonHidden(true)
-                .navigationDestination(isPresented: $nextView) {
-                    HostAssignView(transport: vc.transport)
-                }
-                .onAppear {
-                    vc.transport.setNotificationHandler(self)
-                    vc.transport.startAdvertising(withPassword: vc.rawPassword)
-                }
-                .onDisappear {
-                    vc.transport.stopAdvertising()
+                    
+                    
+                    ButtonComponent (
+                        buttonAction: { vc.startGame() },
+                        text: "START GAME",
+                    )
+                    
                 }
             }
         }
