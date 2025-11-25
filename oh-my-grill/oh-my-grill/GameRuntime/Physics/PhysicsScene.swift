@@ -8,8 +8,6 @@
 import SpriteKit
 import GameplayKit
 
-/*
-
 public final class PhysicsScene: SKScene {
 
     // Game session - transport layer + game handling features
@@ -257,5 +255,3 @@ extension PhysicsScene {
         return nil
     }
 }
-
-*/

@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 @Observable
 class JoinViewController: JoinViewControllerProtocol {
+    
     init(transport: any TransportSessionProtocol) {
         self.transport = transport
     }

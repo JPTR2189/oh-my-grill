@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct JoinView: View {
-    @State private var vc: any JoinViewControllerProtocol
+    private var vc: any JoinViewControllerProtocol
     
+    @State private var nextView: Bool = false
+
     init(transport: any TransportSessionProtocol) {
         self.vc = JoinViewController(transport: transport)
     }
     
     var body: some View {
+NavigationStack {
         ZStack(alignment: .center) {
             
             //MARK: Background
@@ -104,14 +107,32 @@ struct JoinView: View {
                         text: "Start Game",
                     )
                 }
-            .padding(.top, 25)
             }
             .navigationBarBackButtonHidden(true)
+            .navigationDestination(isPresented: $nextView) {
+                LobbyView(transport: vc.transport)
+            }
             .onAppear {
+                vc.transport.setNotificationHandler(self)
                 vc.transport.startBrowsing()
+
             }
             .onDisappear {
                 vc.transport.stopBrowsing()
             }
+                .padding(.top, 25)
+  
+        }
+    }
+}
+
+// MARK: - Notification Delegate
+extension JoinView: MPCNotificationDelegate {
+    func notify(_ notification: MPCNotifications) {
+        switch notification {
+        case .accepted:
+            self.nextView = true
+            
+        default: break
         }
     }
