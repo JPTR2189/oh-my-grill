@@ -26,4 +26,12 @@ final class HostViewController: HostViewControllerProtocol {
         let charset = (1...8).map { String($0) }
         return (0..<length).compactMap { _ in charset.randomElement() }
     }
+    
+    func startGame() {
+        guard (transport.connectedPeers.count + 1) == transport.playersNumber else { return }
+        transport.stopAdvertising()
+        
+        transport.sendNotification(.nextView)
+        transport.notifyDelegate(.nextView)
+    }
 }

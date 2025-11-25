@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 protocol JoinViewControllerProtocol {
     var transport: any TransportSessionProtocol { get }

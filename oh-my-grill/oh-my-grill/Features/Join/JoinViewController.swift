@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 
 class JoinViewController: JoinViewControllerProtocol {
+    
     init(transport: any TransportSessionProtocol) {
         self.transport = transport
     }

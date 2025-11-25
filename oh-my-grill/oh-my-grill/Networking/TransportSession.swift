@@ -29,6 +29,7 @@ public final class TransportSession: NSObject, ObservableObject,
     fileprivate var notificationHandler: MPCNotificationDelegate?
     fileprivate var peerName: String
     public var passwordLength: Int = 4
+    public var playersNumber: Int = 2
     
 
     // HMAC
@@ -125,10 +126,10 @@ extension TransportSession {
     }
 
     // Send generic message type
-    public func send(message data: MPCMessage) {
+    public func send(_ message: MPCMessage) {
         guard !session.connectedPeers.isEmpty else { return }
 
-        if let data = try? JSONEncoder().encode(data) {
+        if let data = try? JSONEncoder().encode(message) {
             try? session.send(
                 data,
                 toPeers: session.connectedPeers,
@@ -153,7 +154,7 @@ extension TransportSession {
     public func sendNotification(_ notification: MPCNotifications) {
         let payLoad = NotificationPayload(notification: notification)
         let message = MPCMessage.notification(payLoad)
-        send(message: message)
+        send(message)
         print("[\(peerName)] Sending notification: \(notification)")
     }
 }

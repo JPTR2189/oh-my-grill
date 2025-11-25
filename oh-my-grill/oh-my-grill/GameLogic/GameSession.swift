@@ -9,7 +9,7 @@ import Foundation
 import MultipeerConnectivity
 import Combine
 
-/*
+
 
 // Incapsulates the player name - used to transport IDs instead of MCPeerID instances
 public struct PlayerID: Hashable, Codable {
@@ -64,7 +64,7 @@ public final class GameSession: ObservableObject {
         let payload = GamePayload(x: x, y: y, ingredientType: ingredient.type, ingredientState: ingredient.state)
         
         let message = MPCMessage.gameV(payload)
-        transport.send(message: message)
+        transport.send(message)
     }
     
     // Used to get the 'neighboor' - on classic mode, always returns the chefID
@@ -92,8 +92,6 @@ extension GameSession {
     // Exposes specific use of the send(message) function
     public func sendParcelHorizontally(_ payload: GamePayload) {
         let message = MPCMessage.gameH(payload)
-        transport.send(message: message)
+        transport.send(message)
     }
 }
-
-*/
