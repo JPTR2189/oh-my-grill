@@ -7,21 +7,50 @@
 
 import Foundation
 
-public struct Order: Codable, Identifiable {
+@Observable
+public class Order: Identifiable {
     public let id: UUID
     public let meal: Meal
-    public let time: TimeInterval
-    public let points: Int
+    public var time: TimeInterval
     public var status: OrderStatus
+    public let points: Int
     
+    private var timer: Timer?
+
     public init(meal: Meal) {
         self.id = UUID()
         self.meal = meal
-        self.time = 60
+        self.time = 30
         self.points = 50
         self.status = .waiting
+        startCountdown()
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id, meal, time, status, points
+    }
+
+    public func startCountdown() {
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            
+            if self.time > 0 {
+                self.time -= 1
+            } else {
+                self.time = 0
+                self.status = .expired
+                self.timer?.invalidate()
+            }
+        }
+    }
+
+    public func invalidateTimer() {
+        timer?.invalidate()
     }
 }
+
 
 public enum OrderStatus: String, Codable {
     case waiting

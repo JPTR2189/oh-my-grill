@@ -99,5 +99,8 @@ struct NewGameView: View {
                 }
             }
         }
+        .onDisappear {
+            viewModel.clearTextfield()
+        }
     }
 }

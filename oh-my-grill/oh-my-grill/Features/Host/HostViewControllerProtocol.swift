@@ -13,4 +13,5 @@ protocol HostViewControllerProtocol {
     var rawPassword: String { get }
     
     func startGame()
+    var players: Int { get }
 }

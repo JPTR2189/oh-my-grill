@@ -35,3 +35,18 @@ public enum IngredientState: String, Codable {
     case top
     case bottom
 }
+
+
+extension IngredientType {
+    var displayName: String {
+        switch self {
+        case .lettuce: "Lettuce"
+        case .tomato: "Tomato"
+        case .bun: "Bun"
+        case .burger: "Burger"
+        case .potato: "Potato"
+        case .cheese: "Cheese"
+        case .genericParcel: ""
+        }
+    }
+}
