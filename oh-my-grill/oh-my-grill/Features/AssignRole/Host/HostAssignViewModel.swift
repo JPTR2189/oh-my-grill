@@ -82,6 +82,8 @@ final class HostAssignViewModel: HostAssignViewModelProtocol {
             transport: transport,
             config: payload
         )
+        
+        transport.notifyDelegate(.nextView)
     }
 }
 

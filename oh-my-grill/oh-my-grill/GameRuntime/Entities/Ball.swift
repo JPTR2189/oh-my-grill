@@ -29,7 +29,7 @@ public class Ball: GKEntity {
         
         node.name = "ball"
         
-        node.setScale(0.2)
+        node.setScale(0.75)
 //        node.fillColor = .systemBlue
 //        node.strokeColor = .white
 

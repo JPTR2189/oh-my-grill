@@ -24,6 +24,7 @@ struct LobbyView: View {
             .onAppear {
                 transport.setNotificationHandler(self)
             }
+            .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $nextView) {
                 PlayerAssignView()
             }
