@@ -120,7 +120,6 @@ NavigationStack {
             .onDisappear {
                 vc.transport.stopBrowsing()
             }
-                .padding(.top, 25)
   
         }
     }
@@ -136,3 +135,4 @@ extension JoinView: MPCNotificationDelegate {
         default: break
         }
     }
+}
