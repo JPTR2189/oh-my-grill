@@ -7,6 +7,7 @@
 
 import Foundation
 
+@Observable
 final class HostViewController: HostViewControllerProtocol {
     var password: [String] = []
     var rawPassword: String {
@@ -15,6 +16,9 @@ final class HostViewController: HostViewControllerProtocol {
     
     let transport: any TransportSessionProtocol
     var passwordLength: Int
+    var players: Int {
+        return transport.connectedPeers.count + 1
+    }
     
     init(transport: any TransportSessionProtocol) {
         self.transport = transport

@@ -10,6 +10,7 @@ import CryptoKit
 import Foundation
 import MultipeerConnectivity
 
+@Observable
 // MARK: Main Class Declaration
 public final class TransportSession: NSObject, ObservableObject,
     TransportSessionProtocol
