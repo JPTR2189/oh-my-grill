@@ -78,10 +78,10 @@ final class HostAssignViewModel: HostAssignViewModelProtocol {
         transport.send(message)
 
         print("Initializing gameSession on host, should start the game")
-//        GameSession(
-//            transport: transport,
-//            config: payload
-//        )
+        self.gameSession =  GameSession(
+            transport: transport,
+            config: payload
+        )
     }
 }
 
