@@ -8,27 +8,56 @@
 import SwiftUI
 
 struct LobbyView: View {
-    
-    // TODO: Move to ViewModel
-    let transport: any TransportSessionProtocol
-    /***/
-    
+    var vm: any LobbyViewModelProtocol
     @State private var nextView: Bool = false
+    
+    init(transport: any TransportSessionProtocol) {
+            self.vm = LobbyViewModel(transport: transport)
+        }
     
     var body: some View {
         NavigationStack {
-            Group {
-                Text("Lobby View")
-                    .font(.largeTitle)
+            ZStack(alignment: .center) {
+
+                // Background
+                Image(.backgroundOut)
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
                 
-                Text("Waiting for host to start the game")
+                BackButtonComponent()
+                
+                Text("Players:  \(vm.players) / 4")
+                    .font(.custom("Poppins Bold", size: 17))
+                    .foregroundColor(.texasBlack)
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .topTrailing
+                    )
+                    .padding(.top, 24)
+                    .padding(.trailing, 24)
+                
+                
+                VStack(spacing: 24) {
+                    VStack(spacing: 8) {
+                        Text("ROOM CODE")
+                            .font(.custom("Toy Block Maestro", size: 55))
+                        Text(
+                            "Wait for the host to start the game!"
+                        )
+                        .font(.custom("Poppins Regular", size: 15))
+                        .multilineTextAlignment(.center)
+                    }
+                    .foregroundColor(.texasBlack)
+                }
             }
             .onAppear {
-                transport.setNotificationHandler(self)
+                vm.transport.setNotificationHandler(self)
             }
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $nextView) {
-                PlayerAssignView(transport: transport)
+                PlayerAssignView(transport: vm.transport)
             }
         }
     }
