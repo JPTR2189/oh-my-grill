@@ -16,6 +16,8 @@ struct HostAssignView: View {
         self.vc = HostAssignViewModel(transport: transport)
     }
     
+    @State private var nextView: Bool = false
+    
     var body: some View {
         NavigationStack {
             Text("Assign role")
@@ -43,13 +45,26 @@ struct HostAssignView: View {
             Button("Start Game") {
                 vc.startGameIfReady()
             }
-            .fullScreenCover(
-                isPresented: Binding(get: { vc.gameSession != nil }, set: { _ in })
-            ) {
+            .fullScreenCover(isPresented: $nextView) {
                 if let gameSession = vc.gameSession {
                     GameView(session: gameSession)
                 }
             }
+        }
+        .onAppear {
+            vc.transport.setNotificationHandler(self)
+        }
+    }
+}
+
+// MARK: - Notification Delegate
+extension HostAssignView: MPCNotificationDelegate {
+    func notify(_ notification: MPCNotifications) {
+        switch notification {
+        case .nextView:
+            self.nextView = true
+
+        default: break
         }
     }
 }

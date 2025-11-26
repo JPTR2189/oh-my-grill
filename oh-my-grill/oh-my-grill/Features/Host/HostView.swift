@@ -69,7 +69,13 @@ struct HostView: View {
                 }
             }
             .navigationBarBackButtonHidden(true)
-
+            .navigationDestination(isPresented: $nextView) {
+                HostAssignView(transport: vc.transport)
+            }
+        }
+        .onAppear {
+            vc.transport.setNotificationHandler(self)
+            vc.transport.startAdvertising(withPassword: vc.rawPassword)
         }
     }
 }
