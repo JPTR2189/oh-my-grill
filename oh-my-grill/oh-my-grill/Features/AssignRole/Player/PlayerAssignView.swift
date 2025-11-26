@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct PlayerAssignView: View {
-
-    @State private var nextView: Bool = false
+    
+    // TODO: Move to ViewModel
+    private var transport: any TransportSessionProtocol
+    @State private var gameSession: GameSession?
+    /***/
+    
+    public init(transport: any TransportSessionProtocol) {
+        self.transport = transport
+    }
 
     var body: some View {
 
@@ -22,9 +29,14 @@ struct PlayerAssignView: View {
                 Text("Waiting for host to do assign roles")
             }
             .navigationBarBackButtonHidden(true)
-            .navigationDestination(isPresented: $nextView) {
-            
+            .fullScreenCover(isPresented: Binding(get: { gameSession != nil }, set: { _ in })) {
+                if let session = self.gameSession {
+                    GameView(session: session)
+                }
             }
+        }
+        .onAppear {
+            transport.setNotificationHandler(self)
         }
     }
 }
@@ -33,9 +45,10 @@ struct PlayerAssignView: View {
 extension PlayerAssignView: MPCNotificationDelegate {
     func notify(_ notification: MPCNotifications) {
         switch notification {
-        case .nextView:
-            self.nextView = true
-
+        case .gameConfig(let payload):
+            print("Game Config received")
+            self.gameSession = GameSession(transport: self.transport, config: payload)
+            
         default: break
         }
     }

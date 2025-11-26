@@ -9,7 +9,9 @@ import SwiftUI
 
 struct LobbyView: View {
     
+    // TODO: Move to ViewModel
     let transport: any TransportSessionProtocol
+    /***/
     
     @State private var nextView: Bool = false
     
@@ -26,7 +28,7 @@ struct LobbyView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $nextView) {
-                PlayerAssignView()
+                PlayerAssignView(transport: transport)
             }
         }
     }
