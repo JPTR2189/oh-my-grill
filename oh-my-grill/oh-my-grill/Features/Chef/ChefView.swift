@@ -9,7 +9,7 @@ import SwiftUI
 import SpriteKit
 
 struct ChefView: View {
-    var vm: ChefViewModel
+    @State var vm: ChefViewModel
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -27,10 +27,19 @@ struct ChefView: View {
             )
             .ignoresSafeArea()
             
+            // MARK: Round Info
+            if let round = vm.round {
+                RoundInfo(round: round)
+                    .padding(.leading)
+                    .padding(.top, 16)
+            }
+            
             // MARK: Orders
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
-                    OrderCard(order: vm.order)
+                    ForEach(vm.orders) { order in
+                        OrderCard(order: order)
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.top, 16)

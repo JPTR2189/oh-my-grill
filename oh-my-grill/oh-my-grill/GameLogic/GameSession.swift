@@ -24,7 +24,7 @@ public final class GameSession: ObservableObject {
     
     // Current game mode
     private let gameMode: GameMode
-
+    
     // Connected players and their roles
     private let players: [PlayerID]
     @Published private(set) var roles: [PlayerID: StationRole]
@@ -45,6 +45,16 @@ public final class GameSession: ObservableObject {
     private var amIChef: Bool {
         chefID == myID
     }
+    
+    //round
+    @Published private(set) var currentRound: Round?
+    private var roundNumber: Int = 1
+    
+    //orders
+    @Published private(set) var currentOrders: [Order] = []
+    private var orderTimer: Timer?
+    private let generator = OrderGenerator()
+    
     
     // Initializer
     public init(transport: TransportSession, config: GameConfigPayload) {
@@ -72,12 +82,59 @@ public final class GameSession: ObservableObject {
         switch gameMode {
         case .classic:
             return chefID
-        
+            
         case .chaos:
             // TODO: topography
             return chefID
         }
     }
+    
+    // Initialize a new round
+    public func startNewRound() {
+        let minRequiredPoints = 150
+        
+        let newRound = Round(
+            number: roundNumber,
+            minPoints: minRequiredPoints
+        )
+        
+        currentRound = newRound
+        roundNumber += 1
+        
+        if amIChef {
+            startOrderLoop()
+        }
+    }
+    
+    public func finishRound() {
+        guard let round = currentRound else { return }
+        round.invalidateTimer()
+        round.getFeedback()
+        orderTimer?.invalidate()
+        currentOrders.removeAll()
+    }
+    
+    // Initialize Orders
+    private func startOrderLoop() {
+        orderTimer?.invalidate()
+        
+        orderTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            self?.updateOrders()
+        }
+    }
+    
+    private func updateOrders() {
+        guard amIChef else { return }
+        
+        currentOrders.removeAll { $0.status == .expired || $0.status == .delivered }
+        
+        if currentOrders.count < 3 {
+            let newOrder = Order(meal: generator.generateOrder().meal)
+            currentOrders.append(newOrder)
+        }
+    }
+    
+    
 }
 
 

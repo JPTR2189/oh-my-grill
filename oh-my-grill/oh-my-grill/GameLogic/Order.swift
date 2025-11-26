@@ -25,10 +25,6 @@ public class Order: Identifiable {
         self.status = .waiting
         startCountdown()
     }
-    
-    private enum CodingKeys: String, CodingKey {
-        case id, meal, time, status, points
-    }
 
     public func startCountdown() {
         timer?.invalidate()
