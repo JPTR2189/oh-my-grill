@@ -28,7 +28,7 @@ struct HostView: View {
                 
                 BackButtonComponent()
                 
-                Text("Players:  \(vc.players) / 4")
+                Text("Players:  \(vc.players) / \(vc.playerLimit)")
                     .font(.custom("Poppins Bold", size: 17))
                     .foregroundColor(.texasBlack)
                     .frame(
@@ -64,6 +64,7 @@ struct HostView: View {
                     ButtonComponent (
                         buttonAction: { vc.startGame() },
                         text: "START GAME",
+                        isDisabled: vc.players != vc.playerLimit
                     )
                     
                 }

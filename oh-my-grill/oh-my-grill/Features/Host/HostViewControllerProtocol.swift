@@ -14,4 +14,5 @@ protocol HostViewControllerProtocol {
     
     func startGame()
     var players: Int { get }
+    var playerLimit: Int { get }
 }
