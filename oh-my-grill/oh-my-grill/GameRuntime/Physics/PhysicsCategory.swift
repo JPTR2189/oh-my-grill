@@ -14,4 +14,9 @@ public struct PhysicsCategory {
     static let sensorRight: UInt32 = 1 << 2
     static let sensorLeft: UInt32 = 1 << 3
     static let obstacle: UInt32 = 1 << 4
+    
+    //////
+    static let prato: UInt32 = 1 << 5
+    static let ingrediente:  UInt32 = 1 << 6
+
 }
