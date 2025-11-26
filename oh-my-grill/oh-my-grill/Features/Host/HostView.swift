@@ -61,7 +61,6 @@ struct HostView: View {
                         }
                     }
                     
-                    
                     ButtonComponent (
                         buttonAction: { vc.startGame() },
                         text: "START GAME",
