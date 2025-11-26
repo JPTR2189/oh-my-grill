@@ -10,11 +10,11 @@ import SwiftUI
 struct LobbyView: View {
     var vm: any LobbyViewModelProtocol
     @State private var nextView: Bool = false
-    
-    init(transport: any TransportSessionProtocol) {
-            self.vm = LobbyViewModel(transport: transport)
-        }
-    
+
+    init(transport: any TransportSessionProtocol, password: [String]) {
+        self.vm = LobbyViewModel(transport: transport, password: password)
+    }
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .center) {
@@ -24,10 +24,10 @@ struct LobbyView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-                
+
                 BackButtonComponent()
-                
-                Text("Players:  \(vm.players) / 4")
+
+                Text("Players:  \(vm.players) / \(vm.playerLimit)")
                     .font(.custom("Poppins Bold", size: 17))
                     .foregroundColor(.texasBlack)
                     .frame(
@@ -37,8 +37,7 @@ struct LobbyView: View {
                     )
                     .padding(.top, 24)
                     .padding(.trailing, 24)
-                
-                
+
                 VStack(spacing: 24) {
                     VStack(spacing: 8) {
                         Text("ROOM CODE")
@@ -50,6 +49,15 @@ struct LobbyView: View {
                         .multilineTextAlignment(.center)
                     }
                     .foregroundColor(.texasBlack)
+
+                    HStack(spacing: 24) {
+                        ForEach(vm.password, id: \.self) { char in
+                            PasswordComponent(
+                                text: char,
+                                isDisabled: true
+                            )
+                        }
+                    }
                 }
             }
             .onAppear {
@@ -69,7 +77,7 @@ extension LobbyView: MPCNotificationDelegate {
         switch notification {
         case .nextView:
             self.nextView = true
-            
+
         default: break
         }
     }
