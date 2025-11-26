@@ -20,7 +20,7 @@ public struct PlayerID: Hashable, Codable {
 public final class GameSession: ObservableObject {
     
     // Transport layer
-    private let transport: TransportSession
+    private let transport: any TransportSessionProtocol
     
     // Current game mode
     private let gameMode: GameMode
@@ -47,7 +47,7 @@ public final class GameSession: ObservableObject {
     }
     
     // Initializer
-    public init(transport: TransportSession, config: GameConfigPayload) {
+    public init(transport: any TransportSessionProtocol, config: GameConfigPayload) {
         self.transport = transport
         self.gameMode = config.mode
         self.players = config.players.map { PlayerID(rawValue: $0) }
