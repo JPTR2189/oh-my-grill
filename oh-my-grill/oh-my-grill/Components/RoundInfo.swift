@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct RoundInfo: View {
-    //let round: Round
+    let round: Round
     
     var body: some View {
         HStack(spacing: 0) {
             
-            //Text("\(Int(round.time))")
-            Text("00:00")
+            Text("\(Int(round.time))")
                 .font(.custom("Poppins", size: 17))
                 .foregroundStyle(.texasBeige)
                 .padding(.horizontal)
                 .padding(.vertical, 13)
+                .frame(width: 74)
                 .background(
                     RoundedCorners(radius: 12, corners: [.topLeft, .bottomLeft])
                         .foregroundStyle(.texasCherry)
@@ -30,8 +30,7 @@ struct RoundInfo: View {
                 Text("Round")
                     .font(.custom("Poppins", size: 16))
                     .foregroundStyle(.texasBeige)
-                //Text("\(round.number)")
-                Text("2")
+                Text("\(round.number)")
                     .font(.custom("Toy Block Maestro", size: 60))
                     .foregroundStyle(.texasBeige)
             }
@@ -47,6 +46,6 @@ struct RoundInfo: View {
     }
 }
 
-#Preview {
-    RoundInfo()
-}
+//#Preview {
+//    RoundInfo()
+//}

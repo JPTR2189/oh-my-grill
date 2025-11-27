@@ -28,7 +28,7 @@ struct HostView: View {
                 
                 BackButtonComponent()
                 
-                Text("Players:  \(vc.players) / 4")
+                Text("Players:  \(vc.players) / \(vc.playerLimit)")
                     .font(.custom("Poppins Bold", size: 17))
                     .foregroundColor(.texasBlack)
                     .frame(
@@ -64,12 +64,19 @@ struct HostView: View {
                     ButtonComponent (
                         buttonAction: { vc.startGame() },
                         text: "START GAME",
+                        isDisabled: vc.players != vc.playerLimit
                     )
                     
                 }
             }
             .navigationBarBackButtonHidden(true)
-
+            .navigationDestination(isPresented: $nextView) {
+                HostAssignView(transport: vc.transport)
+            }
+        }
+        .onAppear {
+            vc.transport.setNotificationHandler(self)
+            vc.transport.startAdvertising(withPassword: vc.rawPassword)
         }
     }
 }

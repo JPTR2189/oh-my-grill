@@ -9,32 +9,75 @@ import SwiftUI
 import SpriteKit
 
 struct ChefView: View {
-    var vm: ChefViewModel
+    @Bindable var vm: ChefViewModel
+
+    @State var scene: ChefScene
+    
+    init(vm: ChefViewModel) {
+        self.vm = vm
+        _scene = State(wrappedValue: ChefScene(size: .init(width: 800, height: 800), session: vm.session))
+    }
     
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack (alignment: .top){
             
             // MARK: Sprite Scene
             SpriteView(
                 scene: {
-                    let scene = ChefScene(size: CGSize(width: 800, height: 600))
-                    scene.scaleMode = .resizeFill
-                    scene.backgroundColor = .texasWhite
-                    return scene
+                    scene
                 }(),
                 preferredFramesPerSecond: 60,
                 options: [.ignoresSiblingOrder]
             )
             .ignoresSafeArea()
             
-            // MARK: Orders
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    OrderCard(order: vm.order)
+            //MARK: Round Info
+            VStack {
+                HStack {
+                    if let order = vm.orders.first {
+                        OrderCard(order: order)
+                    }
+                    
+                    Spacer()
+                    
+                    if let round = vm.round {
+                        RoundInfo(round: round)
+                    }
                 }
-                .padding(.horizontal)
-                .padding(.top, 16)
+                Spacer()
             }
+            .padding(.top, 0)
+            .padding(.trailing, 0)
+            .padding(.leading, 0)
+        }
+        .onAppear {
+            vm.session.setNotificationHandler(self)
+        }
+        .ignoresSafeArea(edges: .all)
+    }
+}
+
+// MARK: - Notification delegate
+extension ChefView: MPCNotificationDelegate {
+    func notify(_ notification: MPCNotifications) {
+        switch notification {
+        case .gameMove(let payload):
+            
+            let dx = CGFloat(payload.x)
+            let sign: CGFloat = dx >= 0 ? 1 : -1
+
+            let newDistance = max(0, abs(dx) - 21)
+
+            let newX = scene.frame.midX + sign * newDistance
+
+            let point = CGPoint(x: newX, y: CGFloat(payload.y))
+            print("Parcel entered \(vm.session.myRole)'s view")
+            scene.spawnBall(at: point, goingTo: payload.side)
+            
+        default:
+            break
         }
     }
+    
+    
 }

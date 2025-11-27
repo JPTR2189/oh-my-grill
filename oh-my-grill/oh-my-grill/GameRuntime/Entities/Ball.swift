@@ -24,14 +24,14 @@ public class Ball: GKEntity {
     override public init() {
         super.init()
 
-//        let node = SKShapeNode(circleOfRadius: ballSize)
-        let node = SKSpriteNode(imageNamed: "tomato-base")
+        let node = SKShapeNode(circleOfRadius: ballSize)
+//        let node = SKSpriteNode(imageNamed: "tomato-base")
         
         node.name = "ball"
         
-        node.setScale(0.2)
-//        node.fillColor = .systemBlue
-//        node.strokeColor = .white
+//        node.setScale(0.75)
+        node.fillColor = .systemBlue
+        node.strokeColor = .white
 
         node.physicsBody = SKPhysicsBody(circleOfRadius: ballSize)
         node.physicsBody?.affectedByGravity = false

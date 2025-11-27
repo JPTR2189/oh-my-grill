@@ -10,11 +10,12 @@ import Foundation
 // Different types of notification
 public enum MPCNotifications: Codable {
     case nextView
-    case nextView2
+    case startTime
     case previousView
     case wrongPassword
     case accepted
     case refresh
-//    case gameMove(GamePayload)
-//    case gameConfig(GameConfigPayload)
+    case gameConfig(GameConfigPayload)
+    case gameMove(GamePayload)
+    case assignment(AssignmentPayload)
 }

@@ -8,24 +8,64 @@
 import SwiftUI
 
 struct LobbyView: View {
-    
-    let transport: any TransportSessionProtocol
-    
+    var vm: any LobbyViewModelProtocol
     @State private var nextView: Bool = false
-    
+
+    init(transport: any TransportSessionProtocol, password: [String]) {
+        self.vm = LobbyViewModel(transport: transport, password: password)
+    }
+
     var body: some View {
         NavigationStack {
-            Group {
-                Text("Lobby View")
-                    .font(.largeTitle)
-                
-                Text("Waiting for host to start the game")
+            ZStack(alignment: .center) {
+
+                // Background
+                Image(.backgroundOut)
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+
+                BackButtonComponent()
+
+                Text("Players:  \(vm.players) / \(vm.playerLimit)")
+                    .font(.custom("Poppins Bold", size: 17))
+                    .foregroundColor(.texasBlack)
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .topTrailing
+                    )
+                    .padding(.top, 24)
+                    .padding(.trailing, 24)
+
+                VStack(spacing: 24) {
+                    VStack(spacing: 8) {
+                        Text("ROOM CODE")
+                            .font(.custom("Toy Block Maestro", size: 55))
+                        Text(
+                            "Wait for the host to start the game!"
+                        )
+                        .font(.custom("Poppins Regular", size: 15))
+                        .multilineTextAlignment(.center)
+                    }
+                    .foregroundColor(.texasBlack)
+
+                    HStack(spacing: 24) {
+                        ForEach(vm.password, id: \.self) { char in
+                            PasswordComponent(
+                                text: char,
+                                isDisabled: true
+                            )
+                        }
+                    }
+                }
             }
             .onAppear {
-                transport.setNotificationHandler(self)
+                vm.transport.setNotificationHandler(self)
             }
+            .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $nextView) {
-                PlayerAssignView()
+                PlayerAssignView(transport: vm.transport)
             }
         }
     }
@@ -37,7 +77,7 @@ extension LobbyView: MPCNotificationDelegate {
         switch notification {
         case .nextView:
             self.nextView = true
-            
+
         default: break
         }
     }

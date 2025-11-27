@@ -9,30 +9,17 @@ import Foundation
 
 @Observable
 class ChefViewModel {
-    var order: Order
-    let generator = OrderGenerator()
-    var statusTimer: Timer?
-    
-    init() {
-        self.order = Order(meal: generator.generateOrder().meal)
-        generateNewOrder()
-        observeOrderStatus()
-    }
-    
-    func generateNewOrder() {
-        order.invalidateTimer()
-        order = Order(meal: generator.generateOrder().meal)
+    let session: GameSession
+
+    init(session: GameSession) {
+        self.session = session
     }
 
-    private func observeOrderStatus() {
-        statusTimer?.invalidate()
+    var orders: [Order] {
+        session.currentOrders
+    }
 
-        statusTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            
-            if self.order.status == .expired {
-                self.generateNewOrder()
-            }
-        }
+    var round: Round? {
+        session.currentRound
     }
 }

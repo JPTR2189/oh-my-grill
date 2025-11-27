@@ -11,6 +11,8 @@ import GameplayKit
 public final class ChefScene: SKScene {
     // MARK: Properties
     
+    private var session: GameSession
+    
     // Entity manager
     private var entityManager: EntityManager?
     
@@ -22,9 +24,14 @@ public final class ChefScene: SKScene {
     // Trash Can Node
     private let trashCanNode: SKSpriteNode = SKSpriteNode(imageNamed: "trashCan")
     
+    // Background node
+    private let backgroundNode = SKSpriteNode(imageNamed: "chefBackground")
+    
+    
     //MARK: Initializers
-    public override init(size: CGSize) {
-            super.init(size: size)
+    public init(size: CGSize, session: GameSession) {
+        self.session = session
+        super.init(size: size)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -34,33 +41,99 @@ public final class ChefScene: SKScene {
     override public func didMove(to view: SKView) {
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
-        
+
         physicsWorld.gravity = .init(dx: 0, dy: 0)
         self.entityManager = EntityManager(scene: self)
-        
+
+        // MARK: Background
+        backgroundNode.size = self.size
+        backgroundNode.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backgroundNode.zPosition = -100
+        backgroundNode.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        addChild(backgroundNode)
+
+        // MARK: Trash can
         trashCanNode.name = "trashCan"
-        
-        //TO DO: Change the trash location
         trashCanNode.position = CGPoint(
             x: trashCanNode.size.width / 2 + 16,
             y: 0 + 48
         )
-        trashCanNode.setScale(0.3) //TO DO: Change the trash size
+        trashCanNode.setScale(0.3)
         addChild(trashCanNode)
-        
-        // TO DO: Change to the ingredient stop being the ball
+
+        // MARK: Ingredient
         let initialIngredient = Ball()
-        
-        // TO DO: Change the initial position for the ingredient
         let centerPoint = CGPoint(x: frame.midX, y: frame.midY)
         initialIngredient.setPosition(to: centerPoint)
         
         entityManager?.add(entity: initialIngredient)
-        
     }
+    
+    override public func didChangeSize(_ oldSize: CGSize) {
+        backgroundNode.size = self.size
+        backgroundNode.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    }
+
     
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
+        
+        guard let entities = entityManager?.getEntities() else { return }
+        
+        for entity in entities {
+            if let node = entity.component(ofType: GKSKNodeComponent.self)?.node {
+                if let side = exitSide(for: node) {
+                    print("Ball from \(session.myID.rawValue) exited to the \(side)")
+                    sendParcelHorizontally(side: side, node: node, entity: entity)
+                }
+            }
+        }
+    }
+    
+    public func spawnBall(at point: CGPoint, goingTo side: EdgeSide) {
+        let ball = Ball()
+        ball.setPosition(to: point)
+        entityManager?.add(entity: ball)
+        let direction: CGFloat = side == .right ? 1 : -1
+        ball.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
+    }
+}
+
+// MARK: - Auxiliar Funcs
+extension ChefScene {
+    private func exitSide(for node: SKNode, minExitVelocity velocity: CGFloat = 1) -> EdgeSide? {
+        guard let body = node.physicsBody else { return nil }
+        
+        let accFrame = node.calculateAccumulatedFrame()
+        
+        if accFrame.maxX < frame.minX + 20, body.velocity.dx < -velocity {
+            return .left
+        }
+        
+        if accFrame.minX > frame.maxX - 20, body.velocity.dx > velocity {
+            return .right
+        }
+        
+        return nil
+    }
+    
+    // Send parecl horizontally - Sends a parcel horizontally
+    private func sendParcelHorizontally(
+        side: EdgeSide,
+        node: SKNode,
+        entity: GKEntity
+    ) {
+        entityManager?.remove(entity: entity)
+        let dxFromCenter = node.position.x - frame.midX
+        let mirroredDx = -dxFromCenter
+
+        let payload = GamePayload(
+            x: mirroredDx,
+            y: node.position.y,
+            side: side
+        )
+        
+        session.sendParcelHorizontally(payload)
     }
 }
 
@@ -169,12 +242,11 @@ extension ChefScene {
             let fadeOut = SKAction.fadeOut(withDuration: 0.2)
             let remove = SKAction.removeFromParent()
             
+            node.run(SKAction.scale(to: 0.2, duration: 0.4))
             node.run(SKAction.sequence([fadeOut, remove])) {
                 manager.remove(entity: entity)
                 print("Ingredient deleted!")
             }
-        } else {
-            node.run(SKAction.scale(to: 0.2, duration: 0.1)) // TO DO: Fix the scale of the object
         }
     }
     

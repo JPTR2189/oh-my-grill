@@ -17,17 +17,18 @@ public struct PlayerID: Hashable, Codable {
 }
 
 
-public final class GameSession: ObservableObject {
+@Observable
+public final class GameSession {
     
     // Transport layer
-    private let transport: TransportSession
+    private let transport: any TransportSessionProtocol
     
     // Current game mode
     private let gameMode: GameMode
-
+    
     // Connected players and their roles
     private let players: [PlayerID]
-    @Published private(set) var roles: [PlayerID: StationRole]
+    private(set) var roles: [PlayerID: StationRole]
     
     
     public var myID: PlayerID {
@@ -46,14 +47,27 @@ public final class GameSession: ObservableObject {
         chefID == myID
     }
     
+    //round
+    private(set) var currentRound: Round?
+    private var roundNumber: Int = 1
+    
+    //orders
+    private(set) var currentOrders: [Order] = []
+    private var orderTimer: Timer?
+    private let generator = OrderGenerator()
+    
+    
     // Initializer
-    public init(transport: TransportSession, config: GameConfigPayload) {
+    public init(transport: any TransportSessionProtocol, config: GameConfigPayload) {
         self.transport = transport
         self.gameMode = config.mode
         self.players = config.players.map { PlayerID(rawValue: $0) }
         self.roles = config.roles.reduce(into: [PlayerID: StationRole]()) { dict, pair in
             dict[PlayerID(rawValue: pair.key)] = pair.value
         }
+        
+        startNewRound()
+        updateOrders()
     }
     
     // Sends a Ingredient to the chef - used on classic mode
@@ -72,12 +86,77 @@ public final class GameSession: ObservableObject {
         switch gameMode {
         case .classic:
             return chefID
-        
+            
         case .chaos:
             // TODO: topography
             return chefID
         }
     }
+    
+    // Initialize a new round
+    public func startNewRound() {
+        let minRequiredPoints = 150
+        
+        let newRound = Round(
+            number: roundNumber,
+            minPoints: minRequiredPoints
+        )
+        
+        currentRound = newRound
+        roundNumber += 1
+        
+        startOrderLoop()
+    }
+    
+    public func finishRound() {
+        guard let round = currentRound else { return }
+        round.invalidateTimer()
+        round.getFeedback()
+        orderTimer?.invalidate()
+        currentOrders.removeAll()
+    }
+    
+    // Initialize Orders
+    private func startOrderLoop() {
+        orderTimer?.invalidate()
+        
+        orderTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            self?.updateOrders()
+        }
+    }
+    
+    private func updateOrders() {
+        currentOrders.removeAll { $0.status == .expired || $0.status == .delivered }
+        
+        if currentOrders.isEmpty {
+            var newOrder = Order(meal: generator.generateOrder().meal)
+            newOrder.onStatusChanged = { [weak self] updatedOrder in
+                self?.orderStatusDidChange(updatedOrder)
+            }
+            currentOrders.append(newOrder)
+        }
+    }
+
+    @MainActor
+    private func orderStatusDidChange(_ order: Order) {
+        if order.status == .expired || order.status == .delivered {
+            replaceOrder(order)
+        }
+    }
+
+    @MainActor
+    private func replaceOrder(_ order: Order) {
+        currentOrders.removeAll { $0.id == order.id }
+
+        var newOrder = Order(meal: generator.generateOrder().meal)
+        newOrder.onStatusChanged = { [weak self] updated in
+            self?.orderStatusDidChange(updated)
+        }
+
+        currentOrders.append(newOrder)
+    }
+
+    
 }
 
 
@@ -94,4 +173,8 @@ extension GameSession {
         let message = MPCMessage.gameH(payload)
         transport.send(message)
     }
+    
+//    public func sendNotification(_ notification: MPCNotifications) {
+//        transport.sendNotification(notification)
+//    }
 }
