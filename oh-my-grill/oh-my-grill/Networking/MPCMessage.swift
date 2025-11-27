@@ -13,6 +13,7 @@ public enum MPCMessage: Codable {
     case gameH(GamePayload)
     case gameV(GamePayload)
     case notification(NotificationPayload)
+    case assignment(AssignmentPayload)
 }
 
 // Used to send game data related to parcels
@@ -34,4 +35,9 @@ public struct GameConfigPayload: Codable {
 // Used to trigger the notification delegates and make the app reactive
 public struct NotificationPayload: Codable {
     public let notification: MPCNotifications
+}
+
+// Used to send a role assignment update
+public struct AssignmentPayload: Codable {
+    public let playerByRole: [String: StationRole]
 }

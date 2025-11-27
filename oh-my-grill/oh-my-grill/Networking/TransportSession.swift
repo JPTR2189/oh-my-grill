@@ -374,6 +374,9 @@ extension TransportSession: MCSessionDelegate {
                 print("[\(peerName)] Received game configs")
                 notifyDelegate(.gameConfig(payload))
                 
+            case .assignment(let payload):
+                print("[\(peerName)] Received an assignment update")
+                notifyDelegate(.assignment(payload))
             default: break
             }
         } else {
