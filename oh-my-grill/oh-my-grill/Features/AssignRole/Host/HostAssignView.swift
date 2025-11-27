@@ -76,10 +76,10 @@ struct HostAssignView: View {
                         }
                     }
 
-                    //                    ButtonComponent (
-                    //                        buttonAction: {  },
-                    //                        text: "Ready",
-                    //                    )
+                                        ButtonComponent (
+                                            buttonAction: { vm.startGameIfReady() },
+                                            text: "Ready",
+                                        )
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.top, 25)

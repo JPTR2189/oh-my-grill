@@ -55,10 +55,10 @@ public final class ChefScene: SKScene {
         // MARK: Trash can
         trashCanNode.name = "trashCan"
         trashCanNode.position = CGPoint(
-            x: trashCanNode.size.width / 2 + 16,
-            y: 0 + 48
+            x: frame.maxX - 60,
+            y: frame.minY + 30
         )
-        trashCanNode.setScale(0.3)
+        trashCanNode.setScale(1)
         addChild(trashCanNode)
 
         // MARK: Ingredient

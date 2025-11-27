@@ -13,7 +13,7 @@ struct RoundInfo: View {
     var body: some View {
         HStack(spacing: 0) {
             
-            Text("\(Int(round.time))")
+            Text("\(formatTime(round.time))")
                 .font(.custom("Poppins", size: 17))
                 .foregroundStyle(.texasBeige)
                 .padding(.horizontal)
@@ -43,6 +43,13 @@ struct RoundInfo: View {
                     .shadow(color: .texasBrown, radius: 0.5, x: 0, y: 7)
             )
         }
+    }
+    
+    private func formatTime(_ time: Double) -> String {
+        let totalSeconds = Int(time)
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 

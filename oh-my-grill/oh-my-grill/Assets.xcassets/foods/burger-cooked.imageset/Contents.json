@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Carne normal.png",
+      "filename" : "Carne normal 5.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Carne normal 1.png",
+      "filename" : "Carne normal 6.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Carne normal 2.png",
+      "filename" : "Carne normal 7.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
