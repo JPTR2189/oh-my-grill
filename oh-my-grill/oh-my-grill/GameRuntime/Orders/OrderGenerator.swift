@@ -17,41 +17,40 @@ final class OrderGenerator {
     private func generateMeal() -> Meal {
         let ingredients = generateIngredients()
         let hasFries = true
-        return Meal(ingredients: ingredients, hasFries: hasFries)
+        return Meal(imageName: "burger", ingredients: ingredients)
     }
 
-    private func generateIngredients() -> [Ingredient] {
-
-        // 1. Primeiro ingrediente: bun-top
-        let topBun = Ingredient(type: .bun, state: .top)
-
-        // 2. Ultimo ingrediente: bun-bottom
-        let bottomBun = Ingredient(type: .bun, state: .bottom)
-
-        // 3. Penúltimo ingrediente: burger-cheesed
-        let cheesedBurger = Ingredient(type: .burger, state: .cheesed)
-
+    private func generateIngredients() -> [Ingredient: Int] {
         
+        // Ingredientes fixos
+        let topBun = Ingredient(type: .bunTop, state: .top)
+        let bottomBun = Ingredient(type: .bunDown, state: .bottom)
+        let cheesedBurger = Ingredient(type: .burger, state: .cheesed)
+        
+        // Todos os fixos possuem apenas uma unidade
+        var ingredientsCount: [Ingredient: Int] = [
+            topBun: 1,
+            bottomBun: 1,
+            cheesedBurger: 1
+        ]
+        
+        // Ingredientes adicionais
         let middleOptions: [Ingredient] = [
             Ingredient(type: .tomato, state: .sliced),
             Ingredient(type: .lettuce, state: .sliced),
         ]
-
+        
+        // Sorteamos a quantidade de recheios extras
         let middleCount = Int.random(in: 0...3)
-
-        var middleIngredients: [Ingredient] = []
+        
         for _ in 0..<middleCount {
-            if let random = middleOptions.randomElement() {
-                middleIngredients.append(random)
+            if let randomIngredient = middleOptions.randomElement() {
+                // Se o ingrediente já existe, soma +1. Se não, começa com 0 e soma 1.
+                ingredientsCount[randomIngredient, default: 0] += 1
             }
         }
-
-        var result: [Ingredient] = []
-        result.append(topBun)
-        result.append(contentsOf: middleIngredients)
-        result.append(cheesedBurger)
-        result.append(bottomBun)
-
-        return result
+        
+        return ingredientsCount
     }
 }
+

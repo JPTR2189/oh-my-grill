@@ -19,6 +19,28 @@ class ChefViewModel {
         observeOrderStatus()
     }
     
+    func getDataMock() -> Order {
+        let pãoTopo = Ingredient(type: .bunTop, state: .top)
+        let pãoBaixo = Ingredient(type: .bunDown, state: .bottom)
+        let carne = Ingredient(type: .burger, state: .burnt)
+        let tomate = Ingredient(type: .tomato, state: .sliced)
+        let alface = Ingredient(type: .lettuce, state: .sliced)
+
+        let ingredientesMock: [Ingredient: Int] = [
+            pãoTopo: 1,
+            pãoBaixo: 1,
+            carne: 1,
+            tomate: 2,
+            alface: 1
+        ]
+
+        let mealTeste = Meal(imageName: "burger", ingredients: ingredientesMock)
+        return Order(meal: mealTeste)
+
+
+       
+    }
+ 
     func generateNewOrder() {
         order.invalidateTimer()
         order = Order(meal: generator.generateOrder().meal)

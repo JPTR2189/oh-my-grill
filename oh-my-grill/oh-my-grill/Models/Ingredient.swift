@@ -8,7 +8,7 @@
 import Foundation
 
 // Ingredient
-public struct Ingredient: Codable {
+public struct Ingredient: Codable, Hashable {
     public let type: IngredientType
     public var state: IngredientState
 }
@@ -17,7 +17,8 @@ public struct Ingredient: Codable {
 public enum IngredientType: String, Codable {
     case lettuce
     case tomato
-    case bun
+    case bunTop
+    case bunDown
     case burger
     case potato
     case cheese
@@ -42,7 +43,8 @@ extension IngredientType {
         switch self {
         case .lettuce: "Lettuce"
         case .tomato: "Tomato"
-        case .bun: "Bun"
+        case .bunTop: "BunTop"
+        case .bunDown: "BunDown"
         case .burger: "Burger"
         case .potato: "Potato"
         case .cheese: "Cheese"

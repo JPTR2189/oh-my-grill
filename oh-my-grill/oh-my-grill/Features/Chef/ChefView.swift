@@ -12,6 +12,8 @@ struct ChefView: View {
     var vm: ChefViewModel
     
     var body: some View {
+        
+        
         ZStack(alignment: .topLeading) {
             
             // MARK: Sprite Scene
@@ -28,13 +30,20 @@ struct ChefView: View {
             .ignoresSafeArea()
             
             // MARK: Orders
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
+            ScrollView(.horizontal) {
+                HStack(alignment: .top, spacing: 64) {
                     OrderCard(order: vm.order)
+                        .frame(width: 200, height: 200)
+                        
                 }
-                .padding(.horizontal)
-                .padding(.top, 16)
             }
         }
     }
+}
+
+#Preview {
+    ChefView(vm: ChefViewModel())
+    
+   
+
 }

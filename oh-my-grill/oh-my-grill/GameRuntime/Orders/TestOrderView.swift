@@ -16,9 +16,9 @@ struct TestOrderView: View {
 
                 print("NEW ORDER:")
                 
-                for ingredient in order.meal.ingredients {
-                    print("- \(ingredient.type) [\(ingredient.state)]")
-                }
+//                for ingredient in order.meal.ingredients {
+//                    print("- \(ingredient.type) [\(ingredient.state)]")
+//                }
                 
                 print(order.meal.hasFries ? "fries" : "")
             }

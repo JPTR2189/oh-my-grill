@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "PãoCima 3.png",
+      "filename" : "Burguer.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "PãoCima 4.png",
+      "filename" : "Burguer 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "PãoCima.png",
+      "filename" : "Burguer 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

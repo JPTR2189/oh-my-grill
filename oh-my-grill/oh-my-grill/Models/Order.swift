@@ -52,8 +52,3 @@ public class Order: Identifiable {
 }
 
 
-public enum OrderStatus: String, Codable {
-    case waiting
-    case delivered
-    case expired
-}
