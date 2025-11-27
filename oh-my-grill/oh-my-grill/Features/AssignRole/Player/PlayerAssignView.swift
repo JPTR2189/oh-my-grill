@@ -9,10 +9,10 @@ import SwiftUI
 
 struct PlayerAssignView: View {
     
-    @State private var viewModel: any PlayerAssignViewModelProtocol
+    @State private var vm: any PlayerAssignViewModelProtocol
     
     init(transport: any TransportSessionProtocol) {
-        self.viewModel = PlayerAssignViewModel(transport: transport)
+        self.vm = PlayerAssignViewModel(transport: transport)
     }
     
     @State private var nextView: Bool = false
@@ -29,7 +29,7 @@ struct PlayerAssignView: View {
                 BackButtonComponent()
                 
 //                Text("Ready:  1 / \(viewModel.playerLimit)")
-                Text("Connected: \(viewModel.players) / \(viewModel.playerLimit)")
+                Text("Connected: \(vm.players) / \(vm.playerLimit)")
                     .font(.custom("Poppins Bold", size: 17))
                     .foregroundColor(.texasBlack)
                     .frame(
@@ -51,9 +51,13 @@ struct PlayerAssignView: View {
                     }
                     .foregroundColor(.texasBlack)
                     
-                    HStack(spacing: 24) { // TODO: Mudar para que cada posição apareça conforme o host assign
-                        ForEach(0...3, id: \.self) { char in
-                            AssignCardComponent(name: String(char), station: "Chef")
+                    HStack(spacing: 24) {
+                        if let array = Array(vm.playerByRole.keys) as? [String] {
+                            ForEach(array.sorted{ $0 < $1 }, id: \.self) { key in
+                                let value = vm.playerByRole[key] ?? ""
+                                let name = String(value.prefix(2))
+                                AssignCardComponent(name: name, station: key)
+                            }
                         }
                     }
                     
@@ -73,7 +77,7 @@ struct PlayerAssignView: View {
             }
         }
         .onAppear {
-            viewModel.transport.setNotificationHandler(self)
+            vm.transport.setNotificationHandler(self)
         }
     }
 }
@@ -84,8 +88,12 @@ extension PlayerAssignView: MPCNotificationDelegate {
         switch notification {
         case .gameConfig(let payload):
             print("Game Config received")
-            viewModel.gameSession = GameSession(transport: viewModel.transport, config: payload)
+            vm.gameSession = GameSession(transport: vm.transport, config: payload)
             nextView = true
+            
+        case .assignment(let payload):
+            print(payload.playerByRole)
+            vm.assignedRoles = payload.playerByRole
             
         default: break
         }

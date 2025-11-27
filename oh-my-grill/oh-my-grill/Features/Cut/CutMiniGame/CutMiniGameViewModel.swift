@@ -21,13 +21,19 @@ class CutMiniGameViewModel: CutMiniGameViewModelProtocol {
     private let accelerationThreshold: Double = 1.5
     var currentState: CutStateEnum = .readyForDownMove
     let indicatorScale: Double = 60
-    
+    let session: GameSession
+
     var progressAmount: Double {
         return Double(gestureCount) / Double(requiredGestures)
     }
     
-    init(motionService: MotionServiceProtocol = MotionService()) {
+    var round: Round? {
+        session.currentRound
+    }
+    
+    init(motionService: MotionServiceProtocol = MotionService(), session: GameSession) {
         self.service = motionService
+        self.session = session
         self.startMotionUpdates()
     }
     
