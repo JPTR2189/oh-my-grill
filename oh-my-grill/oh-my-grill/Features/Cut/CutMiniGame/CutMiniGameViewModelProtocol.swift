@@ -16,6 +16,7 @@ protocol CutMiniGameViewModelProtocol {
     var requiredGestures: Int { get }
     var indicatorScale: Double { get }
     var progressAmount: Double { get }
+    var round: Round? { get }
                 
     func resetGesture()
 }
