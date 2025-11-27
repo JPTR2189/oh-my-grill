@@ -11,6 +11,7 @@ struct ButtonComponent: View {
     var buttonAction: () -> Void
     var text: String
     var paddingHorizontal: CGFloat?
+    var isDisabled: Bool?
 
     var body: some View {
         Button {
@@ -33,5 +34,6 @@ struct ButtonComponent: View {
                         )
                 )
         }
+        .disabled(isDisabled ?? false)
     }
 }
