@@ -31,7 +31,7 @@ struct PlayerAssignView: View {
             .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: Binding(get: { gameSession != nil }, set: { _ in })) {
                 if let session = self.gameSession {
-                    GameView(session: session)
+                    ChefView(vm: ChefViewModel(session: session))
                 }
             }
         }

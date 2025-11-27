@@ -12,7 +12,12 @@ public class Order: Identifiable {
     public let id: UUID
     public let meal: Meal
     public var time: TimeInterval
-    public var status: OrderStatus
+    public var status: OrderStatus {
+        didSet { onStatusChanged?(self) }
+    }
+    
+    public var onStatusChanged: ((Order) -> Void)?
+    
     public let points: Int
     
     private var timer: Timer?

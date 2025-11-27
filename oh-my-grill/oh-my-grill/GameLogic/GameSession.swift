@@ -17,7 +17,8 @@ public struct PlayerID: Hashable, Codable {
 }
 
 
-public final class GameSession: ObservableObject {
+@Observable
+public final class GameSession {
     
     // Transport layer
     private let transport: any TransportSessionProtocol
@@ -27,7 +28,7 @@ public final class GameSession: ObservableObject {
     
     // Connected players and their roles
     private let players: [PlayerID]
-    @Published private(set) var roles: [PlayerID: StationRole]
+    private(set) var roles: [PlayerID: StationRole]
     
     
     public var myID: PlayerID {
@@ -47,11 +48,11 @@ public final class GameSession: ObservableObject {
     }
     
     //round
-    @Published private(set) var currentRound: Round?
+    private(set) var currentRound: Round?
     private var roundNumber: Int = 1
     
     //orders
-    @Published private(set) var currentOrders: [Order] = []
+    private(set) var currentOrders: [Order] = []
     private var orderTimer: Timer?
     private let generator = OrderGenerator()
     
@@ -64,6 +65,9 @@ public final class GameSession: ObservableObject {
         self.roles = config.roles.reduce(into: [PlayerID: StationRole]()) { dict, pair in
             dict[PlayerID(rawValue: pair.key)] = pair.value
         }
+        
+        startNewRound()
+        updateOrders()
     }
     
     // Sends a Ingredient to the chef - used on classic mode
@@ -101,9 +105,7 @@ public final class GameSession: ObservableObject {
         currentRound = newRound
         roundNumber += 1
         
-        if amIChef {
-            startOrderLoop()
-        }
+        startOrderLoop()
     }
     
     public func finishRound() {
@@ -124,16 +126,36 @@ public final class GameSession: ObservableObject {
     }
     
     private func updateOrders() {
-        guard amIChef else { return }
-        
         currentOrders.removeAll { $0.status == .expired || $0.status == .delivered }
         
-        if currentOrders.count < 3 {
-            let newOrder = Order(meal: generator.generateOrder().meal)
+        if currentOrders.isEmpty {
+            var newOrder = Order(meal: generator.generateOrder().meal)
+            newOrder.onStatusChanged = { [weak self] updatedOrder in
+                self?.orderStatusDidChange(updatedOrder)
+            }
             currentOrders.append(newOrder)
         }
     }
-    
+
+    @MainActor
+    private func orderStatusDidChange(_ order: Order) {
+        if order.status == .expired || order.status == .delivered {
+            replaceOrder(order)
+        }
+    }
+
+    @MainActor
+    private func replaceOrder(_ order: Order) {
+        currentOrders.removeAll { $0.id == order.id }
+
+        var newOrder = Order(meal: generator.generateOrder().meal)
+        newOrder.onStatusChanged = { [weak self] updated in
+            self?.orderStatusDidChange(updated)
+        }
+
+        currentOrders.append(newOrder)
+    }
+
     
 }
 
@@ -151,4 +173,8 @@ extension GameSession {
         let message = MPCMessage.gameH(payload)
         transport.send(message)
     }
+    
+//    public func sendNotification(_ notification: MPCNotifications) {
+//        transport.sendNotification(notification)
+//    }
 }

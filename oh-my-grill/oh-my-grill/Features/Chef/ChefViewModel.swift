@@ -9,7 +9,7 @@ import Foundation
 
 @Observable
 class ChefViewModel {
-    private let session: GameSession
+    let session: GameSession
 
     init(session: GameSession) {
         self.session = session

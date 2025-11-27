@@ -9,17 +9,16 @@ import SwiftUI
 import SpriteKit
 
 struct ChefView: View {
-    @State var vm: ChefViewModel
+    @Bindable var vm: ChefViewModel
     
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack (alignment: .top){
             
             // MARK: Sprite Scene
             SpriteView(
                 scene: {
                     let scene = ChefScene(size: CGSize(width: 800, height: 600))
                     scene.scaleMode = .resizeFill
-                    scene.backgroundColor = .texasWhite
                     return scene
                 }(),
                 preferredFramesPerSecond: 60,
@@ -27,23 +26,25 @@ struct ChefView: View {
             )
             .ignoresSafeArea()
             
-            // MARK: Round Info
-            if let round = vm.round {
-                RoundInfo(round: round)
-                    .padding(.leading)
-                    .padding(.top, 16)
-            }
-            
-            // MARK: Orders
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    ForEach(vm.orders) { order in
+            //MARK: Round Info
+            VStack {
+                HStack {
+                    if let order = vm.orders.first {
                         OrderCard(order: order)
                     }
+                    
+                    Spacer()
+                    
+                    if let round = vm.round {
+                        RoundInfo(round: round)
+                    }
                 }
-                .padding(.horizontal)
-                .padding(.top, 16)
+                Spacer()
             }
+            .padding(.top, 0)
+            .padding(.trailing, 0)
+            .padding(.leading, 0)
         }
+        .ignoresSafeArea(edges: .all)
     }
 }

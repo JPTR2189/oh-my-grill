@@ -22,6 +22,10 @@ public final class ChefScene: SKScene {
     // Trash Can Node
     private let trashCanNode: SKSpriteNode = SKSpriteNode(imageNamed: "trashCan")
     
+    // Background node
+    private let backgroundNode = SKSpriteNode(imageNamed: "chefBackground")
+    
+    
     //MARK: Initializers
     public override init(size: CGSize) {
             super.init(size: size)
@@ -34,30 +38,39 @@ public final class ChefScene: SKScene {
     override public func didMove(to view: SKView) {
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
-        
+
         physicsWorld.gravity = .init(dx: 0, dy: 0)
         self.entityManager = EntityManager(scene: self)
-        
+
+        // MARK: Background
+        backgroundNode.size = self.size
+        backgroundNode.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backgroundNode.zPosition = -100
+        backgroundNode.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        addChild(backgroundNode)
+
+        // MARK: Trash can
         trashCanNode.name = "trashCan"
-        
-        //TO DO: Change the trash location
         trashCanNode.position = CGPoint(
             x: trashCanNode.size.width / 2 + 16,
             y: 0 + 48
         )
-        trashCanNode.setScale(0.3) //TO DO: Change the trash size
+        trashCanNode.setScale(0.3)
         addChild(trashCanNode)
-        
-        // TO DO: Change to the ingredient stop being the ball
+
+        // MARK: Ingredient
         let initialIngredient = Ball()
-        
-        // TO DO: Change the initial position for the ingredient
         let centerPoint = CGPoint(x: frame.midX, y: frame.midY)
         initialIngredient.setPosition(to: centerPoint)
         
         entityManager?.add(entity: initialIngredient)
-        
     }
+    
+    override public func didChangeSize(_ oldSize: CGSize) {
+        backgroundNode.size = self.size
+        backgroundNode.position = CGPoint(x: size.width / 2, y: size.height / 2)
+    }
+
     
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
@@ -169,12 +182,11 @@ extension ChefScene {
             let fadeOut = SKAction.fadeOut(withDuration: 0.2)
             let remove = SKAction.removeFromParent()
             
+            node.run(SKAction.scale(to: 0.2, duration: 0.4))
             node.run(SKAction.sequence([fadeOut, remove])) {
                 manager.remove(entity: entity)
                 print("Ingredient deleted!")
             }
-        } else {
-            node.run(SKAction.scale(to: 0.2, duration: 0.1)) // TO DO: Fix the scale of the object
         }
     }
     
