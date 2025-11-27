@@ -20,6 +20,10 @@ final class HostViewController: HostViewControllerProtocol {
         return transport.connectedPeers.count + 1
     }
     
+    var playerLimit: Int {
+        return transport.playersNumber
+    }
+    
     init(transport: any TransportSessionProtocol) {
         self.transport = transport
         self.passwordLength = transport.passwordLength

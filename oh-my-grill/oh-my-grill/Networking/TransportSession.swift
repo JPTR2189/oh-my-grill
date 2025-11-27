@@ -356,11 +356,11 @@ extension TransportSession: MCSessionDelegate {
             switch message {
 
                 // Received a horizontally moving parcel
-//            case .gameH(let payload):
-//                print(
-//                    "Parcel from \(peerID.displayName) going to the \(payload.side)"
-//                )
-//                notifyDelegate(.gameMove(payload))
+            case .gameH(let payload):
+                print(
+                    "Parcel from \(peerID.displayName) going to the \(payload.side)"
+                )
+                notifyDelegate(.gameMove(payload))
 
                 // Received a notification from other peer
             case .notification(let payload):
@@ -370,9 +370,9 @@ extension TransportSession: MCSessionDelegate {
                 notifyDelegate(payload.notification)
 
                 // Received initial game configs
-//            case .gameConfig(let payload):
-//                print("[\(peerName)] Received game configs")
-//                notifyDelegate(.gameConfig(payload))
+            case .gameConfig(let payload):
+                print("[\(peerName)] Received game configs")
+                notifyDelegate(.gameConfig(payload))
                 
             default: break
             }
