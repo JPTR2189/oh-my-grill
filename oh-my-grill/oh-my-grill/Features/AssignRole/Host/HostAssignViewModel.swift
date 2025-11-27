@@ -11,6 +11,28 @@ import MultipeerConnectivity
 final class HostAssignViewModel: HostAssignViewModelProtocol {
     var assignedRoles: [MCPeerID: StationRole] = [:]
     
+    var players: Int {
+        transport.connectedPeers.count + 1
+    }
+    
+    var playerLimit: Int {
+        transport.playersNumber
+    }
+    
+    var playerByRole: [String: String] {
+        var dict: [String: String] = [:]
+
+        for role in StationRole.allCases {
+            if role == .notSet { continue }
+            
+            let assignedPeer = assignedRoles.first { $0.value == role }?.key
+
+            dict[role.displayName] = assignedPeer?.displayName ?? ""
+        }
+
+        return dict
+    }
+    
     var gameSession: GameSession?
     
     var transport: any TransportSessionProtocol

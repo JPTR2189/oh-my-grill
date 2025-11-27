@@ -12,6 +12,11 @@ protocol HostAssignViewModelProtocol {
     var transport: any TransportSessionProtocol { get }
     var assignedRoles: [MCPeerID: StationRole] { get set }
     
+    var players: Int { get }
+    var playerLimit: Int { get }
+    
+    var playerByRole: [String: String] { get }
+    
     var gameSession: GameSession? { get }
     
     func assign(_ role: StationRole, to peer: MCPeerID)
