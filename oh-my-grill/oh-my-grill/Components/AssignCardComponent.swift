@@ -24,7 +24,7 @@ struct AssignCardComponent: View {
                     )
                 
                 Text(station)
-                    .font(.custom("Toy Block Maestro", size: 23))
+                    .font(.custom("Poppins Bold", size: 23))
                     .foregroundStyle(.white)
                     .padding(.top, 6)
                     .padding(.bottom, 16)

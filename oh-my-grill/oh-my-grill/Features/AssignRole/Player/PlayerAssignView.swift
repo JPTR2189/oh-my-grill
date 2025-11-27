@@ -91,6 +91,10 @@ extension PlayerAssignView: MPCNotificationDelegate {
             vm.gameSession = GameSession(transport: vm.transport, config: payload)
             nextView = true
             
+        case .assignment(let payload):
+            print(payload.playerByRole)
+            vm.assignedRoles = payload.playerByRole
+            
         default: break
         }
     }

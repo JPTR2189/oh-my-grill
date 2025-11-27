@@ -14,6 +14,6 @@ protocol PlayerAssignViewModelProtocol {
     var playerLimit: Int { get }
     var players: Int { get }
     
-    var assignedRoles: [MCPeerID: StationRole] { get set }
+    var assignedRoles: [String: StationRole] { get set }
     var playerByRole: [String: String] { get }
 }

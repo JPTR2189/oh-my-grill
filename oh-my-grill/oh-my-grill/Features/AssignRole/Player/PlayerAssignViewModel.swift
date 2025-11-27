@@ -9,24 +9,25 @@ import Foundation
 import MultipeerConnectivity
 
 final class PlayerAssignViewModel: PlayerAssignViewModelProtocol {
-    var assignedRoles: [MCPeerID : StationRole] = [:]
+    var assignedRoles: [String : StationRole] = [:]
     
     var playerByRole: [String: String] {
-        var dict: [String: String] = [:]
-
+        var result: [String: String] = [:]
+        
         for role in StationRole.allCases {
             if role == .notSet { continue }
             
-            let assignedPeer = assignedRoles.first { $0.value == role }?.key
-
-            dict[role.displayName] = assignedPeer?.displayName ?? ""
+            let playerName = assignedRoles.first { $0.value == role }?.key
+            
+            result[role.displayName] = playerName ?? ""
         }
-
-        return dict
+        
+        return result
     }
     
     var transport: any TransportSessionProtocol
     var gameSession: GameSession?
+    
     
     var players: Int {
         return transport.connectedPeers.count + 1

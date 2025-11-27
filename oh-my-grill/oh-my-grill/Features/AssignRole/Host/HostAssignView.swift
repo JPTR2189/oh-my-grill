@@ -5,19 +5,19 @@
 //  Created by João Pedro Teixeira de Carvalho on 25/11/25.
 //
 
-import SwiftUI
 import MultipeerConnectivity
+import SwiftUI
 
 struct HostAssignView: View {
-    
-    private var vm: any HostAssignViewModelProtocol
-    
+
+    @StateObject private var vm: HostAssignViewModel
+
     init(transport: TransportSessionProtocol) {
-        self.vm = HostAssignViewModel(transport: transport)
+        _vm = StateObject(wrappedValue: HostAssignViewModel(transport: transport))
     }
-    
+
     @State private var nextView: Bool = false
-    
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .center) {
@@ -26,9 +26,9 @@ struct HostAssignView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-                
+
                 BackButtonComponent()
-                
+
                 Text("Connected: \(vm.players) / \(vm.playerLimit)")
                     .font(.custom("Poppins Bold", size: 17))
                     .foregroundColor(.texasBlack)
@@ -39,8 +39,7 @@ struct HostAssignView: View {
                     )
                     .padding(.top, 24)
                     .padding(.trailing, 24)
-                
-                
+
                 VStack(spacing: 21) {
                     VStack(spacing: 8) {
                         Text("Lobby")
@@ -50,21 +49,37 @@ struct HostAssignView: View {
                             .multilineTextAlignment(.center)
                     }
                     .foregroundColor(.texasBlack)
-                    
+
                     HStack(spacing: 24) {
-                        if let array = Array(vm.playerByRole.keys) as? [String] {
-                            ForEach(array.sorted{ $0 < $1 }, id: \.self) { key in
+                        if let array = Array(vm.playerByRole.keys) as? [String]
+                        {
+                            ForEach(array.sorted { $0 < $1 }, id: \.self) {
+                                key in
                                 let value = vm.playerByRole[key] ?? ""
                                 let name = String(value.prefix(2))
-                                AssignCardComponent(name: name, station: key)
+//                                let name = value
+
+                                Menu {
+                                    ForEach(vm.unassignedPlayers, id: \.self) {
+                                        playerName in
+                                        Button(playerName) {
+                                            vm.assign(key, to: playerName)
+                                        }
+                                    }
+                                } label: {
+                                    AssignCardComponent(
+                                        name: name,
+                                        station: key
+                                    )
+                                }
                             }
                         }
                     }
-                    
-//                    ButtonComponent (
-//                        buttonAction: {  },
-//                        text: "Ready",
-//                    )
+
+                    //                    ButtonComponent (
+                    //                        buttonAction: {  },
+                    //                        text: "Ready",
+                    //                    )
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.top, 25)

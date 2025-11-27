@@ -23,4 +23,22 @@ public enum StationRole: String, Codable, CaseIterable {
         case .notSet:        return "Role not set"
         }
     }
+    
+    public init(from string: String) {
+        if let match = StationRole.allCases.first(where: {
+            $0.rawValue.lowercased() == string.lowercased()
+        }) {
+            self = match
+            return
+        }
+
+        if let match = StationRole.allCases.first(where: {
+            $0.displayName.lowercased() == string.lowercased()
+        }) {
+            self = match
+            return
+        }
+
+        self = .notSet
+    }
 }

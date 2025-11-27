@@ -19,6 +19,10 @@ protocol HostAssignViewModelProtocol {
     
     var gameSession: GameSession? { get }
     
+    var allPlayernames: [String] { get }
+    var unassignedPlayers: [String] { get }
+    
     func assign(_ role: StationRole, to peer: MCPeerID)
+    func assign(_ role: String, to peer: String)
     func startGameIfReady()
 }
