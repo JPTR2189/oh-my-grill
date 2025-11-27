@@ -47,7 +47,7 @@ struct HostAssignView: View {
             }
             .fullScreenCover(isPresented: $nextView) {
                 if let gameSession = vc.gameSession {
-                    GameView(session: gameSession)
+                    ChefView(vm: ChefViewModel(session: gameSession))
                 }
             }
         }

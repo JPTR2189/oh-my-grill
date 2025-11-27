@@ -10,7 +10,7 @@ import SpriteKit
 
 struct GameView: View {
     
-    @ObservedObject private var session: GameSession
+    private var session: GameSession
     @State private var scene: PhysicsScene
     
     public init(session: GameSession) {
