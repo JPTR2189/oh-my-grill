@@ -15,7 +15,7 @@ struct GameView: View {
     // 2. Criamos uma propriedade computada que configura a cena
     var scene: SKScene {
         // Inicializa a sua GameScene
-        let scene = GameScene()
+        let scene = GameScene2()
         
         // Define o tamanho (use .resizeFill ou .aspectFill para telas diferentes)
         scene.scaleMode = .resizeFill

@@ -12,9 +12,9 @@ import SpriteKit
 
 class PhysicsManager: NSObject, SKPhysicsContactDelegate {
     
-    weak var gameScene: GameScene?
+    weak var gameScene: GameScene2?
     
-    init(scene: GameScene) {
+    init(scene: GameScene2) {
         self.gameScene = scene
     }
     

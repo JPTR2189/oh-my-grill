@@ -8,10 +8,10 @@
 import Foundation
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene2: SKScene {
     
     var nodeSendoArrastado: SKNode?
-    var viewModel = GameViewModel()
+    var viewModel = GameViewModel2()
 //    var physicsManager: PhysicsManager!
     
     

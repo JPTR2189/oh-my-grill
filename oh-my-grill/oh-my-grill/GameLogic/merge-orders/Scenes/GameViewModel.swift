@@ -8,9 +8,9 @@
 import Foundation
 import SpriteKit
 
-class GameViewModel {
+class GameViewModel2 {
     
-    weak var scene: GameScene!
+    weak var scene: GameScene2!
     
     let nomeBotaoSpawn = "btn_spawn"
     let nomeBotaoLimpar = "btn_limpar"
