@@ -10,6 +10,13 @@ import SpriteKit
 
 struct ChefView: View {
     @Bindable var vm: ChefViewModel
+
+    @State var scene: ChefScene
+    
+    init(vm: ChefViewModel) {
+        self.vm = vm
+        _scene = State(wrappedValue: ChefScene(size: .init(width: 800, height: 800), session: vm.session))
+    }
     
     var body: some View {
         ZStack (alignment: .top){
@@ -17,9 +24,7 @@ struct ChefView: View {
             // MARK: Sprite Scene
             SpriteView(
                 scene: {
-                    let scene = ChefScene(size: CGSize(width: 800, height: 600))
-                    scene.scaleMode = .resizeFill
-                    return scene
+                    scene
                 }(),
                 preferredFramesPerSecond: 60,
                 options: [.ignoresSiblingOrder]
@@ -45,6 +50,34 @@ struct ChefView: View {
             .padding(.trailing, 0)
             .padding(.leading, 0)
         }
+        .onAppear {
+            vm.session.setNotificationHandler(self)
+        }
         .ignoresSafeArea(edges: .all)
     }
+}
+
+// MARK: - Notification delegate
+extension ChefView: MPCNotificationDelegate {
+    func notify(_ notification: MPCNotifications) {
+        switch notification {
+        case .gameMove(let payload):
+            
+            let dx = CGFloat(payload.x)
+            let sign: CGFloat = dx >= 0 ? 1 : -1
+
+            let newDistance = max(0, abs(dx) - 21)
+
+            let newX = scene.frame.midX + sign * newDistance
+
+            let point = CGPoint(x: newX, y: CGFloat(payload.y))
+            print("Parcel entered \(vm.session.myRole)'s view")
+            scene.spawnBall(at: point, goingTo: payload.side)
+            
+        default:
+            break
+        }
+    }
+    
+    
 }

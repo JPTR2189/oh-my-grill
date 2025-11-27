@@ -11,6 +11,8 @@ import GameplayKit
 public final class ChefScene: SKScene {
     // MARK: Properties
     
+    private var session: GameSession
+    
     // Entity manager
     private var entityManager: EntityManager?
     
@@ -27,8 +29,9 @@ public final class ChefScene: SKScene {
     
     
     //MARK: Initializers
-    public override init(size: CGSize) {
-            super.init(size: size)
+    public init(size: CGSize, session: GameSession) {
+        self.session = session
+        super.init(size: size)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -74,6 +77,63 @@ public final class ChefScene: SKScene {
     
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
+        
+        guard let entities = entityManager?.getEntities() else { return }
+        
+        for entity in entities {
+            if let node = entity.component(ofType: GKSKNodeComponent.self)?.node {
+                if let side = exitSide(for: node) {
+                    print("Ball from \(session.myID.rawValue) exited to the \(side)")
+                    sendParcelHorizontally(side: side, node: node, entity: entity)
+                }
+            }
+        }
+    }
+    
+    public func spawnBall(at point: CGPoint, goingTo side: EdgeSide) {
+        let ball = Ball()
+        ball.setPosition(to: point)
+        entityManager?.add(entity: ball)
+        let direction: CGFloat = side == .right ? 1 : -1
+        ball.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
+    }
+}
+
+// MARK: - Auxiliar Funcs
+extension ChefScene {
+    private func exitSide(for node: SKNode, minExitVelocity velocity: CGFloat = 1) -> EdgeSide? {
+        guard let body = node.physicsBody else { return nil }
+        
+        let accFrame = node.calculateAccumulatedFrame()
+        
+        if accFrame.maxX < frame.minX + 20, body.velocity.dx < -velocity {
+            return .left
+        }
+        
+        if accFrame.minX > frame.maxX - 20, body.velocity.dx > velocity {
+            return .right
+        }
+        
+        return nil
+    }
+    
+    // Send parecl horizontally - Sends a parcel horizontally
+    private func sendParcelHorizontally(
+        side: EdgeSide,
+        node: SKNode,
+        entity: GKEntity
+    ) {
+        entityManager?.remove(entity: entity)
+        let dxFromCenter = node.position.x - frame.midX
+        let mirroredDx = -dxFromCenter
+
+        let payload = GamePayload(
+            x: mirroredDx,
+            y: node.position.y,
+            side: side
+        )
+        
+        session.sendParcelHorizontally(payload)
     }
 }
 
