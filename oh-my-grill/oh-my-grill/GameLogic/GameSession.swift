@@ -50,6 +50,7 @@ public final class GameSession {
     //round
     private(set) var currentRound: Round?
     private var roundNumber: Int = 1
+    public var finishedRound: Round?
     
     //orders
     private(set) var currentOrders: [Order] = []
@@ -102,11 +103,24 @@ public final class GameSession {
             minPoints: minRequiredPoints
         )
         
+        newRound.onFinished = { [weak self] round in
+                self?.roundDidFinish(round)
+            }
+        
         currentRound = newRound
         roundNumber += 1
         
         startOrderLoop()
     }
+    
+    @MainActor
+    private func roundDidFinish(_ round: Round) {
+        finishedRound = round
+
+        orderTimer?.invalidate()
+        currentOrders.removeAll()
+    }
+
     
     public func finishRound() {
         guard let round = currentRound else { return }

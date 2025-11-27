@@ -18,11 +18,13 @@ public class Round {
     
     private var timer: Timer?
     
+    public var onFinished: ((Round) -> Void)?
+    
     public init(number: Int, minPoints: Int)
     {
         self.number = number
         self.minPoints = minPoints
-        self.points = 150
+        self.points = 0
         self.time = 180
         self.status = .inProgress
         self.feedback = .none
@@ -51,7 +53,9 @@ public class Round {
         time = 0
         status = .finished
         getFeedback()
+        onFinished?(self)
     }
+
     
     public func invalidateTimer() {
         timer?.invalidate()
@@ -85,4 +89,15 @@ public enum Feedback: String, Codable {
     case none
     case fail
     case success
+}
+
+
+extension Feedback {
+    var displayName: String {
+        switch self {
+        case .none: ""
+        case .fail: "Falharam"
+        case .success: "Ganharam"
+        }
+    }
 }

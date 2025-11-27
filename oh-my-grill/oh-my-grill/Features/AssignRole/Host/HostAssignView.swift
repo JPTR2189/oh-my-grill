@@ -76,17 +76,17 @@ struct HostAssignView: View {
                         }
                     }
 
-                    //                    ButtonComponent (
-                    //                        buttonAction: {  },
-                    //                        text: "Ready",
-                    //                    )
+                                        ButtonComponent (
+                                            buttonAction: { vm.startGameIfReady() },
+                                            text: "Ready",
+                                        )
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.top, 25)
             }
             .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: $nextView) {
-                if let gameSession = vc.gameSession {
+                if let gameSession = vm.gameSession {
                     ChefView(vm: ChefViewModel(session: gameSession))
                 }
             }

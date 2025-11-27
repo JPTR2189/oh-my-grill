@@ -50,3 +50,18 @@ extension IngredientType {
         }
     }
 }
+
+
+extension IngredientType {
+    var imageName: String {
+        switch self {
+        case .lettuce: "lettuce-sliced"
+        case .tomato: "tomato-sliced"
+        case .bun: "bun-top"
+        case .burger: "burger-cheesed"
+        case .potato: "potato"
+        case .cheese: "cheese-base"
+        case .genericParcel: "parcel"
+        }
+    }
+}
