@@ -59,7 +59,7 @@ extension IngredientType {
         case .tomato: "tomato-sliced"
         case .bun: "bun-top"
         case .burger: "burger-cheesed"
-        case .potato: "bun-bottom"
+        case .potato: "potato"
         case .cheese: "cheese-base"
         case .genericParcel: "parcel"
         }
