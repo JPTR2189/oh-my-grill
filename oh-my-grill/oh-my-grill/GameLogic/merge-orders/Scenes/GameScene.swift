@@ -66,7 +66,15 @@ class GameScene: SKScene {
         
         // Lógica de Arrastar
         
-        if let nodeTocado = nodesTocados.first(where: { $0.name == nomeIngrediente || $0.name == nomePrato }) {
+       
+        if let nodeTocado = nodesTocados.first(where: { node in
+            
+            if node.name == nomePrato { return true }
+            
+            if let nome = node.name, viewModel.opcoes.contains(nome) { return true }
+            
+            return false
+        }) {
             
             // Verifica se o ingrediente já está no prato (Verifca qual o seu pai)
             if let parent = nodeTocado.parent, parent.name == nomePrato {

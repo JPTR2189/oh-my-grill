@@ -19,14 +19,13 @@ class GameViewModel {
     var nodeSendoArrastado: SKNode?
     
    
-    // Começamos com um valor base. O prato será 0. O primeiro item será 10, o segundo 11, etc.
     var nívelDeEmpilhamentoAtual: CGFloat = 10
     
     // Referência ao prato para sabermos onde é o centro
     var pratoNode: SKSpriteNode?
     
     private var cont = 0
-    private let opcoes = ["bottom-bread", "meat", "tomato", "lettuce", "top-bread"]
+    let opcoes = ["bun-top", "burger-cooked", "tomato-sliced", "lettuce-sliced", "bun-bottom"]
     
     let tituloBotaoSpawn = "+ Comida"
     let tituloBotaoLimpar = "Limpar"
@@ -54,9 +53,23 @@ class GameViewModel {
 
     func spawnIngrediente() {
         let nomeSorteado = getNextIngredientName()
-        let node = SKSpriteNode(imageNamed: nomeSorteado)
         
-        // Configuração Visual
+        var node = SKSpriteNode(imageNamed: nomeSorteado)
+
+        if nomeSorteado == "bun-bottom"  {
+            let textura = SKTexture(imageNamed: "bun-bottom")
+            
+            node = SKSpriteNode(texture: textura, color: .clear, size: CGSize(width: 700, height: 435))
+        } else if nomeSorteado == "tomato-sliced" {
+            let textura = SKTexture(imageNamed: "tomato-sliced")
+            
+            node = SKSpriteNode(texture: textura, color: .clear, size: CGSize(width: 700, height: 455))
+        }
+            
+        node.name = nomeSorteado
+            
+//        node.anchorPoint = CGPoint(x: 0., y: 0.5)
+        
         if node.texture == nil {
             node.color = .yellow
             node.size = CGSize(width: 60, height: 60)
@@ -95,7 +108,6 @@ class GameViewModel {
         
         // Coloca em cima de tudo
         node.zPosition = 100
-        node.name = nomeIngrediente
         
         // Adiciona na CENA (Solto)
         scene.addChild(node)
@@ -161,58 +173,70 @@ class GameViewModel {
     
     func limparTudo() {
         // Procura os filhos dentro do prato e remove eles
-        pratoNode?.enumerateChildNodes(withName: nomeIngrediente) { node, stop in
-            node.removeFromParent()
-        }
+        pratoNode?.removeAllChildren()
         
         // Reinicia o contador
         nívelDeEmpilhamentoAtual = 10
         
     }
     
+
     func soltarObjeto(node: SKNode?) {
-        
-        guard let node = node else { return }
+        guard let node = node as? SKSpriteNode else { return }
         guard let prato = pratoNode else { return }
+        
+       
             
-        // Quando soltamos o Prato
-        if node.name == nomePrato {
-            node.run(SKAction.scale(to: 1.0, duration: 0.1))
+        // se soltamos um INGREDIENTE
+        if  opcoes.contains(node.name!) {
             
-            return
-        }
-            
-        // Quando soltamos um Ingrediente
-        if node.name == nomeIngrediente {
-            
-            // Verifica se já não é filho do prato
             if node.parent != prato {
                 
-                // Calcula distância até o prato
                 let distancia = node.position.distance(to: prato.position)
-                
                 
                 if distancia < 60 {
                     
                     node.removeFromParent()
-                    
-                    // Adiciona no Prato
                     prato.addChild(node)
                     
-                    // Ajusta a posição para o centro do prato (0,0 relativo ao pai)
-                    node.position = CGPoint.zero
                     
-                    // Ajusta a camada (Z) para ficar no topo da pilha atual
+                    
+                    let breadTop = node.name == "bun-top"
+                    
+                    if breadTop {
+                        print("PAO DE CIMA")
+                        node.anchorPoint = CGPoint(x: 0.515, y: 0.5)
+                    } else {
+                        print("SEMMM PAO DE CIMA")
+
+                        node.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+                    }
+                    // --------------------------------------------------
+                    
+                    // Cálculo da Perspectiva
+                    let indiceDaCamada = nívelDeEmpilhamentoAtual - 10
+                    let alturaPorItem: CGFloat = 5.0
+                    let novaPosicaoY = indiceDaCamada * alturaPorItem
+                    
+                    // Aplica a posição. X é ZERO para alinhar no centro do prato.
+                    node.position = CGPoint(x: 0, y: novaPosicaoY)
+                    
+                    // Ajusta Z e incrementa nível
                     node.zPosition = nívelDeEmpilhamentoAtual
                     nívelDeEmpilhamentoAtual += 1
                     
-                    // Volta ao tamanho normal
+                    // Animação de encaixe
                     node.setScale(0.5)
+                    node.run(SKAction.sequence([
+                        SKAction.scale(to: 0.57, duration: 0.05),
+                        SKAction.scale(to: 0.5, duration: 0.05)
+                    ]))
                     
                 } else {
-                    
-                    // Se soltou longe, só volta o tamanho normal e deixa na mesa
+                    // Soltou longe
                     node.setScale(0.5)
+                     // Garante o anchor point central se soltar na mesa também
+                    node.anchorPoint = CGPoint(x: 0.5, y: 0.5)
                 }
             }
         }
