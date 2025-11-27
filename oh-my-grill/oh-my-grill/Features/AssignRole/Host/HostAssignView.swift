@@ -86,7 +86,7 @@ struct HostAssignView: View {
             }
             .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: $nextView) {
-                if let gameSession = vc.gameSession {
+                if let gameSession = vm.gameSession {
                     ChefView(vm: ChefViewModel(session: gameSession))
                 }
             }
