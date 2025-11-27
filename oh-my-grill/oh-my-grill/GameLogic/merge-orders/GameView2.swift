@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 import SpriteKit 
 
-struct GameView: View {
+struct GameView2: View {
     
     // 2. Criamos uma propriedade computada que configura a cena
     var scene: SKScene {
