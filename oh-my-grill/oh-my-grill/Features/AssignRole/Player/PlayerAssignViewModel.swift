@@ -12,6 +12,10 @@ final class PlayerAssignViewModel: PlayerAssignViewModelProtocol {
     var transport: any TransportSessionProtocol
     var gameSession: GameSession?
     
+    var players: Int {
+        return transport.connectedPeers.count + 1
+    }
+    
     var playerLimit: Int {
         return transport.playersNumber
     }

@@ -28,7 +28,8 @@ struct PlayerAssignView: View {
                 
                 BackButtonComponent()
                 
-                Text("Ready:  1 / \(viewModel.playerLimit)") //TO DO: Colocar a quantidade de players prontos
+//                Text("Ready:  1 / \(viewModel.playerLimit)")
+                Text("Connected: \(viewModel.players) / \(viewModel.playerLimit)")
                     .font(.custom("Poppins Bold", size: 17))
                     .foregroundColor(.texasBlack)
                     .frame(
@@ -84,6 +85,7 @@ extension PlayerAssignView: MPCNotificationDelegate {
         case .gameConfig(let payload):
             print("Game Config received")
             viewModel.gameSession = GameSession(transport: viewModel.transport, config: payload)
+            nextView = true
             
         default: break
         }
