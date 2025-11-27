@@ -12,4 +12,6 @@ protocol LobbyViewModelProtocol {
     
     var players: Int { get }
     var playerLimit: Int { get }
+    
+    var password: [String] { get }
 }

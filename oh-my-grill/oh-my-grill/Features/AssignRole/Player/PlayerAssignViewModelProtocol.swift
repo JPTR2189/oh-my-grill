@@ -11,5 +11,5 @@ protocol PlayerAssignViewModelProtocol {
     var transport: any TransportSessionProtocol { get }
     var gameSession: GameSession? { get set }
     var playerLimit: Int { get }
-
+    var players: Int { get }
 }

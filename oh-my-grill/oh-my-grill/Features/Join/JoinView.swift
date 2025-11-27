@@ -110,7 +110,7 @@ struct JoinView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $nextView) {
-                LobbyView(transport: vc.transport)
+                LobbyView(transport: vc.transport, password: vc.password)
             }
             .onAppear {
                 vc.transport.setNotificationHandler(self)

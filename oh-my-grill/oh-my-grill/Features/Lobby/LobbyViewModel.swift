@@ -9,6 +9,8 @@ import Foundation
 
 final class LobbyViewModel: LobbyViewModelProtocol {
     let transport: any TransportSessionProtocol
+    
+    var password: [String]
 
     var players: Int {
         return transport.connectedPeers.count + 1
@@ -18,7 +20,8 @@ final class LobbyViewModel: LobbyViewModelProtocol {
         return transport.playersNumber
     }
         
-    init(transport: any TransportSessionProtocol) {
+    init(transport: any TransportSessionProtocol, password: [String]) {
         self.transport = transport
+        self.password = password
     }
 }
