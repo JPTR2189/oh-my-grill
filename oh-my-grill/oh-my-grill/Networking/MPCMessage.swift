@@ -21,8 +21,7 @@ public struct GamePayload: Codable {
     public let x: CGFloat
     public let y: CGFloat
     public var side: EdgeSide = .none
-    public var ingredientType: IngredientType = .genericParcel
-    public var ingredientState: IngredientState = .base
+    public var ingredient: Ingredient = Ingredient.getRandom()
 }
 
 // Used to pass the initial game configs from the host to the players
