@@ -18,7 +18,7 @@ struct RoundInfo: View {
                 .foregroundStyle(.texasBeige)
                 .padding(.horizontal)
                 .padding(.vertical, 13)
-                .frame(width: 74)
+                .frame(width: 80)
                 .background(
                     RoundedCorners(radius: 12, corners: [.topLeft, .bottomLeft])
                         .foregroundStyle(.texasCherry)
