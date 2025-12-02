@@ -76,7 +76,7 @@ public final class GameSession {
         let x: CGFloat = CGFloat.random(in: -200...200)
         let y: CGFloat = -200
         
-        let payload = GamePayload(x: x, y: y, ingredientType: ingredient.type, ingredientState: ingredient.state)
+        let payload = GamePayload(x: x, y: y, ingredient: ingredient)
         
         let message = MPCMessage.gameV(payload)
         transport.send(message)

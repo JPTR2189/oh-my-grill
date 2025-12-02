@@ -27,6 +27,11 @@ public final class ChefScene: SKScene {
     // Background node
     private let backgroundNode = SKSpriteNode(imageNamed: "chefBackground")
     
+    // Ingredient spawning
+    private var isSpawning: Bool = false
+    private let spawningInterval: TimeInterval = 10
+    private let spawnerKey: String = "ingredientSpawner"
+    
     
     //MARK: Initializers
     public init(size: CGSize, session: GameSession) {
@@ -66,7 +71,7 @@ public final class ChefScene: SKScene {
         let centerPoint = CGPoint(x: frame.midX, y: frame.midY)
         initialIngredient.setPosition(to: centerPoint)
         
-        entityManager?.add(entity: initialIngredient)
+//        entityManager?.add(entity: initialIngredient)
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -81,10 +86,18 @@ public final class ChefScene: SKScene {
         guard let entities = entityManager?.getEntities() else { return }
         
         for entity in entities {
+            
+            var ingredient: Ingredient?
+            
+            if let ingredientNode = entity as? SKIngredient {
+                ingredient = ingredientNode.ingredient
+            }
+            
             if let node = entity.component(ofType: GKSKNodeComponent.self)?.node {
                 if let side = exitSide(for: node) {
                     print("Ball from \(session.myID.rawValue) exited to the \(side)")
-                    sendParcelHorizontally(side: side, node: node, entity: entity)
+                    
+                    sendParcelHorizontally(side: side, node: node, entity: entity, ingredient: ingredient)
                 }
             }
         }
@@ -95,7 +108,49 @@ public final class ChefScene: SKScene {
         ball.setPosition(to: point)
         entityManager?.add(entity: ball)
         let direction: CGFloat = side == .right ? 1 : -1
-        ball.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
+        ball.body?.applyForce(.init(dx: 10000 * direction, dy: 0))
+    }
+    
+    public func spawnIngredient(_ ingredient: Ingredient, at point: CGPoint, goingTo side: EdgeSide) {
+        let ingredient = SKIngredient(for: ingredient)
+        ingredient.setPosition(to: point)
+        entityManager?.add(entity: ingredient)
+        let direction: CGFloat = side == .right ? 1 : -1
+        ingredient.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
+    }
+    
+    private func dropRandomIngredient() {
+        let x: CGFloat = CGFloat.random(in: frame.minX...frame.maxX)
+        let y: CGFloat = frame.maxY
+        let point = CGPoint(x: x, y: y)
+        let ingredient = Ingredient.getRandom()
+        
+        print("Dropping: \(ingredient.state.rawValue) \(ingredient.type.displayName)")
+        
+        let ingredientNode = SKIngredient(for: ingredient)
+        ingredientNode.setPosition(to: point)
+        entityManager?.add(entity: ingredientNode)
+        ingredientNode.body?.applyForce(.init(dx: 0, dy: -20000))
+    }
+    
+    public func startSpawning() {
+        isSpawning = true
+        
+        let wait = SKAction.wait(forDuration: spawningInterval)
+        let spawn = SKAction.run { [weak self] in
+            guard let self = self, self.isSpawning else { return }
+            self.dropRandomIngredient()
+        }
+        
+        let sequence = SKAction.sequence([wait, spawn])
+        let forever = SKAction.repeatForever(sequence)
+        
+        self.run(forever, withKey: spawnerKey)
+    }
+    
+    public func stopSpawning() {
+        isSpawning = false
+        self.removeAction(forKey: spawnerKey)
     }
 }
 
@@ -121,7 +176,8 @@ extension ChefScene {
     private func sendParcelHorizontally(
         side: EdgeSide,
         node: SKNode,
-        entity: GKEntity
+        entity: GKEntity,
+        ingredient: Ingredient? = nil
     ) {
         entityManager?.remove(entity: entity)
         let dxFromCenter = node.position.x - frame.midX
@@ -130,7 +186,8 @@ extension ChefScene {
         let payload = GamePayload(
             x: mirroredDx,
             y: node.position.y,
-            side: side
+            side: side,
+            ingredient: ingredient ?? .getRandom()
         )
         
         session.sendParcelHorizontally(payload)

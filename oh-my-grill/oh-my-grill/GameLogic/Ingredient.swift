@@ -11,10 +11,18 @@ import Foundation
 public struct Ingredient: Codable {
     public let type: IngredientType
     public var state: IngredientState
+    
+    static func getRandom() -> Ingredient {
+        while true {
+            let ingredient = Ingredient(type: IngredientType.getRandom(), state: .base)
+            
+            if ingredient.type != .genericParcel { return ingredient }
+        }
+    }
 }
 
 // Ingredient types - used to differentiate different ingredients
-public enum IngredientType: String, Codable {
+public enum IngredientType: String, Codable, CaseIterable {
     case lettuce
     case tomato
     case bun
@@ -25,18 +33,6 @@ public enum IngredientType: String, Codable {
     case genericParcel
 }
 
-// Ingredient state - used to manage different states from ingredients
-public enum IngredientState: String, Codable {
-    case base
-    case sliced
-    case cooked
-    case burnt
-    case cheesed
-    case top
-    case bottom
-}
-
-
 extension IngredientType {
     var displayName: String {
         switch self {
@@ -46,13 +42,10 @@ extension IngredientType {
         case .burger: "Burger"
         case .potato: "Potato"
         case .cheese: "Cheese"
-        case .genericParcel: ""
+        case .genericParcel: "Generic"
         }
     }
-}
 
-
-extension IngredientType {
     var imageName: String {
         switch self {
         case .lettuce: "lettuce-sliced"
@@ -64,4 +57,19 @@ extension IngredientType {
         case .genericParcel: "parcel"
         }
     }
+    
+    static func getRandom() -> IngredientType {
+        IngredientType.allCases.randomElement() ?? .burger
+    }
+}
+
+// Ingredient state - used to manage different states from ingredients
+public enum IngredientState: String, Codable {
+    case base
+    case sliced
+    case cooked
+    case burnt
+    case cheesed
+    case top
+    case bottom
 }
