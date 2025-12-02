@@ -13,7 +13,11 @@ public struct Ingredient: Codable {
     public var state: IngredientState
     
     static func getRandom() -> Ingredient {
-        Ingredient(type: IngredientType.getRandom(), state: .base)
+        while true {
+            let ingredient = Ingredient(type: IngredientType.getRandom(), state: .base)
+            
+            if ingredient.type != .genericParcel { return ingredient }
+        }
     }
 }
 

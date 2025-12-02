@@ -74,6 +74,9 @@ struct ChefView: View {
             scene.startSpawning()
             vm.session.setNotificationHandler(self)
         }
+        .onDisappear {
+            scene.stopSpawning()
+        }
         .ignoresSafeArea(.all)
     }
 }
