@@ -22,7 +22,7 @@ struct GrillMiniGameView: View {
                 
                 if let round = vm.round {
                     RoundNumber(round: round)
-                        .padding(.top, 8)
+                        .padding(.top, 0)
                         .padding(.trailing, 0)
                 }
                 
@@ -30,6 +30,7 @@ struct GrillMiniGameView: View {
                     VStack(spacing: 8) {
                         Text("Grill the meat")
                             .font(.custom("Toy Block Maestro", size: 56))
+                            .padding(.horizontal, 180)
                         
                         Text("Flip your phone to cook your meat.")
                             .font(.custom("Poppins Regular", size: 15))
@@ -43,10 +44,10 @@ struct GrillMiniGameView: View {
                         .animation(.easeIn, value: vm.didRotate360)
                     
                 }
-                .padding(.horizontal, 157)
                 .padding(.top, 32)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.top, 0)
             .ignoresSafeArea()
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $vm.nextView) {
