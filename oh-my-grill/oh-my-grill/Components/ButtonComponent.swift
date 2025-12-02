@@ -12,10 +12,10 @@ struct ButtonComponent: View {
     var text: String
     var paddingHorizontal: CGFloat?
     var isDisabled: Bool?
-    var isButton: Bool = false
+    var isNotButton: Bool = false
 
     var body: some View {
-        if isButton {
+        if isNotButton {
             Text(text)
                 .font(.custom("Toy Block Maestro", size: 23))
                 .foregroundStyle(.white)

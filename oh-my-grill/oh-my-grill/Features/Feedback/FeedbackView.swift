@@ -33,12 +33,12 @@ struct FeedbackView: View {
                     ButtonComponent(
                         buttonAction: {},
                         text: "\(round.points) points made",
-                        isButton: true
+                        isNotButton: true
                     )
                     ButtonComponent(
                         buttonAction: {},
                         text: "\(round.points / 50) orders placed",
-                        isButton: true
+                        isNotButton: true
                     )
                 }
             }
