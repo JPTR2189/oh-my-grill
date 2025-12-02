@@ -20,7 +20,7 @@ struct RoundTimer: View {
                 .foregroundStyle(.texasBeige)
                 .padding(.horizontal)
                 .padding(.vertical, 13)
-                .frame(width: 80)
+                .frame(width: 85)
                 .background(
                     RoundedCorners(radius: 12, corners: roundSide == Side.right ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight])
                         .foregroundStyle(.texasCherry)
@@ -34,7 +34,7 @@ struct RoundTimer: View {
                 .font(.custom("Toy Block Maestro", size: 32).weight(.semibold))
                 .foregroundStyle(.texasBeige)
                 .padding(.vertical, 13)
-                .frame(width: 90)
+                .frame(width: 85, height: 50)
                 .background(
                     RoundedCorners(radius: 12, corners: roundSide == Side.right ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight])
                         .foregroundStyle(.texasCherry)

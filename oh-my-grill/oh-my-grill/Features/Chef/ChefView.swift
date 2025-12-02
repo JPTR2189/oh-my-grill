@@ -30,23 +30,27 @@ struct ChefView: View {
                 )
                 .ignoresSafeArea()
                 
-                HStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 0){
                     
-                    if let order = vm.orders.first {
-                        OrderCard(order: order)
-                            .padding(.leading, 20)
-
-                        OrderCard(order: order)
+                    HStack(spacing: 9) {
                         
-                        
-                        OrderCard(order: order)
-                        RoundTimer(round: Round(number: 1, minPoints: 1000), roundSide: .left)
-                            .padding(.top, 16)
+                        if let order = vm.orders.first {
+                            OrderCard(order: order)
+                                .padding(.leading, 20)
 
-
+                            OrderCard(order: order)
                             
+                            
+                            OrderCard(order: order)
+                           
+                        }
+                        
+                        
                     }
-
+                    
+                    RoundTimer(round: Round(number: 1, minPoints: 1000), roundSide: .left)
+                        .padding(.top, 26)
+                    
                     Spacer()
                     
                     if let round = vm.round {
