@@ -7,6 +7,7 @@
 
 import Foundation
 import SpriteKit
+import SwiftUI
 
 class ChefSceneViewModel {
 
@@ -296,7 +297,10 @@ class ChefSceneViewModel {
         var startX = CGFloat(100)
         let bancada = SKShapeNode(rectOf: CGSize(width: 676, height: 96), cornerRadius: 8)
         
-        bancada.fillColor = .texasSalmon
+        bancada.fillColor = .white
+        bancada.fillTexture = SKTexture.gradient(size: CGSize(width: 300, height: 100), colors: [.texasSalmon, .texasGrayGradient], startPoint: CGPoint(x: 0, y: 0), 
+                                                 endPoint: CGPoint(x: 1, y: 3))
+        
         bancada.position = CGPoint(x: scene.frame.minX + 330, y: scene.frame.minY + 10)
         
         for ingrediente in opcoes {
