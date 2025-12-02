@@ -11,33 +11,73 @@ struct FeedbackView: View {
     let round: Round
 
     var body: some View {
-            ZStack(alignment: .center) {
-                //MARK: Fundo
-                Image(.backgroundOut)
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-                    .opacity(0.4)
-                
-                //MARK: Conteúdo
-                VStack(alignment: .center, spacing: 25) {
-                    Text(round.feedback == .success ? "Parabéns, time!" : "Mais sorte na próxima vez!")
-                        .font(.custom("Toy Block Maestro", size: 38))
-                        .foregroundStyle(.texasBrown)
-                    Text("Rodada: \(round.number)")
-                        .font(.custom("Poppins Regular", size: 24))
+        ZStack {
+            // MARK: Background
+            Image(.feedbackBackground)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+
+            // MARK: Conteúdo
+            VStack(alignment: .center, spacing: 24) {
+                VStack(alignment: .center, spacing: 8) {
+                    Text("Round \(round.number) completed")
+                        .font(.custom("Toy Block Maestro", size: 55))
                         .foregroundStyle(.texasBlack)
-                    Text("Pontos: \(round.points)")
-                        .font(.custom("Poppins Regular", size: 24))
-                        .foregroundStyle(.texasBlack)
-                    Text("Feedback: \(round.feedback.displayName)")
-                        .font(.custom("Poppins Regular", size: 24))
+                    Text("Keep it up and do it faster and faster.")
+                        .font(.custom("Poppins Regular", size: 15))
                         .foregroundStyle(.texasBlack)
                 }
+
+                VStack(alignment: .center, spacing: 24) {
+                    ButtonComponent(
+                        buttonAction: {},
+                        text: "\(round.points) points made",
+                        isNotButton: true
+                    )
+                    ButtonComponent(
+                        buttonAction: {},
+                        text: "\(round.points / 50) orders placed",
+                        isNotButton: true
+                    )
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+
+            // MARK: Next Button
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button {
+                        // action
+                    } label: {
+                        Image(systemName: "chevron.right")
+                            .font(.title2)
+                            .tint(.white)
+                            .padding(.horizontal, 15)
+                            .padding(.top, 11)
+                            .padding(.bottom, 10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 7)
+                                    .foregroundStyle(.accent)
+                                    .shadow(
+                                        color: .texasBrown,
+                                        radius: 0.5,
+                                        x: 0,
+                                        y: 5
+                                    )
+                            )
+                    }
+                }
+                .padding(.bottom, 24)
+                .padding(.trailing, 24)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
-
 
 //#Preview {
 //    FeedbackView()
