@@ -7,6 +7,7 @@
 
 import SpriteKit
 import GameplayKit
+import SwiftUI
 
 public final class ChefScene: SKScene {
 
@@ -136,9 +137,11 @@ public final class ChefScene: SKScene {
 
         trashCanNode.setScale(1)
 
-        addChild(trashCanNode)
+//        addChild(trashCanNode)
 
-
+        // MARK: Organizer
+        
+        viewModel.criarBancada()
 
         // MARK: Ingredient
 
@@ -154,7 +157,7 @@ public final class ChefScene: SKScene {
 
         
 
-        viewModel.criarBotoes()
+//        viewModel.criarBotoes()
 
         viewModel.criarPratoRedondo()
 

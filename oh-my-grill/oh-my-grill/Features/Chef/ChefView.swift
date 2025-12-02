@@ -92,3 +92,8 @@ extension ChefView: MPCNotificationDelegate {
     
     
 }
+
+#Preview {
+    let vm = ChefViewModel(session: GameSession(transport: TransportSession(userName: "Teste"), config: GameConfigPayload(mode: .classic, players: ["1"], roles: ["2": .chef])))
+    ChefView(vm: vm)
+}

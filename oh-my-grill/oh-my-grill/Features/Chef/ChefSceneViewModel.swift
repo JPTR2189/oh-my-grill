@@ -40,7 +40,7 @@ class ChefSceneViewModel {
 
     private var cont = 0
 
-    let opcoes = ["bun-top", "burger-cooked", "tomato-sliced", "lettuce-sliced", "bun-bottom"]
+    let opcoes = ["burger-cheesed", "tomato-sliced", "lettuce-sliced", "potato", "bun-top",  "bun-bottom"]
 
     
 
@@ -266,8 +266,55 @@ class ChefSceneViewModel {
         self.pratoNode = prato
 
     }
-
     
+    func componenteIngrediente(nome: String, posicaoIngrediente: CGFloat) {
+        let ingrediente = SKSpriteNode(texture: SKTexture(imageNamed: nome), color: .clear, size: CGSize(width: 65 , height: 65))
+        ingrediente.position = CGPoint(x: scene.frame.minX + posicaoIngrediente, y: scene.frame.minY + 50)
+
+        let contador = SKShapeNode(rectOf:  CGSize(width: 23, height: 23), cornerRadius: 20)
+        contador.position = CGPoint(x: scene.frame.minX + (posicaoIngrediente + 40), y: scene.frame.minY + 80)
+        contador.fillColor = .texasCherry
+        
+        let label = SKLabelNode(text: "0")
+        label.fontName = "Toy Block Maestro"
+        label.fontSize = 15
+        label.position = CGPoint(x: scene.frame.minX + (posicaoIngrediente + 40), y: scene.frame.minY + 73)
+
+        scene.addChild(ingrediente)
+        scene.addChild(contador)
+        scene.addChild(label)
+
+
+
+    }
+    
+    func criarBancada() {
+        
+        var startX = CGFloat(100)
+        let bancada = SKShapeNode(rectOf: CGSize(width: 676, height: 96), cornerRadius: 8)
+        
+        bancada.fillColor = .texasSalmon
+        bancada.position = CGPoint(x: scene.frame.minX + 330, y: scene.frame.minY + 10)
+        
+        for ingrediente in opcoes {
+            
+            componenteIngrediente(nome: ingrediente, posicaoIngrediente: startX)
+            startX += 100
+
+        }
+        
+        
+
+        
+
+        
+        
+        
+
+        scene.addChild(bancada)
+        
+        
+    }
 
     func criarBotoes() {
 
@@ -326,6 +373,8 @@ class ChefSceneViewModel {
         scene.addChild(btnLimpar)
 
     }
+    
+    
 
     
 
@@ -472,3 +521,4 @@ class ChefSceneViewModel {
     
 
 }
+
