@@ -274,6 +274,12 @@ class ChefSceneViewModel {
         
         let ingrediente = SKSpriteNode(texture: SKTexture(imageNamed: nome), color: .clear, size: tamanho)
         ingrediente.position = CGPoint(x: scene.frame.minX + posicaoIngrediente, y: scene.frame.minY + 50)
+        ingrediente.addDropShadow(
+            opacity: 0.18,
+            offset: CGSize(width: 0, height: -10),
+            radius: 10,
+            layer: 1
+        )
 
         let contador = SKShapeNode(rectOf:  CGSize(width: 23, height: 23), cornerRadius: 20)
         contador.position = CGPoint(x: scene.frame.minX + (posicaoIngrediente + 40), y: scene.frame.minY + 80)
