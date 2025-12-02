@@ -222,11 +222,11 @@ class ChefSceneViewModel {
 
     
 
-    func criarPratoRedondo() {
+    func criarPratoRedondo(isPotato: Bool = false) {
 
         
 
-        let tamanhoPrato = CGSize(width: 150, height: 150)
+        let tamanhoPrato = isPotato ? CGSize(width: 100, height: 70) : CGSize(width: 140, height: 105)
 
         let prato = SKSpriteNode(color: .lightGray, size: tamanhoPrato)
 
@@ -244,7 +244,7 @@ class ChefSceneViewModel {
 
         
 
-        prato.position = CGPoint(x: (scene.frame.maxX - CGFloat(200)), y: scene.frame.midY)
+        prato.position = isPotato ? CGPoint(x: (scene.frame.maxX - CGFloat(240)), y: (scene.frame.midY  - CGFloat(30))) : CGPoint(x: (scene.frame.maxX - CGFloat(120)), y: (scene.frame.midY - CGFloat(30)))
 
         prato.name = nomePrato
 

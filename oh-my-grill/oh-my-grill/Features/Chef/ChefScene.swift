@@ -137,7 +137,7 @@ public final class ChefScene: SKScene {
 
         trashCanNode.setScale(1)
 
-//        addChild(trashCanNode)
+        addChild(trashCanNode)
 
         // MARK: Organizer
         
@@ -160,6 +160,9 @@ public final class ChefScene: SKScene {
 //        viewModel.criarBotoes()
 
         viewModel.criarPratoRedondo()
+        viewModel.criarPratoRedondo(isPotato: true)
+
+        
 
     }
 

@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "dish.png",
+      "filename" : "prato1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "prato2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "prato3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
