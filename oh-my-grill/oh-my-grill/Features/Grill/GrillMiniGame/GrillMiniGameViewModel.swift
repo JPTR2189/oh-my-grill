@@ -17,7 +17,7 @@ class GrillMiniGameViewModel {
     var didRotate360 = false {
         didSet {
             if didRotate360 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     self.nextView = true
                 }
             }

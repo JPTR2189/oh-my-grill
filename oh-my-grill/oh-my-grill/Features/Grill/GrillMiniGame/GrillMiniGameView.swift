@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GrillMiniGameView: View {
+    
     @Bindable var vm: GrillMiniGameViewModel
     
     var body: some View {
@@ -29,7 +30,6 @@ struct GrillMiniGameView: View {
                     VStack(spacing: 8) {
                         Text("Grill the meat")
                             .font(.custom("Toy Block Maestro", size: 56))
-                            .padding(.horizontal, 157)
                         
                         Text("Flip your phone to cook your meat.")
                             .font(.custom("Poppins Regular", size: 15))
@@ -41,17 +41,20 @@ struct GrillMiniGameView: View {
                         .scaledToFit()
                         .frame(width: 270)
                         .animation(.easeIn, value: vm.didRotate360)
-                    }
+                    
+                }
+                .padding(.horizontal, 157)
                 .padding(.top, 32)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .ignoresSafeArea()
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $vm.nextView) {
-                GrillView()
+                CutView()
             }
         }
     }
 }
-
 
 //#Preview {
 //    GrillMiniGameView()
