@@ -138,7 +138,7 @@ public final class PhysicsScene: SKScene {
     public override func didChangeSize(_ oldSize: CGSize) {
         super.didChangeSize(oldSize)
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
-        physicsBody?.categoryBitMask = PhysicsCategory.edge
+        physicsBody?.categoryBitMask = PhysicsCategory.wall
         // Rebuild sensors to match new size (or update their frames)
         children.filter { $0.name?.hasPrefix("sensor.") == true }.forEach {
             $0.removeFromParent()

@@ -30,7 +30,7 @@ public final class TransportSession: NSObject, ObservableObject,
     fileprivate var notificationHandler: MPCNotificationDelegate?
     fileprivate var peerName: String
     public var passwordLength: Int = 4
-    public var playersNumber: Int = 2
+    public var playersNumber: Int = 1
     
 
     // HMAC

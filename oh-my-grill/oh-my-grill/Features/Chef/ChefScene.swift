@@ -32,6 +32,9 @@ public final class ChefScene: SKScene {
     private let spawningInterval: TimeInterval = 10
     private let spawnerKey: String = "ingredientSpawner"
     
+    // Plate node
+    private var plate: SKPlate?
+    
     
     //MARK: Initializers
     public init(size: CGSize, session: GameSession) {
@@ -46,6 +49,8 @@ public final class ChefScene: SKScene {
     override public func didMove(to view: SKView) {
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
+        
+        physicsWorld.contactDelegate = self
 
         physicsWorld.gravity = .init(dx: 0, dy: 0)
         self.entityManager = EntityManager(scene: self)
@@ -66,12 +71,12 @@ public final class ChefScene: SKScene {
         trashCanNode.setScale(1)
         addChild(trashCanNode)
 
-        // MARK: Ingredient
-        let initialIngredient = Ball()
-        let centerPoint = CGPoint(x: frame.midX, y: frame.midY)
-        initialIngredient.setPosition(to: centerPoint)
-        
-//        entityManager?.add(entity: initialIngredient)
+        // Plate
+        let plate = SKPlate()
+        self.plate = plate
+        let centerPoint: CGPoint = .init(x: frame.midX, y: frame.midY)
+        plate.node?.position = centerPoint
+        entityManager?.add(entity: plate)
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -125,7 +130,7 @@ public final class ChefScene: SKScene {
         let point = CGPoint(x: x, y: y)
         let ingredient = Ingredient.getRandom()
         
-        print("Dropping: \(ingredient.state.rawValue) \(ingredient.type.displayName)")
+//        print("Dropping: \(ingredient.state.rawValue) \(ingredient.type.displayName)")
         
         let ingredientNode = SKIngredient(for: ingredient)
         ingredientNode.setPosition(to: point)
@@ -142,7 +147,7 @@ public final class ChefScene: SKScene {
             self.dropRandomIngredient()
         }
         
-        let sequence = SKAction.sequence([wait, spawn])
+        let sequence = SKAction.sequence([spawn, wait])
         let forever = SKAction.repeatForever(sequence)
         
         self.run(forever, withKey: spawnerKey)
@@ -323,5 +328,30 @@ extension ChefScene {
         
         body.isDynamic = true
         body.angularVelocity = 0
+    }
+}
+
+// MARK: - Contact delegate
+extension ChefScene: SKPhysicsContactDelegate {
+    
+    public func didBegin(_ contact: SKPhysicsContact) {
+        let bodyA = contact.bodyA
+        let bodyB = contact.bodyB
+        
+        print("Contact")
+        
+        guard let nodeA = bodyA.node, let nodeB = bodyB.node else { return }
+        
+        if(nodeA.name == SKPlate.name || nodeB.name == SKIngredient.name) {
+            if let plate = nodeA.entity as? SKPlate,
+               let ingredient = nodeB.entity as? SKIngredient {
+                let stacked = plate.stackIngredient(ingredient)
+                
+                print("Stacked: \(stacked)")
+                
+//                if stacked { entityManager?.remove(entity: ingredient) }
+            }
+            
+        }
     }
 }

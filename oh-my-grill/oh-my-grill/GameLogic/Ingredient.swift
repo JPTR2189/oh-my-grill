@@ -25,7 +25,8 @@ public struct Ingredient: Codable {
 public enum IngredientType: String, Codable, CaseIterable {
     case lettuce
     case tomato
-    case bun
+    case topBun
+    case bottomBun
     case burger
     case potato
     case cheese
@@ -38,7 +39,8 @@ extension IngredientType {
         switch self {
         case .lettuce: "Lettuce"
         case .tomato: "Tomato"
-        case .bun: "Bun"
+        case .topBun: "Top Bun"
+        case .bottomBun: "Bottom Bun"
         case .burger: "Burger"
         case .potato: "Potato"
         case .cheese: "Cheese"
@@ -50,7 +52,8 @@ extension IngredientType {
         switch self {
         case .lettuce: "lettuce-sliced"
         case .tomato: "tomato-sliced"
-        case .bun: "bun-top"
+        case .topBun: "bun-top"
+        case .bottomBun: "bun-bottom"
         case .burger: "burger-cheesed"
         case .potato: "potato"
         case .cheese: "cheese-base"
@@ -70,6 +73,4 @@ public enum IngredientState: String, Codable {
     case cooked
     case burnt
     case cheesed
-    case top
-    case bottom
 }
