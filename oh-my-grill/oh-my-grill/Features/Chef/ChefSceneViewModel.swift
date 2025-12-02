@@ -40,7 +40,7 @@ class ChefSceneViewModel {
 
     private var cont = 0
 
-    let opcoes = ["burger-cheesed", "tomato-sliced", "lettuce-sliced", "potato", "bun-top",  "bun-bottom"]
+    let opcoes = ["burger-cheesed", "tomato-sliced", "lettuce-sliced", "potato-fried", "bun-top",  "bun-bottom"]
 
     
 
@@ -268,7 +268,10 @@ class ChefSceneViewModel {
     }
     
     func componenteIngrediente(nome: String, posicaoIngrediente: CGFloat) {
-        let ingrediente = SKSpriteNode(texture: SKTexture(imageNamed: nome), color: .clear, size: CGSize(width: 65 , height: 65))
+        
+        let tamanho = nome == "potato-fried" ? CGSize(width: 100  , height: 65) : CGSize(width: 65 , height: 65)
+        
+        let ingrediente = SKSpriteNode(texture: SKTexture(imageNamed: nome), color: .clear, size: tamanho)
         ingrediente.position = CGPoint(x: scene.frame.minX + posicaoIngrediente, y: scene.frame.minY + 50)
 
         let contador = SKShapeNode(rectOf:  CGSize(width: 23, height: 23), cornerRadius: 20)

@@ -19,22 +19,25 @@ struct OrderCard: View {
             
             // Cabeçalho: Nome + imagem do combo
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Combo")
-                        .font(.custom("Poppins SemiBold", size: 20))
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Order 10")
+                        .font(.custom("Poppins Regular", size: 16))
                         .foregroundColor(.texasBrown)
                     
                     Text(formatTime(order.time))
-                        .font(.custom("Poppins SemiBold", size: 28))
+                        .font(.custom("Poppins SemiBold", size: 20))
                         .foregroundColor(.texasBrown)
                 }
+                .padding(.leading, 24)
+                .padding(.top, 8)
                 
                 Spacer()
                 
                 Image("burger-complete")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 65, height: 65)
+                    .frame(width: 50, height: 50)
+                    .padding([.leading, .trailing] ,8)
             }
             
             // GRID DE INGREDIENTES
@@ -47,7 +50,7 @@ struct OrderCard: View {
                         Image(type.imageName)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 34, height: 34) // menor para caber numa linha
+                            .frame(width: 22, height: 22) // menor para caber numa linha
                         
                         Text("\(count)x")
                             .font(.custom("Poppins Regular", size: 16))
@@ -58,22 +61,24 @@ struct OrderCard: View {
                 // FRIES
                 if order.meal.hasFries {
                     VStack(spacing: 2) {
-                        Image("bun-top") // nome correto aqui
+                        Image("potato-fried") // nome correto aqui
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 34, height: 34)
+                            .frame(width: 22, height: 22)
                         
                         Text("1x")
                             .font(.custom("Poppins Regular", size: 16))
                             .foregroundColor(.texasBrown)
                     }
+                    .padding(.bottom, 2)
                 }
             }
-            .padding(.top, 4)
+            .padding([.leading, .trailing], 16)
+            
             
         }
-        .padding()
-        .frame(width: 220, height: 160)
+//        .padding(8)
+        .frame(width: 165, height: 120)
         .background(
             RoundedCorners(radius: 12, corners: [.bottomRight, .bottomLeft])
                 .foregroundStyle(.texasSalmon)
@@ -95,4 +100,8 @@ struct OrderCard: View {
         let seconds = totalSeconds % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
+}
+
+#Preview {
+    OrderCard(order: Order(meal: Meal(ingredients: [Ingredient(type: .bun, state: .base)], hasFries: true)))
 }

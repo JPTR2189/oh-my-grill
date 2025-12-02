@@ -21,11 +21,16 @@ struct RoundNumber: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 13)
-        .frame(width: 100, height: 104)
+        .frame(width: 115, height: 104)
         .background(
             RoundedCorners(radius: 12, corners: [.bottomRight, .bottomLeft])
                 .foregroundStyle(.accent)
                 .shadow(color: .texasBrown, radius: 0.5, x: 0, y: 7)
         )
+
     }
+}
+
+#Preview {
+    RoundNumber(round: Round(number: 1, minPoints: 1000))
 }

@@ -34,7 +34,17 @@ struct ChefView: View {
                     
                     if let order = vm.orders.first {
                         OrderCard(order: order)
-                            .padding(.leading, 45)
+                            .padding(.leading, 20)
+
+                        OrderCard(order: order)
+                        
+                        
+                        OrderCard(order: order)
+                        RoundTimer(round: Round(number: 1, minPoints: 1000), roundSide: .left)
+                            .padding(.top, 16)
+
+
+                            
                     }
 
                     Spacer()
@@ -43,7 +53,7 @@ struct ChefView: View {
                         RoundInfo(round: round)
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
             .ignoresSafeArea()
             
@@ -97,3 +107,4 @@ extension ChefView: MPCNotificationDelegate {
     let vm = ChefViewModel(session: GameSession(transport: TransportSession(userName: "Teste"), config: GameConfigPayload(mode: .classic, players: ["1"], roles: ["2": .chef])))
     ChefView(vm: vm)
 }
+
