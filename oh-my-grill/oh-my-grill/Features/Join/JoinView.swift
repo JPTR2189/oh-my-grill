@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct JoinView: View {
-    @Bindable private var vc: JoinViewController
+    @State private var vc: JoinViewController
 
     @State private var nextView: Bool = false
+    @State private var wrongPassword: Bool = false
 
     init(transport: any TransportSessionProtocol) {
-        _vc = Bindable(wrappedValue: JoinViewController(transport: transport))
+        self.vc = JoinViewController(transport: transport)
     }
     
     var body: some View {
@@ -40,10 +41,6 @@ struct JoinView: View {
                     }
                     .foregroundColor(.texasBlack)
                     
-                    Text(vc.wrongPassword ? "WRONG" : "OK")   // mostra se o estado mudou
-                        .foregroundColor(.white)
-                        .padding(.bottom, 8)
-                    
                     HStack(spacing: 10) {
                         ForEach(0...3, id: \.self) { number in
                             let char = number < vc.password.count ? vc.password[number] : ""
@@ -54,12 +51,13 @@ struct JoinView: View {
                                 isDisabled: true,
                                 size: .small,
                                 bgColor: .texasBlack,
-                                isError: vc.wrongPassword
+                                isError: wrongPassword
                             )
                         }
                         
                         Button {
                             vc.removeFromPassword()
+                            wrongPassword = false
                         } label: {
                             Image(systemName: "delete.left")
                                 .font(.custom("Toy Block Maestro", size: 16))
@@ -88,7 +86,7 @@ struct JoinView: View {
                                 },
                                 text: String(number),
                                 size: .medium,
-                                isError: vc.wrongPassword
+                                isError: false
                             )
                         }
                     }
@@ -102,7 +100,7 @@ struct JoinView: View {
                                 },
                                 text: String(number),
                                 size: .medium,
-                                isError: vc.wrongPassword
+                                isError: false
                             )
                         }
                     }
@@ -132,6 +130,12 @@ struct JoinView: View {
     }
 }
 
+func setError(to state: Bool) {
+    if state {
+        
+    }
+}
+
 // MARK: - Notification Delegate
 extension JoinView: MPCNotificationDelegate {
     func notify(_ notification: MPCNotifications) {
@@ -139,10 +143,11 @@ extension JoinView: MPCNotificationDelegate {
         switch notification {
         case .accepted:
             self.nextView = true
+            break
 
         case .wrongPassword:
             print("wrongPassword case received")
-            vc.wrongPassword = true
+            wrongPassword = true
 
         default: break
         }

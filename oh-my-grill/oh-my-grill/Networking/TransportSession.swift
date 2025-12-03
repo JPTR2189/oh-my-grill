@@ -118,6 +118,10 @@ extension TransportSession {
             let computedProof = hmacSHA256Hex(key: password, message: nonce)
 
             if computedProof != expectedProof {
+                // Notifica que a senha está errada para a UI
+                DispatchQueue.main.async { [weak self] in
+                    self?.notifyDelegate(.wrongPassword)
+                }
                 return
             }
         }
@@ -125,6 +129,7 @@ extension TransportSession {
         let data = try? JSONEncoder().encode(password)
         browser?.invitePeer(peer, to: session, withContext: data, timeout: 10)
     }
+
 
     // Send generic message type
     public func send(_ message: MPCMessage) {
