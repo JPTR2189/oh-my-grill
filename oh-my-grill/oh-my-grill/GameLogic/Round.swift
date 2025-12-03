@@ -25,7 +25,7 @@ public class Round {
         self.number = number
         self.minPoints = minPoints
         self.points = 0
-        self.time = 180
+        self.time = 10
         self.status = .inProgress
         self.feedback = .none
         

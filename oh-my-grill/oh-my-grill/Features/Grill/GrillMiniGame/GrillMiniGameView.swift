@@ -51,7 +51,7 @@ struct GrillMiniGameView: View {
             .ignoresSafeArea()
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $vm.nextView) {
-                GrillView(vm: GrillViewModel(session: vm.session))
+                CutView()
             }
         }
     }
