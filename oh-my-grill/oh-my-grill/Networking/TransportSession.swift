@@ -29,7 +29,7 @@ public final class TransportSession: NSObject, ObservableObject,
     fileprivate var browser: MCNearbyServiceBrowser?
     fileprivate var notificationHandler: MPCNotificationDelegate?
     fileprivate var peerName: String
-    public var passwordLength: Int = 4
+    public var passwordLength: Int = 1
     public var playersNumber: Int = 2
     
 

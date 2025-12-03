@@ -13,7 +13,29 @@ public class SKIngredient: GKEntity {
     
     let bodySize: CGFloat = 40
     
-    let ingredient: Ingredient
+    var ingredient: Ingredient {
+        didSet {
+            let texture = SKTexture(imageNamed: ingredient.imageName)
+            
+            let old = oldValue.state.rawValue
+            let new = ingredient.state.rawValue
+            
+            print(self)
+            
+            print("Changing texture from \(old) to \(new)")
+            print("From \(oldValue.imageName) to \(ingredient.imageName)")
+            
+            if let sNode = spriteNode {
+                print("Got sprite node")
+                spriteNode?.texture = texture
+                sNode.texture = texture
+            }
+        }
+    }
+    
+    var spriteNode: SKSpriteNode? {
+        node as? SKSpriteNode
+    }
     
     var node: SKNode? {
         component(ofType: GKSKNodeComponent.self)?.node
@@ -27,8 +49,10 @@ public class SKIngredient: GKEntity {
         self.ingredient = ingredient
         
         super.init()
-        
-        let node = SKSpriteNode(imageNamed: ingredient.type.imageName)
+                
+        let texture = SKTexture(imageNamed: ingredient.imageName)
+
+        let node = SKSpriteNode(texture: texture)
         
         node.setScale(0.8)
         
@@ -55,5 +79,9 @@ public class SKIngredient: GKEntity {
     
     public func setPosition(to point: CGPoint) {
         component(ofType: GKSKNodeComponent.self)?.node.position = point
+    }
+    
+    deinit {
+        print("\(self.ingredient.type.displayName) deinited")
     }
 }

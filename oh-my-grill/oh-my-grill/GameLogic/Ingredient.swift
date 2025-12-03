@@ -19,6 +19,18 @@ public struct Ingredient: Codable {
             if ingredient.type != .genericParcel { return ingredient }
         }
     }
+    
+    var imageName: String {
+        let preffix: String = type.rawValue
+        let suffix: String = state.rawValue
+        
+        return "\(preffix)-\(suffix)"
+    }
+    
+    mutating func cut() {
+        print("\(type.displayName) cutted!")
+        self.state = .sliced
+    }
 }
 
 // Ingredient types - used to differentiate different ingredients
@@ -43,18 +55,6 @@ extension IngredientType {
         case .potato: "Potato"
         case .cheese: "Cheese"
         case .genericParcel: "Generic"
-        }
-    }
-
-    var imageName: String {
-        switch self {
-        case .lettuce: "lettuce-sliced"
-        case .tomato: "tomato-sliced"
-        case .bun: "bun-top"
-        case .burger: "burger-cheesed"
-        case .potato: "potato"
-        case .cheese: "cheese-base"
-        case .genericParcel: "parcel"
         }
     }
     

@@ -40,3 +40,8 @@ public struct NotificationPayload: Codable {
 public struct AssignmentPayload: Codable {
     public let playerByRole: [String: StationRole]
 }
+
+// Used to pass an ingredient to the minigames
+public struct IngredientPayload: Codable {
+    public let ingredient: Ingredient
+}
