@@ -72,7 +72,6 @@ public final class CutScene: SKScene {
         addChild(backgroundNode)
 
         // MARK: Knife
-        //TODO: Tirar a knife daqui
         knifeNode.name = "knife"
         knifeNode.position = CGPoint(
             x: knifeNode.size.width / 2 + 84,
