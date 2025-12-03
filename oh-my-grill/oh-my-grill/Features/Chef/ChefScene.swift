@@ -46,9 +46,11 @@ public final class ChefScene: SKScene {
     private let backgroundNode = SKSpriteNode(imageNamed: "chefBackground")
 
     
-
-    var nodeSendoArrastado: SKNode?
-
+    // Ingredient spawning
+    private var isSpawning: Bool = false
+    private let spawningInterval: TimeInterval = 10
+    private let spawnerKey: String = "ingredientSpawner"
+    
     
 
     var nívelDeEmpilhamentoAtual: CGFloat = 10
@@ -145,19 +147,8 @@ public final class ChefScene: SKScene {
 
         // MARK: Ingredient
 
-        let initialIngredient = Ball()
-
-        let centerPoint = CGPoint(x: frame.midX, y: frame.midY)
-
-        initialIngredient.setPosition(to: centerPoint)
-
         
 
-        entityManager?.add(entity: initialIngredient)
-
-        
-
-//        viewModel.criarBotoes()
 
         viewModel.criarPratoRedondo()
         viewModel.criarPratoRedondo(isPotato: true)
@@ -174,55 +165,89 @@ public final class ChefScene: SKScene {
 
         backgroundNode.position = CGPoint(x: size.width / 2, y: size.height / 2)
 
+//        entityManager?.add(entity: initialIngredient)
     }
 
 
-
     
-
     public override func update(_ currentTime: TimeInterval) {
-
         handleMovementUpdate()
-
         
-
         guard let entities = entityManager?.getEntities() else { return }
-
         
-
         for entity in entities {
-
-            if let node = entity.component(ofType: GKSKNodeComponent.self)?.node {
-
-                if let side = exitSide(for: node) {
-
-                    print("Ball from \(session.myID.rawValue) exited to the \(side)")
-
-                    sendParcelHorizontally(side: side, node: node, entity: entity)
-
-                }
-
+            
+            var ingredient: Ingredient?
+            
+            if let ingredientNode = entity as? SKIngredient {
+                ingredient = ingredientNode.ingredient
             }
-
+            
+            if let node = entity.component(ofType: GKSKNodeComponent.self)?.node {
+                if let side = exitSide(for: node) {
+                    print("Ball from \(session.myID.rawValue) exited to the \(side)")
+                    
+                    sendParcelHorizontally(side: side, node: node, entity: entity, ingredient: ingredient)
+                }
+            }
         }
+    }
 
+
+
+    
+    public func spawnBall(at point: CGPoint, goingTo side: EdgeSide) {
+        let ball = Ball()
+        ball.setPosition(to: point)
+        entityManager?.add(entity: ball)
+        let direction: CGFloat = side == .right ? 1 : -1
+        ball.body?.applyForce(.init(dx: 10000 * direction, dy: 0))
+    }
+    
+    public func spawnIngredient(_ ingredient: Ingredient, at point: CGPoint, goingTo side: EdgeSide) {
+        let ingredient = SKIngredient(for: ingredient)
+        ingredient.setPosition(to: point)
+        entityManager?.add(entity: ingredient)
+        let direction: CGFloat = side == .right ? 1 : -1
+        ingredient.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
+    }
+    
+    private func dropRandomIngredient() {
+        let x: CGFloat = CGFloat.random(in: frame.minX...frame.maxX)
+        let y: CGFloat = frame.maxY
+        let point = CGPoint(x: x, y: y)
+        let ingredient = Ingredient.getRandom()
+        
+        print("Dropping: \(ingredient.state.rawValue) \(ingredient.type.displayName)")
+        
+        let ingredientNode = SKIngredient(for: ingredient)
+        ingredientNode.setPosition(to: point)
+        entityManager?.add(entity: ingredientNode)
+        ingredientNode.body?.applyForce(.init(dx: 0, dy: -20000))
+    }
+    
+    public func startSpawning() {
+        isSpawning = true
+        
+        let wait = SKAction.wait(forDuration: spawningInterval)
+        let spawn = SKAction.run { [weak self] in
+            guard let self = self, self.isSpawning else { return }
+            self.dropRandomIngredient()
+        }
+        
+        let sequence = SKAction.sequence([wait, spawn])
+        let forever = SKAction.repeatForever(sequence)
+        
+        self.run(forever, withKey: spawnerKey)
+    }
+    
+    public func stopSpawning() {
+        isSpawning = false
+        self.removeAction(forKey: spawnerKey)
     }
 
     
 
-    public func spawnBall(at point: CGPoint, goingTo side: EdgeSide) {
-
-        let ball = Ball()
-
-        ball.setPosition(to: point)
-
-        entityManager?.add(entity: ball)
-
-        let direction: CGFloat = side == .right ? 1 : -1
-
-        ball.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
-
-    }
 
 }
 
@@ -271,9 +296,8 @@ extension ChefScene {
         side: EdgeSide,
 
         node: SKNode,
-
-        entity: GKEntity
-
+        entity: GKEntity,
+        ingredient: Ingredient? = nil
     ) {
 
         entityManager?.remove(entity: entity)
@@ -289,9 +313,8 @@ extension ChefScene {
             x: mirroredDx,
 
             y: node.position.y,
-
-            side: side
-
+            side: side,
+            ingredient: ingredient ?? .getRandom()
         )
 
         
@@ -400,30 +423,6 @@ extension ChefScene {
 
             
 
-            if let parent = nodeTocado.parent, parent.name == nomePrato {
-
-                nodeSendoArrastado = pratoNode
-
-                nodeSendoArrastado?.run(SKAction.scale(to: 1.1, duration: 0.1))
-
-            }
-
-            else if nodeTocado.name == nomePrato {
-
-                nodeSendoArrastado = pratoNode
-
-                nodeSendoArrastado?.run(SKAction.scale(to: 1.1, duration: 0.1))
-
-            }
-
-            else {
-
-                nodeSendoArrastado = nodeTocado
-
-                nodeSendoArrastado?.setScale(0.6)
-
-            }
-
         }
 
     }
@@ -437,19 +436,13 @@ extension ChefScene {
             targetPoint = location
         }
         
-        // CASO 2: Se estiver arrastando um Ingrediente Simples (Direct Position)
-        if let node = nodeSendoArrastado {
-            node.position = location
-        }
+
     }
 
     
 
     override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 
-        viewModel.soltarObjeto(node: nodeSendoArrastado)
-
-        nodeSendoArrastado = nil
 
         handleDropAndDeletion()
 
@@ -460,10 +453,6 @@ extension ChefScene {
     
 
     override public func touchesCancelled( _ touches: Set<UITouch>, with event: UIEvent?) {
-
-        viewModel.soltarObjeto(node: nodeSendoArrastado)
-
-        nodeSendoArrastado = nil
 
         endDrag()
 

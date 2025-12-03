@@ -13,7 +13,8 @@ struct RoundInfo: View {
     var body: some View {
         HStack(spacing: 0) {
             
-            RoundTimer(round: round, roundSide: .right)
+            RoundTimer(round: round)
+
 
             
             RoundNumber(round: round)

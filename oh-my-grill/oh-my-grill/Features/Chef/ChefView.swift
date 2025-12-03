@@ -5,24 +5,29 @@
 //  Created by Maria Santellano on 24/11/25.
 //
 
-import SwiftUI
 import SpriteKit
+import SwiftUI
 
 struct ChefView: View {
     @Bindable var vm: ChefViewModel
-    
+
     @State var scene: ChefScene
-    
+
     init(vm: ChefViewModel) {
         self.vm = vm
-        _scene = State(wrappedValue: ChefScene(size: .init(width: 800, height: 800), session: vm.session))
+        _scene = State(
+            wrappedValue: ChefScene(
+                size: .init(width: 800, height: 800),
+                session: vm.session
+            )
+        )
     }
-    
+
     var body: some View {
         NavigationStack {
-            
+
             ZStack(alignment: .topTrailing) {
-                
+
                 SpriteView(
                     scene: scene,
                     preferredFramesPerSecond: 60,
@@ -38,6 +43,7 @@ struct ChefView: View {
                             OrderCard(order: order)
                                 .padding(.leading, 20)
 
+
                             OrderCard(order: order)
                             
                             
@@ -48,11 +54,11 @@ struct ChefView: View {
                         
                     }
                     
-                    RoundTimer(round: Round(number: 1, minPoints: 1000), roundSide: .left)
+                    OrdersCount(quantity: 3)
                         .padding(.top, 26)
                     
                     Spacer()
-                    
+
                     if let round = vm.round {
                         RoundInfo(round: round)
                     }
@@ -60,7 +66,7 @@ struct ChefView: View {
 //                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
             .ignoresSafeArea()
-            
+
             // MARK: Navigation
             .navigationDestination(
                 isPresented: Binding(
@@ -73,38 +79,45 @@ struct ChefView: View {
                 }
             }
         }
-        
+
         .onAppear {
+            scene.startSpawning()
             vm.session.setNotificationHandler(self)
+        }
+        .onDisappear {
+            scene.stopSpawning()
         }
         .ignoresSafeArea(.all)
     }
 }
-
 
 // MARK: - Notification delegate
 extension ChefView: MPCNotificationDelegate {
     func notify(_ notification: MPCNotifications) {
         switch notification {
         case .gameMove(let payload):
-            
+
             let dx = CGFloat(payload.x)
             let sign: CGFloat = dx >= 0 ? 1 : -1
-            
+
             let newDistance = max(0, abs(dx) - 21)
-            
+
             let newX = scene.frame.midX + sign * newDistance
-            
+
             let point = CGPoint(x: newX, y: CGFloat(payload.y))
             print("Parcel entered \(vm.session.myRole)'s view")
-            scene.spawnBall(at: point, goingTo: payload.side)
-            
+            //            scene.spawnBall(at: point, goingTo: payload.side)
+            scene.spawnIngredient(
+                payload.ingredient,
+                at: point,
+                goingTo: payload.side
+            )
+
         default:
             break
         }
     }
-    
-    
+
 }
 
 #Preview {
