@@ -72,7 +72,8 @@ struct PlayerAssignView: View {
             .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: $nextView) {
                 if let session = vm.gameSession {
-                    ChefView(vm: ChefViewModel(session: session))
+                    //ChefView(vm: ChefViewModel(session: session))
+                    GrillMiniGameView(vm: GrillMiniGameViewModel(session: session))
                 }
             }
         }
