@@ -343,8 +343,6 @@ extension CutScene {
         }
 
         if node.frame.intersects(knifeNode.frame) {
-            let scaleDown = SKAction.scale(to: 0.8, duration: 0.2)
-            node.run(scaleDown) {
                 let payload = IngredientPayload(
                     ingredient: ingredient.ingredient
                 )
@@ -352,7 +350,6 @@ extension CutScene {
                 
                 if let function = self.onKnifeCollision {
                     function(ingredient)
-                }
             }
         }
     }
