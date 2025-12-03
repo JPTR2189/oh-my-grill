@@ -11,6 +11,7 @@ import SwiftUI
 protocol JoinViewControllerProtocol {
     var transport: any TransportSessionProtocol { get }
     var password: [String] { get }
+    var wrongPassword: Bool { get set }
     var rawPassword: String { get }
     
     func insertToPassword(_ char: String)
