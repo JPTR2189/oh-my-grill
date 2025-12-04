@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-protocol JoinViewControllerProtocol {
+protocol JoinViewModelProtocol {
     var transport: any TransportSessionProtocol { get }
     var password: [String] { get }
     var wrongPassword: Bool { get set }

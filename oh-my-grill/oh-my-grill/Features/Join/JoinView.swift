@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct JoinView: View {
-    @State private var vc: JoinViewController
+    @State private var vc: JoinViewModel
 
     @State private var nextView: Bool = false
     @State private var wrongPassword: Bool = false
 
     init(transport: any TransportSessionProtocol) {
-        self.vc = JoinViewController(transport: transport)
+        self.vc = JoinViewModel(transport: transport)
     }
     
     var body: some View {
