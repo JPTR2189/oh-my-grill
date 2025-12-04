@@ -29,7 +29,7 @@ public final class ChefScene: SKScene {
     
     // Ingredient spawning
     private var isSpawning: Bool = false
-    private let spawningInterval: TimeInterval = 10
+    private let spawningInterval: TimeInterval = 5 // Go back to 10 after testing
     private let spawnerKey: String = "ingredientSpawner"
     
     // Plate node

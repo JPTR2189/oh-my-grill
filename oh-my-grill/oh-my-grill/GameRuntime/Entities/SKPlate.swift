@@ -25,6 +25,9 @@ public class SKPlate: GKEntity {
     
     var stack: [SKIngredient] = []
     
+    let baseOffset: CGFloat = 15
+    let stackingOffset: CGFloat = 8
+    
     override init() {
         super.init()
         
@@ -55,64 +58,55 @@ public class SKPlate: GKEntity {
     public func stackIngredient(_ ingredient: SKIngredient) -> Bool {
         print("Trying to stack \(ingredient.ingredient.type.displayName)")
 
-
+        /* Preconditions */
+        
+        // Extracting plate node
         guard let plateNode = node
         else {
             print("Critical error on SKPlate: Couldnt find SKNode")
             return false
         }
         
-        guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
-        else {
-            print("Bottom bun needed to start stacking")
-            return false
-        }
-        
-        if let lastType = stack.last?.ingredient.type {
-            guard lastType != .topBun else {
-                print("Cant stack after a top bun")
-                return false
-            }
-        }
-        
+        // Extracting ingredient node
         guard let ingredientNode = ingredient.node
         else {
             print("Couldnt extract node frm ingredient")
             return false
         }
         
-        guard let ingredientEntity = ingredientNode.entity as? SKIngredient
+        // Verifying for bottom bun to start stack
+        guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
         else {
-            print("Couldnt access ingredient's entity")
+            print("Bottom bun needed to start stacking")
             return false
         }
         
-        
-        let parentNode: SKNode
-        if let lastIngredientNode = stack.last?.node {
-            parentNode = lastIngredientNode
-        } else {
-            parentNode = plateNode
+        // Cant stack potatoes
+        guard ingredient.ingredient.type != .potato
+        else {
+            print("Cant stack potatoes")
+            return false
         }
         
+        // Stack ended with top bun
+        if let lastType = stack.last?.ingredient.type {
+            guard lastType != .topBun else {
+                print("Cant stack after a top bun")
+                return false
+            }
+        }
+        /***/
         
-        let parentFrame = parentNode.calculateAccumulatedFrame()
-        let newFrame = ingredientNode.calculateAccumulatedFrame()
         
-        let offsetY = (parentFrame.height / 2) + (newFrame.height / 2)
+        ingredient.removeComponent(ofType: DraggableComponent.self)
         
         
-        ingredientNode.position = .init(x: 0, y: offsetY)
-        ingredientNode.zPosition = (stack.last?.node?.zPosition ?? plateNode.zPosition) + 1
-        
-        
-        ingredientEntity.removeComponent(ofType: DraggableComponent.self)
-            
-        
-            //        if ingredientNode.parent != nil {
+//        if ingredientNode.parent != nil {
 //            ingredientNode.removeFromParent()
 //        }
-        
+//        
+//        plateNode.addChild(ingredientNode)
+
         
         if let body = ingredient.body {
             body.velocity = .zero
@@ -124,10 +118,33 @@ public class SKPlate: GKEntity {
         }
         
         
-//        parentNode.addChild(ingredientNode)
+        let parentNode: SKNode = stack.last?.node ?? plateNode
+        
+        print("Parent Node: \(parentNode)")
+        
+        
+        let offSet: CGFloat = baseOffset + CGFloat(stack.count) * stackingOffset
+        
+        var targetPosition = plateNode.position
+        targetPosition.y += offSet
+        
+        
+        let moveAction = SKAction.move(to: targetPosition, duration: 0.0)
+        ingredientNode.run(moveAction)
+        
+        
+        ingredientNode.zPosition = (stack.last?.node?.zPosition ?? plateNode.zPosition) + 1
+        
+        
         stack.append(ingredient)
         
-        print("parent: \(String(describing: ingredientNode.parent))")
+        
+        if ingredient.ingredient.type == .topBun {
+            let draggable = DraggableComponent()
+            self.addComponent(draggable)
+            
+            self.body?.isDynamic = true
+        }
         
         return true
     }
