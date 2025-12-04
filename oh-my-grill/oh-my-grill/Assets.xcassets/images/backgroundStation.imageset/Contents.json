@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "alface1.png",
+      "filename" : "bgstation.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "alface2.png",
+      "filename" : "bgstation2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "alface3.png",
+      "filename" : "bgstation3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

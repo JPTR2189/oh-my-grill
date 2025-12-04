@@ -44,6 +44,10 @@ public final class EntityManager {
     public func getEntities() -> Set<GKEntity> {
         entities
     }
+    
+    deinit {
+        print("Entity Manager deinited")
+    }
 }
 
 // Hit-test helpers
