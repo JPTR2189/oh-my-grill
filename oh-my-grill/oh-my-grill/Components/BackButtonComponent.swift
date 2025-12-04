@@ -12,6 +12,8 @@ struct BackButtonComponent: View {
     
     var body: some View {
         Button {
+            HapticManager.instance.notification(type: .success)
+
             dismiss()
         } label: {
             Image(systemName: "chevron.left")

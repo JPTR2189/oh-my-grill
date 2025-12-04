@@ -34,6 +34,8 @@ struct ButtonComponent: View {
                 )
         } else {
             Button {
+                HapticManager.instance.notification(type: .success)
+                
                 buttonAction()
             } label: {
                 Text(text)

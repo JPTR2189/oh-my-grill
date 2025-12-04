@@ -54,6 +54,8 @@ struct JoinView: View {
                         }
                         
                         Button {
+                            HapticManager.instance.notification(type: .success)
+
                             vc.removeFromPassword()
                         } label: {
                             Image(systemName: "delete.left")

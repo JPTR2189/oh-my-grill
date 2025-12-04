@@ -9,6 +9,7 @@ import CoreMotion
 import Foundation
 import Combine
 import SwiftUI
+import UIKit
 
 @Observable
 class CutMiniGameViewModel: CutMiniGameViewModelProtocol {
@@ -67,10 +68,15 @@ class CutMiniGameViewModel: CutMiniGameViewModelProtocol {
         case .waitingForUpReverse:
             if accelerationValue < -self.accelerationThreshold {
                 self.gestureCount += 1
+                
+                HapticManager.instance.impact(style: .heavy)
+                
                 self.currentState = .readyForDownMove
                 
                 if self.gestureCount >= self.requiredGestures {
                     self.gestureComplete = true
+
+                    HapticManager.instance.notification(type: .success)
                 }
             }
         }
