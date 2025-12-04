@@ -10,7 +10,11 @@ import SwiftUI
 struct CutMiniGameView: View {
     @State var vm: any CutMiniGameViewModelProtocol
     
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var nextView: Bool = false
+    
+    var ingredient: SKIngredient
     
     var body: some View {
         NavigationStack {
@@ -50,14 +54,15 @@ struct CutMiniGameView: View {
                         )
                         .padding(.horizontal, 226)
                         .onChange(of: vm.gestureComplete) {
-                                nextView = true
+                                ingredient.ingredient.cut()
+                                dismiss()
                             }
                     }
                 .padding(.top, 32)
             }
             .navigationBarBackButtonHidden(true)
-            .navigationDestination(isPresented: $nextView) {
-                    CutView()
+            .onDisappear {
+                
             }
         }
     }

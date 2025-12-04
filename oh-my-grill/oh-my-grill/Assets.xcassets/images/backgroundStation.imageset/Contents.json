@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Carne normal 8.png",
+      "filename" : "bgstation.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Carne normal 9.png",
+      "filename" : "bgstation2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Carne normal 10.png",
+      "filename" : "bgstation3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
