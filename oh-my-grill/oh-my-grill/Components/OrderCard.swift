@@ -77,13 +77,13 @@ struct OrderCard: View {
             
             
         }
-//        .padding(8)
         .frame(width: 165, height: 120)
         .background(
             RoundedCorners(radius: 12, corners: [.bottomRight, .bottomLeft])
                 .foregroundStyle(.texasSalmon)
                 .shadow(color: .texasBrown, radius: 0.5, x: 0, y: 7)
         )
+        .opacity(order.status == .expired ? 0.7 : 1)
     }
     
     

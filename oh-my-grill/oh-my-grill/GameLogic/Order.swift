@@ -50,6 +50,10 @@ public class Order: Identifiable {
     public func invalidateTimer() {
         timer?.invalidate()
     }
+    
+    public var getTime: Int {
+        Int(time)
+    }
 }
 
 

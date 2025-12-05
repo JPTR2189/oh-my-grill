@@ -39,22 +39,20 @@ struct ChefView: View {
                     
                     HStack(spacing: 9) {
                         
-                        if let order = vm.orders.first {
+                        ForEach(vm.orders) { order in
                             OrderCard(order: order)
-                                .padding(.leading, 20)
-
-
-                            OrderCard(order: order)
-                            
-                            
-                            OrderCard(order: order)
-                           
+                                .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity),
+                                removal: .opacity.animation(.easeOut(duration: 0.2))))
+                                
+                                .zIndex(1)
                         }
+
                         
                         
                     }
+                    .animation(.spring(response: 0.5, dampingFraction: 0.8), value: vm.orders.map { $0.id })
                     
-                    OrdersCount(quantity: 3)
+                    OrdersCount(quantity: vm.moreOrders, Isvisible: vm.moreOrders > 0)
                         .padding(.top, 26)
                     
                     Spacer()
@@ -83,6 +81,7 @@ struct ChefView: View {
         .onAppear {
             scene.startSpawning()
             vm.session.setNotificationHandler(self)
+            vm.startGame()
         }
         .onDisappear {
             scene.stopSpawning()
@@ -90,6 +89,7 @@ struct ChefView: View {
         .ignoresSafeArea(.all)
     }
 }
+
 
 // MARK: - Notification delegate
 extension ChefView: MPCNotificationDelegate {
