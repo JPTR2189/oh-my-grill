@@ -31,6 +31,11 @@ public struct Ingredient: Codable {
         print("\(type.displayName) cutted!")
         self.state = .sliced
     }
+    
+    mutating func cook() {
+        print("\(type.displayName) cooked!")
+        self.state = .cooked
+    }
 }
 
 // Ingredient types - used to differentiate different ingredients
