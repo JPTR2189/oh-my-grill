@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "AlfaceInteira 3.png",
+      "filename" : "alface1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "AlfaceInteira 1.png",
+      "filename" : "alface2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "AlfaceInteira 2.png",
+      "filename" : "alface3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

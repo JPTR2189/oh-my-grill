@@ -16,7 +16,7 @@ public struct PhysicsCategory {
     static let obstacle: UInt32 = 1 << 4
     
     //////
-    static let prato: UInt32 = 1 << 5
-    static let ingrediente:  UInt32 = 1 << 6
+    static let dish: UInt32 = 1 << 5
+    static let ingredient:  UInt32 = 1 << 6
 
 }

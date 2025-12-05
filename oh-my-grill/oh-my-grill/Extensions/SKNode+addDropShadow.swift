@@ -7,7 +7,7 @@
 
 import Foundation
 import SpriteKit
-import CoreImage // Necessário para o filtro de Blur
+import CoreImage
 
 extension SKNode {
     
@@ -28,58 +28,51 @@ extension SKNode {
         self.childNode(withName: "dropShadow_container")?.removeFromParent()
         
         // 2. Copia o nó atual para criar a forma da sombra
-        // O copy() é essencial para pegar a mesma textura/forma do original
         guard let shadowNode = self.copy() as? SKNode else { return }
         
         // 3. Configurações básicas da cópia
         shadowNode.name = "shadow_shape"
-        shadowNode.position = .zero // A posição será controlada pelo container ou offset
+        shadowNode.position = .zero
         shadowNode.alpha = opacity
-        shadowNode.xScale = 1.0 // Reseta escala relativa caso o pai mude
+        shadowNode.xScale = 1.0
         shadowNode.yScale = 1.0
         shadowNode.zRotation = 0
         
-        // Remove filhos da cópia (ex: se o ingrediente tem rótulos dentro, a sombra não precisa ter)
         shadowNode.removeAllChildren()
         
         // 4. Pinta a sombra da cor escolhida (Preto) dependendo do tipo de nó
         if let sprite = shadowNode as? SKSpriteNode {
             sprite.color = color
-            sprite.colorBlendFactor = 1.0 // Força a cor sólida
+            sprite.colorBlendFactor = 1.0
             sprite.blendMode = .alpha
         } else if let shape = shadowNode as? SKShapeNode {
             shape.fillColor = color
-            shape.strokeColor = color // Se tiver borda
+            shape.strokeColor = color 
             shape.glowWidth = 0
         } else if let label = shadowNode as? SKLabelNode {
             label.fontColor = color
-            // Labels não tem colorBlendFactor, então a cor já é aplicada acima
         }
         
         // 5. Lógica de Container e Blur
-        // Criamos um nó vazio para segurar a sombra. Isso facilita o gerenciamento.
         let shadowContainer: SKNode
         
         if radius > 0 {
-            // Se tiver Blur, usamos um SKEffectNode (mais custoso, mas bonito)
             let effectNode = SKEffectNode()
             effectNode.shouldEnableEffects = true
             
-            // Aplica o filtro de Gaussian Blur
             let filter = CIFilter(name: "CIGaussianBlur")
             filter?.setValue(radius, forKey: kCIInputRadiusKey)
             effectNode.filter = filter
             
             shadowContainer = effectNode
         } else {
-            // Se não tiver blur, usa um nó simples (muito mais rápido)
             shadowContainer = SKNode()
         }
         
         // 6. Configuração Final do Container
         shadowContainer.name = "dropShadow_container"
         shadowContainer.position = CGPoint(x: offset.width, y: offset.height)
-        shadowContainer.zPosition = layer // Aqui controlamos se fica atrás (-1) ou na frente (+1)
+        shadowContainer.zPosition = layer
         
         // Adiciona a forma pintada dentro do container
         shadowContainer.addChild(shadowNode)

@@ -139,7 +139,11 @@ extension GameSession {
         transport.send(message)
     }
     
-//    public func sendNotification(_ notification: MPCNotifications) {
-//        transport.sendNotification(notification)
-//    }
+    public func sendNotification(_ notification: MPCNotifications) {
+        transport.sendNotification(notification)
+    }
+    
+    public func notifyDelegate(_ notification: MPCNotifications) {
+        transport.notifyDelegate(notification)
+    }
 }
