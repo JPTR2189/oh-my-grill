@@ -14,32 +14,27 @@ class GrillMiniGameViewModel {
 
     private let service: MotionServiceProtocol
 
-    var didRotate360 = false {
-        didSet {
-            if didRotate360 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    self.nextView = true
-                }
-            }
-        }
-    }
-
-    var nextView = false
-    
+    var didRotate360 = false
     private var lastRoll: Double = 0
     private var accumulated: Double = 0
     private var firstReading = true
     private var currentDirection: Int = 0
     
+    var ingredient: SKIngredient
     let session: GameSession
     
     var round: Round? {
         session.currentRound
     }
 
-    init(motionService: MotionServiceProtocol = MotionService(), session: GameSession) {
+    init(
+        motionService: MotionServiceProtocol = MotionService(),
+        session: GameSession,
+        ingredient: SKIngredient
+    ) {
         self.service = motionService
         self.session = session
+        self.ingredient = ingredient
         self.startMotionUpdates()
     }
 
@@ -73,8 +68,9 @@ class GrillMiniGameViewModel {
         accumulated += delta
         lastRoll = roll
 
-        if abs(accumulated) >= (240 * .pi / 180) {
+        if abs(accumulated) >= (230 * .pi / 180) {
             didRotate360 = true
+            service.stopUpdates()
         }
     }
 

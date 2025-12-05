@@ -10,6 +10,7 @@ import SwiftUI
 struct GrillMiniGameView: View {
     
     @Bindable var vm: GrillMiniGameViewModel
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationStack {
@@ -19,44 +20,37 @@ struct GrillMiniGameView: View {
                     .scaledToFill()
                     .ignoresSafeArea()
                 
-                
                 if let round = vm.round {
                     RoundNumber(round: round)
-                        .padding(.top, 0)
-                        .padding(.trailing, 0)
                 }
                 
-                VStack(spacing: 24) {
+                VStack(alignment: .center, spacing: 24) {
                     VStack(spacing: 8) {
                         Text("Grill the meat")
                             .font(.custom("Toy Block Maestro", size: 56))
-                            .padding(.horizontal, 180)
                         
                         Text("Flip your phone to cook your meat.")
                             .font(.custom("Poppins Regular", size: 15))
                     }
                     .foregroundStyle(.texasBeige)
+                    .padding(.trailing, 170)
                     
                     Image(vm.didRotate360 ? "burger-cooked" : "burger-base")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 270)
                         .animation(.easeIn, value: vm.didRotate360)
-                    
+                        .padding(.trailing, 185)
                 }
                 .padding(.top, 32)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding(.top, 0)
-            .ignoresSafeArea()
             .navigationBarBackButtonHidden(true)
-            .navigationDestination(isPresented: $vm.nextView) {
-                CutView()
+            .onChange(of: vm.didRotate360) {
+                vm.ingredient.ingredient.cook()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    dismiss()
+                }
             }
         }
     }
 }
-
-//#Preview {
-//    GrillMiniGameView()
-//}
