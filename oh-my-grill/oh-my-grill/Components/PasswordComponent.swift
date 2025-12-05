@@ -11,7 +11,7 @@ enum Size {
     case large
     case medium
     case small
-
+    
     var frameSize: CGFloat {
         switch self {
         case .large: 86
@@ -43,7 +43,8 @@ struct PasswordComponent: View {
     var isDisabled: Bool = false
     var size: Size = .large
     var bgColor: Color?
-
+    var isError: Bool = false
+    
     var body: some View {
         Button {
             self.buttonAction?()
@@ -61,6 +62,10 @@ struct PasswordComponent: View {
                             x: 0,
                             y: 4
                         )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: size.cornerRadius)
+                        .stroke(isError ? Color.red : Color.clear, lineWidth: 3)
                 )
         }
         .disabled(isDisabled)
