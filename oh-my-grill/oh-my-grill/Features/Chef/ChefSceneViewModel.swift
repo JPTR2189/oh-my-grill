@@ -258,7 +258,7 @@ class ChefSceneViewModel {
 
         prato.physicsBody?.isDynamic = false
 
-        prato.physicsBody?.categoryBitMask = PhysicsCategory.prato
+        prato.physicsBody?.categoryBitMask = PhysicsCategory.dish
 
         
 
