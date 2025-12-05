@@ -363,11 +363,18 @@ extension GrillScene {
                     if let burgerNode = entityManager?.node(for: cookedBurgerEntity),
                        let burgerIngredient = burgerNode.entity as? SKIngredient {
                         
+                        guard !burgerIngredient.isCooking else {
+                            print("Burger is not cooked! Can't add cheese.")
+                            return
+                        }
+                        
                         //burger cheesed
                         burgerIngredient.ingredient.state = .cheesed
                         let scaleUp = SKAction.scale(to: 1.1, duration: 0.1)
                         let scaleDown = SKAction.scale(to: 1.0, duration: 0.1)
                         burgerNode.run(.sequence([scaleUp, scaleDown]))
+                        
+                        releaseIngredientFromGrill(burgerNode)
                         
                         entityManager?.remove(entity: entity)
                         
@@ -382,12 +389,24 @@ extension GrillScene {
             
             // if burger base
             if ingredient.ingredient.type == .burger && ingredient.ingredient.state == .base {
+                pinIngredientToGrill(node)
                 onGrillCollision?(ingredient)
+            }
+            
+            if ingredient.ingredient.type == .burger && ingredient.ingredient.state == .cooked {
+                pinIngredientToGrill(node)
             }
             
             let payload = IngredientPayload(ingredient: ingredient.ingredient)
             self.session.notifyDelegate(.ingredient(payload))
         }
+        
+        let sceneRect = CGRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height)
+
+            if !sceneRect.contains(node.position) {
+                print("Ingredient dropped outside, removing.")
+                entityManager?.remove(entity: entity)
+            }
     }
     
     
@@ -428,4 +447,19 @@ extension GrillScene {
         body.angularVelocity = 0
     }
     
+    private func pinIngredientToGrill(_ ingredientNode: SKNode) {
+        ingredientNode.position = grillNode.position
+        ingredientNode.zPosition = grillNode.zPosition + 0.8
+
+        ingredientNode.physicsBody?.velocity = .zero
+        ingredientNode.physicsBody?.angularVelocity = 0
+        ingredientNode.physicsBody?.isDynamic = false
+        ingredientNode.physicsBody?.affectedByGravity = false
+    }
+
+    private func releaseIngredientFromGrill(_ ingredientNode: SKNode) {
+        ingredientNode.physicsBody?.isDynamic = true
+        ingredientNode.physicsBody?.affectedByGravity = false
+    }
+
 }
