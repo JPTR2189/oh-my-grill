@@ -29,8 +29,11 @@ public final class ChefScene: SKScene {
     
     // Ingredient spawning
     private var isSpawning: Bool = false
-    private let spawningInterval: TimeInterval = 10
+    private let spawningInterval: TimeInterval = 10 // Go back to 10 after testing
     private let spawnerKey: String = "ingredientSpawner"
+    
+    // Plate node
+    private var plate: SKPlate?
     
     
     //MARK: Initializers
@@ -44,8 +47,11 @@ public final class ChefScene: SKScene {
     }
     
     override public func didMove(to view: SKView) {
+        
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
+        
+        physicsWorld.contactDelegate = self
 
         physicsWorld.gravity = .init(dx: 0, dy: 0)
         self.entityManager = EntityManager(scene: self)
@@ -66,12 +72,12 @@ public final class ChefScene: SKScene {
         trashCanNode.setScale(1)
         addChild(trashCanNode)
 
-        // MARK: Ingredient
-        let initialIngredient = Ball()
-        let centerPoint = CGPoint(x: frame.midX, y: frame.midY)
-        initialIngredient.setPosition(to: centerPoint)
-        
-//        entityManager?.add(entity: initialIngredient)
+        // Plate
+        let plate = SKPlate()
+        self.plate = plate
+        let centerPoint: CGPoint = .init(x: frame.midX, y: frame.midY)
+        plate.node?.position = centerPoint
+        entityManager?.add(entity: plate)
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -125,12 +131,32 @@ public final class ChefScene: SKScene {
         let point = CGPoint(x: x, y: y)
         let ingredient = Ingredient.getRandom()
         
-        print("Dropping: \(ingredient.state.rawValue) \(ingredient.type.displayName)")
+//        print("Dropping: \(ingredient.state.rawValue) \(ingredient.type.displayName)")
         
         let ingredientNode = SKIngredient(for: ingredient)
         ingredientNode.setPosition(to: point)
         entityManager?.add(entity: ingredientNode)
         ingredientNode.body?.applyForce(.init(dx: 0, dy: -20000))
+    }
+    
+    func dropBurger() {
+        let burger = [
+            SKIngredient(for: .init(type: .bottomBun, state: .base)),
+            SKIngredient(for: .init(type: .burger, state: .base)),
+            SKIngredient(for: .init(type: .cheese, state: .base)),
+            SKIngredient(for: .init(type: .topBun, state: .base))
+        ]
+        
+        for ingredient in burger {
+            let x: CGFloat = CGFloat.random(in: frame.minX...frame.maxX)
+            let y: CGFloat = frame.maxY
+            let point = CGPoint(x: x, y: y)
+            
+            ingredient.setPosition(to: point)
+            entityManager?.add(entity: ingredient)
+            ingredient.body?.applyForce(.init(dx: 0, dy: -20000))
+        }
+        
     }
     
     public func startSpawning() {
@@ -142,7 +168,7 @@ public final class ChefScene: SKScene {
             self.dropRandomIngredient()
         }
         
-        let sequence = SKAction.sequence([wait, spawn])
+        let sequence = SKAction.sequence([spawn, wait])
         let forever = SKAction.repeatForever(sequence)
         
         self.run(forever, withKey: spawnerKey)
@@ -323,5 +349,31 @@ extension ChefScene {
         
         body.isDynamic = true
         body.angularVelocity = 0
+    }
+}
+
+// MARK: - Contact delegate
+extension ChefScene: SKPhysicsContactDelegate {
+    
+    public func didBegin(_ contact: SKPhysicsContact) {
+        let bodyA = contact.bodyA
+        let bodyB = contact.bodyB
+        
+        print("Contact")
+        
+        guard let nodeA = bodyA.node, let nodeB = bodyB.node else { return }
+        
+        if(nodeA.name == SKPlate.name || nodeB.name == SKIngredient.name) {
+            if let plate = nodeA.entity as? SKPlate,
+               let ingredient = nodeB.entity as? SKIngredient,
+               let managet = entityManager {
+                let stacked = plate.stackIngredient(ingredient, manager: managet)
+                
+                print("Stacked: \(stacked)")
+                
+//                
+            }
+            
+        }
     }
 }

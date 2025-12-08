@@ -56,6 +56,8 @@ struct JoinView: View {
                         }
                         
                         Button {
+                            HapticManager.instance.notification(type: .success)
+
                             vc.removeFromPassword()
                             wrongPassword = false
                         } label: {
