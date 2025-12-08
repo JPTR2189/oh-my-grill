@@ -53,9 +53,7 @@ public final class GameSession {
     public var finishedRound: Round?
     
     //orders
-    private(set) var currentOrders: [Order] = []
     private var orderTimer: Timer?
-    private let generator = OrderGenerator()
     
     
     // Initializer
@@ -68,7 +66,6 @@ public final class GameSession {
         }
         
         startNewRound()
-        updateOrders()
     }
     
     // Sends a Ingredient to the chef - used on classic mode
@@ -94,83 +91,37 @@ public final class GameSession {
         }
     }
     
-    // Initialize a new round
     public func startNewRound() {
-        let minRequiredPoints = 150
-        
-        let newRound = Round(
-            number: roundNumber,
-            minPoints: minRequiredPoints
-        )
-        
-        newRound.onFinished = { [weak self] round in
-                self?.roundDidFinish(round)
-            }
-        
-        currentRound = newRound
-        roundNumber += 1
-        
-        startOrderLoop()
-    }
+            let minRequiredPoints = 150
     
-    @MainActor
-    private func roundDidFinish(_ round: Round) {
-        finishedRound = round
+            let newRound = Round(
+                number: roundNumber,
+                minPoints: minRequiredPoints
+            )
+    
+            newRound.onFinished = { [weak self] round in
+                    self?.roundDidFinish(round)
+                }
+    
+            currentRound = newRound
+            roundNumber += 1
+    
+}
 
-        orderTimer?.invalidate()
-        currentOrders.removeAll()
-    }
-
+        @MainActor
+        private func roundDidFinish(_ round: Round) {
+            finishedRound = round
     
-    public func finishRound() {
-        guard let round = currentRound else { return }
-        round.invalidateTimer()
-        round.getFeedback()
-        orderTimer?.invalidate()
-        currentOrders.removeAll()
-    }
-    
-    // Initialize Orders
-    private func startOrderLoop() {
-        orderTimer?.invalidate()
-        
-        orderTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            self?.updateOrders()
+            orderTimer?.invalidate()
         }
-    }
     
-    private func updateOrders() {
-        currentOrders.removeAll { $0.status == .expired || $0.status == .delivered }
-        
-        if currentOrders.isEmpty {
-            var newOrder = Order(meal: generator.generateOrder().meal)
-            newOrder.onStatusChanged = { [weak self] updatedOrder in
-                self?.orderStatusDidChange(updatedOrder)
-            }
-            currentOrders.append(newOrder)
-        }
-    }
-
-    @MainActor
-    private func orderStatusDidChange(_ order: Order) {
-        if order.status == .expired || order.status == .delivered {
-            replaceOrder(order)
-        }
-    }
-
-    @MainActor
-    private func replaceOrder(_ order: Order) {
-        currentOrders.removeAll { $0.id == order.id }
-
-        var newOrder = Order(meal: generator.generateOrder().meal)
-        newOrder.onStatusChanged = { [weak self] updated in
-            self?.orderStatusDidChange(updated)
-        }
-
-        currentOrders.append(newOrder)
-    }
-
     
+        public func finishRound() {
+            guard let round = currentRound else { return }
+            round.invalidateTimer()
+            round.getFeedback()
+            orderTimer?.invalidate()
+        }
 }
 
 

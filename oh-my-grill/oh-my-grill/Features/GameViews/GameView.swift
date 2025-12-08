@@ -1,10 +1,3 @@
-//
-//  GameView.swift
-//  oh-my-grill
-//
-//  Created by João Pedro Teixeira de Carvalho on 25/11/25.
-//
-
 import SwiftUI
 import SpriteKit
 

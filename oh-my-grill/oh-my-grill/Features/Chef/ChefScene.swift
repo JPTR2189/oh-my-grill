@@ -11,6 +11,7 @@ import GameplayKit
 public final class ChefScene: SKScene {
     // MARK: Properties
     
+    private var viewModel = ChefSceneViewModel()
     private var session: GameSession
     
     // Entity manager
