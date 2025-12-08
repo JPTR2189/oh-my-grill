@@ -73,6 +73,7 @@ struct ChefView: View {
 
         .onAppear {
             scene.startSpawning()
+//            scene.dropBurger()
             vm.session.setNotificationHandler(self)
         }
         .onDisappear {

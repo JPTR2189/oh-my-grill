@@ -18,8 +18,6 @@ public class SKPlate: GKEntity {
     let rootNode = SKNode()
     let plateSprite = SKSpriteNode(imageNamed: "plate")
     
-    let burgerRoot = SKNode()
-    
     var node: SKNode? {
         component(ofType: GKSKNodeComponent.self)?.node
     }
@@ -54,12 +52,6 @@ public class SKPlate: GKEntity {
         
         rootNode.zPosition = 0
         
-                
-        burgerRoot.position = CGPoint(x: 0, y: baseOffset)
-        burgerRoot.zPosition = baseOffset
-        rootNode.addChild(burgerRoot)
-
-        
         addComponent(GKSKNodeComponent(node: rootNode))
     }
     
@@ -71,10 +63,8 @@ public class SKPlate: GKEntity {
         print("Trying to stack \(ingredient.ingredient.type.displayName)")
 
         /* Preconditions */
-        
         // Extracting plate node
-        guard let plateNode = node
-        else {
+        guard let plateNode = node else {
             print("Critical error on SKPlate: Couldnt find SKNode")
             return false
         }
@@ -107,17 +97,13 @@ public class SKPlate: GKEntity {
                 return false
             }
         }
-        
-        let newIngredient = SKIngredient(for: ingredient.ingredient)
-        guard let newNode = newIngredient.node
-        else {
-            print("Couldn extract node from new ingredient")
-            return false
-        }
         /***/
         
         
-        if let body = newNode.physicsBody {
+        ingredient.removeComponent(ofType: DraggableComponent.self)
+        
+        
+        if let body = ingredientNode.physicsBody {
             body.categoryBitMask = 0
             body.collisionBitMask = 0
             body.contactTestBitMask = 0
@@ -126,50 +112,36 @@ public class SKPlate: GKEntity {
         }
         
         
-        if ingredientNode.parent != nil {
-            manager.remove(entity: ingredient)
+        let offset: CGFloat = baseOffset + CGFloat(stack.count) * stackingOffset
+        
+        var targetPosition: CGPoint = plateNode.position
+        targetPosition.y += offset
+        
+        let moveAction = SKAction.move(to: targetPosition, duration: 0.0)
+        ingredientNode.run(moveAction)
+
+        ingredientNode.zPosition = CGFloat(stack.count) + 10
+        
+        
+        stack.append(ingredient)
+        
+        
+        guard ingredient.ingredient.type == .topBun
+        else { return true }
+        
+        let burger = SKBurger(fromStack: stack)
+        
+        if let burgerNode = burger.node {
+            burgerNode.position = plateNode.position
+            manager.add(entity: burger)
         }
         
-        
-        burgerRoot.addChild(newNode)
-        
-        
-        let offset: CGFloat = CGFloat(stack.count) * stackingOffset
-        newNode.position = CGPoint(x: 0, y: offset)
-        newNode.zPosition = CGFloat(stack.count) + 1
-        
-        
-        stack.append(newIngredient)
-        
-        
-        if newIngredient.ingredient.type == .topBun {
-            releaseBurger(manager: manager)
+        for ing in stack {
+            manager.remove(entity: ing)
         }
+        stack.removeAll()
         
         return true
-    }
-    
-    private func releaseBurger(manager: EntityManager) {
-        guard let plateNode = node,
-              let scene = plateNode.scene
-        else { return }
-        
-        print("Releasing burger with \(stack.count) ingredients")
-        
-        let worldPos = burgerRoot.convert(rootNode.position, to: scene)
-        
-        burgerRoot.removeFromParent()
-        
-        let burgerEntity = SKBurger(fromRoot: burgerRoot)
-        burgerEntity.node?.position = worldPos
-        manager.add(entity: burgerEntity)
-        
-        stack.removeAll()
-        let newBurgerRoot = SKNode()
-        newBurgerRoot.position = CGPoint(x: 0, y: baseOffset)
-        newBurgerRoot.zPosition = 5
-        plateNode.addChild(newBurgerRoot)
-        self.burgerRoot.removeAllChildren()
     }
 }
 

@@ -139,6 +139,26 @@ public final class ChefScene: SKScene {
         ingredientNode.body?.applyForce(.init(dx: 0, dy: -20000))
     }
     
+    func dropBurger() {
+        let burger = [
+            SKIngredient(for: .init(type: .bottomBun, state: .base)),
+            SKIngredient(for: .init(type: .burger, state: .base)),
+            SKIngredient(for: .init(type: .cheese, state: .base)),
+            SKIngredient(for: .init(type: .topBun, state: .base))
+        ]
+        
+        for ingredient in burger {
+            let x: CGFloat = CGFloat.random(in: frame.minX...frame.maxX)
+            let y: CGFloat = frame.maxY
+            let point = CGPoint(x: x, y: y)
+            
+            ingredient.setPosition(to: point)
+            entityManager?.add(entity: ingredient)
+            ingredient.body?.applyForce(.init(dx: 0, dy: -20000))
+        }
+        
+    }
+    
     public func startSpawning() {
         isSpawning = true
         
