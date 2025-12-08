@@ -19,7 +19,7 @@ class ChefSceneViewModel {
 
     private var cont = 0
 
-    let opcoes = ["burger-cheesed-shade", "tomato-sliced-shade", "lettuce-sliced-shade", "potato-fried-shade", "bun-top-shade",  "bun-bottom-shade"]
+    let opcoes = ["burger-cheesed-shade", "tomato-sliced-shade", "lettuce-sliced-shade", "potato-cooked-shade", "bun-top-shade",  "bun-bottom-shade"]
 
 
     func criarPratoRedondo(isPotato: Bool = false) {
@@ -67,7 +67,7 @@ class ChefSceneViewModel {
     
     func componenteIngrediente(nome: String, posicaoIngrediente: CGFloat) {
         
-        let tamanho = nome == "potato-fried-shade" ? CGSize(width: 125  , height: 90) : CGSize(width: 90 , height: 90)
+        let tamanho = nome == "potato-cooked-shade" ? CGSize(width: 125  , height: 90) : CGSize(width: 90 , height: 90)
         
         let ingrediente = SKSpriteNode(texture: SKTexture(imageNamed: nome), color: .clear, size: tamanho)
         ingrediente.position = CGPoint(x: scene.frame.minX + posicaoIngrediente, y: scene.frame.minY + 50)
