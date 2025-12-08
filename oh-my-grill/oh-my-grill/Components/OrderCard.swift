@@ -101,7 +101,3 @@ struct OrderCard: View {
         return String(format: "%02d:%02d", minutes, seconds)
     }
 }
-
-#Preview {
-    OrderCard(order: Order(meal: Meal(ingredients: [Ingredient(type: .bun, state: .base)], hasFries: true)))
-}

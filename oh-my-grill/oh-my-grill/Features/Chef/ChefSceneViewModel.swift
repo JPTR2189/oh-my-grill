@@ -55,7 +55,7 @@ class ChefSceneViewModel {
 
         dish.physicsBody?.isDynamic = false
 
-        dish.physicsBody?.categoryBitMask = PhysicsCategory.dish
+        dish.physicsBody?.categoryBitMask = PhysicsCategory.plate
 
         
 
