@@ -47,6 +47,8 @@ struct PasswordComponent: View {
     
     var body: some View {
         Button {
+            HapticManager.instance.notification(type: .success)
+
             self.buttonAction?()
         } label: {
             Text(text)
