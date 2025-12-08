@@ -58,7 +58,7 @@ struct OrderCard: View {
                 // FRIES
                 if order.meal.hasFries {
                     VStack(spacing: 2) {
-                        Image(.potatoBase) // nome correto aqui
+                        Image(.potatoCooked) // nome correto aqui
                             .resizable()
                             .scaledToFit()
                             .frame(width: 34, height: 34)
