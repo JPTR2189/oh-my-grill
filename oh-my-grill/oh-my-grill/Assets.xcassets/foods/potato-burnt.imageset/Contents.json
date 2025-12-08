@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "batata queimada 1.png",
+      "filename" : "batataqueimada1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "batata queimada 2.png",
+      "filename" : "batataqueimada2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "batata queimada 3.png",
+      "filename" : "batataqueimada3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

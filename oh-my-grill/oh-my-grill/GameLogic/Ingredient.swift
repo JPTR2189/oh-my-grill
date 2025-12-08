@@ -21,8 +21,10 @@ public struct Ingredient: Codable {
     }
     
     var imageName: String {
+        if type == .bottomBun || type == .topBun { return type.imageName }
+
         let preffix: String = type.rawValue
-        let suffix: String = state.rawValue
+        let suffix: String = state.rawValue        
         
         return "\(preffix)-\(suffix)"
     }
@@ -42,7 +44,8 @@ public struct Ingredient: Codable {
 public enum IngredientType: String, Codable, CaseIterable {
     case lettuce
     case tomato
-    case bun
+    case topBun
+    case bottomBun
     case burger
     case potato
     case cheese
@@ -55,11 +58,25 @@ extension IngredientType {
         switch self {
         case .lettuce: "Lettuce"
         case .tomato: "Tomato"
-        case .bun: "Bun"
+        case .topBun: "Top Bun"
+        case .bottomBun: "Bottom Bun"
         case .burger: "Burger"
         case .potato: "Potato"
         case .cheese: "Cheese"
         case .genericParcel: "Generic"
+        }
+    }
+
+    var imageName: String {
+        switch self {
+        case .lettuce: "lettuce-sliced"
+        case .tomato: "tomato-sliced"
+        case .topBun: "bun-top"
+        case .bottomBun: "bun-bottom"
+        case .burger: "burger-cheesed"
+        case .potato: "potato"
+        case .cheese: "cheese-base"
+        case .genericParcel: "parcel"
         }
     }
     
@@ -75,6 +92,4 @@ public enum IngredientState: String, Codable {
     case cooked
     case burnt
     case cheesed
-    case top
-    case bottom
 }

@@ -23,10 +23,10 @@ final class OrderGenerator {
     private func generateIngredients() -> [Ingredient] {
 
         // 1. Primeiro ingrediente: bun-top
-        let topBun = Ingredient(type: .bun, state: .top)
+        let topBun = Ingredient(type: .topBun, state: .base)
 
         // 2. Ultimo ingrediente: bun-bottom
-        let bottomBun = Ingredient(type: .bun, state: .bottom)
+        let bottomBun = Ingredient(type: .bottomBun, state: .base)
 
         // 3. Penúltimo ingrediente: burger-cheesed
         let cheesedBurger = Ingredient(type: .burger, state: .cheesed)

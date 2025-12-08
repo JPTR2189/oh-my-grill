@@ -1,5 +1,5 @@
 //
-//  CutScene.swift
+//  FryScene.swift
 //  oh-my-grill
 //
 //  Created by Maria Santellano on 27/11/25.
@@ -8,7 +8,7 @@
 import GameplayKit
 import SpriteKit
 
-public final class CutScene: SKScene {
+public final class FryScene: SKScene {
     // MARK: Properties
 
     private var session: GameSession
@@ -21,35 +21,33 @@ public final class CutScene: SKScene {
     private var currentDrag: GKEntity?
     private var targetPoint: CGPoint?
 
-    public var onKnifeCollision: ((SKIngredient) -> Void)?
+    //Collision with the fryer
+    public var onFryerCollision: ((SKIngredient) -> Void)?
 
     // Ingredients table Node
     private let ingredientsTableNode: SKSpriteNode = SKSpriteNode(
         imageNamed: "ingredientsTable"
     )
 
-    //Knife Node
-    private let knifeNode: SKSpriteNode = SKSpriteNode(imageNamed: "knife")
+    //Fryer Node
+    private let fryerNode: SKSpriteNode = SKSpriteNode(imageNamed: "fryer")
 
     // Background node
     private let backgroundNode = SKSpriteNode(imageNamed: "backgroundStation")
 
     // Ingredient spawning point
-    private var tomatoSpawnPoint: CGPoint {
-        return CGPoint(x: frame.maxX - 200, y: frame.minY + 80)
-    }
-    private var lettuceSpawnPoint: CGPoint {
-        return CGPoint(x: frame.maxX - 80, y: frame.minY + 80)
+    private var potatoSpawnPoint: CGPoint {
+        return CGPoint(x: frame.maxX - 140, y: frame.minY + 60)
     }
 
     //MARK: Initializers
     public init(
         size: CGSize,
         session: GameSession,
-        onKnifeCollision: ((SKIngredient) -> Void)? = nil
+        onFryerCollision: ((SKIngredient) -> Void)? = nil
     ) {
         self.session = session
-        self.onKnifeCollision = onKnifeCollision
+        self.onFryerCollision = onFryerCollision
         super.init(size: size)
     }
 
@@ -70,19 +68,19 @@ public final class CutScene: SKScene {
         backgroundNode.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         addChild(backgroundNode)
 
-        // MARK: Knife
-        knifeNode.name = "knife"
-        knifeNode.position = CGPoint(
-            x: knifeNode.size.width / 2 + 84,
-            y: knifeNode.size.height / 2 + 52,
+        // MARK: Fryer
+        fryerNode.name = "fryer"
+        fryerNode.position = CGPoint(
+            x: fryerNode.size.width / 2 + 84,
+            y: fryerNode.size.height / 2,
         )
-        knifeNode.setScale(1.4)
-        addChild(knifeNode)
+        addChild(fryerNode)
 
         //MARK: Ingredients table
+
         self.entityManager = EntityManager(scene: self)
 
-        print("First entry on CutScene")
+        print("First entry on FryScene")
 
         ingredientsTableNode.name = "ingredientsTable"
         ingredientsTableNode.position = CGPoint(
@@ -92,8 +90,7 @@ public final class CutScene: SKScene {
         ingredientsTableNode.zPosition = 1
         addChild(ingredientsTableNode)
 
-        replenishIngredient(type: .tomato)
-        replenishIngredient(type: .lettuce)
+        replenishIngredient(type: .potato)
 
         print("Entities:")
         if let entities = entityManager?.getEntities() {
@@ -111,8 +108,7 @@ public final class CutScene: SKScene {
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
 
-        replenishIngredient(type: .tomato)
-        replenishIngredient(type: .lettuce)
+        replenishIngredient(type: .potato)
 
         guard let entities = entityManager?.getEntities() else { return }
 
@@ -134,13 +130,10 @@ public final class CutScene: SKScene {
     }
 
     private func replenishIngredient(type: IngredientType) {
-
         let point: CGPoint
         switch type {
-        case .tomato:
-            point = tomatoSpawnPoint
-        case .lettuce:
-            point = lettuceSpawnPoint
+        case .potato:
+            point = potatoSpawnPoint
         default:
             return
         }
@@ -178,7 +171,7 @@ public final class CutScene: SKScene {
         node.yScale = 0.5
 
         let fadeInAction = SKAction.fadeIn(withDuration: 0.3)
-        let scaleUpAction = SKAction.scale(to: 1.0, duration: 0.3)
+        let scaleUpAction = SKAction.scale(to: 1.6, duration: 0.3)
         let spawnAnimation = SKAction.group([fadeInAction, scaleUpAction])
 
         entityManager?.add(entity: ingredientNode)
@@ -190,7 +183,7 @@ public final class CutScene: SKScene {
 }
 
 // MARK: - Auxiliar Funcs
-extension CutScene {
+extension FryScene {
     private func exitSide(
         for node: SKNode,
         minExitVelocity velocity: CGFloat = 1
@@ -231,7 +224,7 @@ extension CutScene {
 }
 
 // MARK: - Touch Input & Drag Mechanics
-extension CutScene {
+extension FryScene {
 
     override public func touchesBegan(
         _ touches: Set<UITouch>,
@@ -340,8 +333,8 @@ extension CutScene {
             return
         }
 
-        if ingredient.ingredient.type == .lettuce && ingredient.ingredient.state == .base  || ingredient.ingredient.type == .tomato && ingredient.ingredient.state == .base {
-            onKnifeCollision?(ingredient)
+        if ingredient.ingredient.type == .potato && ingredient.ingredient.state == .base {
+            onFryerCollision?(ingredient)
         }
         
         let payload = IngredientPayload(ingredient: ingredient.ingredient)

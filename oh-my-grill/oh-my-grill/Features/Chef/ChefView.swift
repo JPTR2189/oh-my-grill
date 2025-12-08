@@ -20,6 +20,7 @@ struct ChefView: View {
                 size: .init(width: 800, height: 800),
                 session: vm.session
             )
+
         )
     }
 
@@ -80,6 +81,7 @@ struct ChefView: View {
 
         .onAppear {
             scene.startSpawning()
+//            scene.dropBurger()
             vm.session.setNotificationHandler(self)
             vm.startGame()
         }
