@@ -32,9 +32,12 @@ struct GameView: View {
                 }
             }
         }
-        .onAppear {
-            session.setNotificationHandler(self)
-        }
+//        .onAppear {
+//            session.setNotificationHandler(self)
+//            
+//            SoundManager.instance.playMusic(type: .game)
+//        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -59,4 +62,3 @@ extension GameView: MPCNotificationDelegate {
         }
     }
 }
-
