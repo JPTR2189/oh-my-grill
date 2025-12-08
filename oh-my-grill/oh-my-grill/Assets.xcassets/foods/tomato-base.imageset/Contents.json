@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "TomateInteiro 3.png",
+      "filename" : "TomateInteiro1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "TomateInteiro 4.png",
+      "filename" : "TomateInteiro 2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "TomateInteiro 2.png",
+      "filename" : "TomateInteiro3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

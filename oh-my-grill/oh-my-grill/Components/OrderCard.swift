@@ -44,7 +44,7 @@ struct OrderCard: View {
                     let count = groupedIngredients[type]?.count ?? 0
                     
                     VStack(spacing: 2) { // mais coladinho
-                        Image(type.imageName)
+                        Image("\(type.rawValue)-base")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 34, height: 34) // menor para caber numa linha
@@ -58,7 +58,7 @@ struct OrderCard: View {
                 // FRIES
                 if order.meal.hasFries {
                     VStack(spacing: 2) {
-                        Image("bun-top") // nome correto aqui
+                        Image(.potato) // nome correto aqui
                             .resizable()
                             .scaledToFit()
                             .frame(width: 34, height: 34)

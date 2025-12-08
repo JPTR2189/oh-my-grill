@@ -54,4 +54,8 @@ public class Ball: GKEntity {
     public func setPosition(to point: CGPoint) {
         component(ofType: GKSKNodeComponent.self)?.node.position = point
     }
+    
+    deinit {
+        print("Ball deinited")
+    }
 }
