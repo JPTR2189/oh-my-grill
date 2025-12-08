@@ -21,8 +21,10 @@ public struct Ingredient: Codable {
     }
     
     var imageName: String {
+        if type == .bottomBun || type == .topBun { return type.imageName }
+
         let preffix: String = type.rawValue
-        let suffix: String = state.rawValue
+        let suffix: String = state.rawValue        
         
         return "\(preffix)-\(suffix)"
     }

@@ -20,6 +20,7 @@ struct ChefView: View {
                 size: .init(width: 800, height: 800),
                 session: vm.session
             )
+
         )
     }
 

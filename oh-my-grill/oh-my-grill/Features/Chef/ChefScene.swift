@@ -47,6 +47,7 @@ public final class ChefScene: SKScene {
     }
     
     override public func didMove(to view: SKView) {
+        
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
         
@@ -344,12 +345,13 @@ extension ChefScene: SKPhysicsContactDelegate {
         
         if(nodeA.name == SKPlate.name || nodeB.name == SKIngredient.name) {
             if let plate = nodeA.entity as? SKPlate,
-               let ingredient = nodeB.entity as? SKIngredient {
-                let stacked = plate.stackIngredient(ingredient)
+               let ingredient = nodeB.entity as? SKIngredient,
+               let managet = entityManager {
+                let stacked = plate.stackIngredient(ingredient, manager: managet)
                 
                 print("Stacked: \(stacked)")
                 
-//                if stacked { entityManager?.remove(entity: ingredient) }
+//                
             }
             
         }

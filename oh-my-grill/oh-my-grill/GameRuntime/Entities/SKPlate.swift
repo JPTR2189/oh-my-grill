@@ -15,6 +15,11 @@ public class SKPlate: GKEntity {
     
     var ready: Bool = false
     
+    let rootNode = SKNode()
+    let plateSprite = SKSpriteNode(imageNamed: "plate")
+    
+    let burgerRoot = SKNode()
+    
     var node: SKNode? {
         component(ofType: GKSKNodeComponent.self)?.node
     }
@@ -31,31 +36,38 @@ public class SKPlate: GKEntity {
     override init() {
         super.init()
         
-        let node = SKSpriteNode(imageNamed: "plate")
+        plateSprite.setScale(3.5)
+        rootNode.addChild(plateSprite)
         
-        node.setScale(3.5)
+        rootNode.zPosition = -1
         
-        node.zPosition = -1
+        rootNode.name = "plate"
         
-        node.name = "plate"
+        rootNode.physicsBody = SKPhysicsBody(circleOfRadius: bodySize)
+        rootNode.physicsBody?.affectedByGravity = false
+        rootNode.physicsBody?.isDynamic = false
+        rootNode.physicsBody?.categoryBitMask = PhysicsCategory.plate
+        rootNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel | PhysicsCategory.wall | PhysicsCategory.gateWay
+        rootNode.physicsBody?.contactTestBitMask = PhysicsCategory.parcel
+        rootNode.physicsBody?.linearDamping = 7
+        rootNode.physicsBody?.angularDamping = 7
         
-        node.physicsBody = SKPhysicsBody(circleOfRadius: bodySize)
-        node.physicsBody?.affectedByGravity = false
-        node.physicsBody?.isDynamic = false
-        node.physicsBody?.categoryBitMask = PhysicsCategory.plate
-        node.physicsBody?.collisionBitMask = PhysicsCategory.parcel | PhysicsCategory.wall | PhysicsCategory.gateWay
-        node.physicsBody?.contactTestBitMask = PhysicsCategory.parcel
-        node.physicsBody?.linearDamping = 7
-        node.physicsBody?.angularDamping = 7
+        rootNode.zPosition = 0
         
-        addComponent(GKSKNodeComponent(node: node))
+                
+        burgerRoot.position = CGPoint(x: 0, y: baseOffset)
+        burgerRoot.zPosition = baseOffset
+        rootNode.addChild(burgerRoot)
+
+        
+        addComponent(GKSKNodeComponent(node: rootNode))
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func stackIngredient(_ ingredient: SKIngredient) -> Bool {
+    public func stackIngredient(_ ingredient: SKIngredient, manager: EntityManager) -> Bool {
         print("Trying to stack \(ingredient.ingredient.type.displayName)")
 
         /* Preconditions */
@@ -75,11 +87,11 @@ public class SKPlate: GKEntity {
         }
         
         // Verifying for bottom bun to start stack
-        guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
-        else {
-            print("Bottom bun needed to start stacking")
-            return false
-        }
+//        guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
+//        else {
+//            print("Bottom bun needed to start stacking")
+//            return false
+//        }
         
         // Cant stack potatoes
         guard ingredient.ingredient.type != .potato
@@ -95,58 +107,69 @@ public class SKPlate: GKEntity {
                 return false
             }
         }
+        
+        let newIngredient = SKIngredient(for: ingredient.ingredient)
+        guard let newNode = newIngredient.node
+        else {
+            print("Couldn extract node from new ingredient")
+            return false
+        }
         /***/
         
         
-        ingredient.removeComponent(ofType: DraggableComponent.self)
-        
-        
-//        if ingredientNode.parent != nil {
-//            ingredientNode.removeFromParent()
-//        }
-//        
-//        plateNode.addChild(ingredientNode)
-
-        
-        if let body = ingredient.body {
-            body.velocity = .zero
-            body.angularVelocity = 0
-            body.isDynamic = false
+        if let body = newNode.physicsBody {
             body.categoryBitMask = 0
             body.collisionBitMask = 0
             body.contactTestBitMask = 0
+            body.isDynamic = false
+            body.angularVelocity = 0
         }
         
         
-        let parentNode: SKNode = stack.last?.node ?? plateNode
-        
-        print("Parent Node: \(parentNode)")
-        
-        
-        let offSet: CGFloat = baseOffset + CGFloat(stack.count) * stackingOffset
-        
-        var targetPosition = plateNode.position
-        targetPosition.y += offSet
+        if ingredientNode.parent != nil {
+            manager.remove(entity: ingredient)
+        }
         
         
-        let moveAction = SKAction.move(to: targetPosition, duration: 0.0)
-        ingredientNode.run(moveAction)
+        burgerRoot.addChild(newNode)
         
         
-        ingredientNode.zPosition = (stack.last?.node?.zPosition ?? plateNode.zPosition) + 1
+        let offset: CGFloat = CGFloat(stack.count) * stackingOffset
+        newNode.position = CGPoint(x: 0, y: offset)
+        newNode.zPosition = CGFloat(stack.count) + 1
         
         
-        stack.append(ingredient)
+        stack.append(newIngredient)
         
         
-        if ingredient.ingredient.type == .topBun {
-            let draggable = DraggableComponent()
-            self.addComponent(draggable)
-            
-            self.body?.isDynamic = true
+        if newIngredient.ingredient.type == .topBun {
+            releaseBurger(manager: manager)
         }
         
         return true
+    }
+    
+    private func releaseBurger(manager: EntityManager) {
+        guard let plateNode = node,
+              let scene = plateNode.scene
+        else { return }
+        
+        print("Releasing burger with \(stack.count) ingredients")
+        
+        let worldPos = burgerRoot.convert(rootNode.position, to: scene)
+        
+        burgerRoot.removeFromParent()
+        
+        let burgerEntity = SKBurger(fromRoot: burgerRoot)
+        burgerEntity.node?.position = worldPos
+        manager.add(entity: burgerEntity)
+        
+        stack.removeAll()
+        let newBurgerRoot = SKNode()
+        newBurgerRoot.position = CGPoint(x: 0, y: baseOffset)
+        newBurgerRoot.zPosition = 5
+        plateNode.addChild(newBurgerRoot)
+        self.burgerRoot.removeAllChildren()
     }
 }
 

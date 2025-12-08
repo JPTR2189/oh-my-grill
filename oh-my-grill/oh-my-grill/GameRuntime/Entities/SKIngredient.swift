@@ -66,6 +66,8 @@ public class SKIngredient: GKEntity {
         node.physicsBody?.linearDamping = 7
         node.physicsBody?.angularDamping = 7
         
+        node.zPosition = 1
+        
         addComponent(GKSKNodeComponent(node: node))
         
         
