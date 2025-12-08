@@ -48,9 +48,10 @@ public final class ChefScene: SKScene {
     }
     
     override public func didMove(to view: SKView) {
-        
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
+        
+        addBounds()
         
         physicsWorld.contactDelegate = self
 
@@ -127,7 +128,7 @@ public final class ChefScene: SKScene {
     }
     
     private func dropRandomIngredient() {
-        let x: CGFloat = CGFloat.random(in: frame.minX...frame.maxX)
+        let x: CGFloat = CGFloat.random(in: (frame.minX - 20)...(frame.maxX + 20))
         let y: CGFloat = frame.maxY
         let point = CGPoint(x: x, y: y)
         let ingredient = Ingredient.getRandom()
@@ -178,6 +179,40 @@ public final class ChefScene: SKScene {
     public func stopSpawning() {
         isSpawning = false
         self.removeAction(forKey: spawnerKey)
+    }
+    
+    private func addBounds() {
+        let thickness: CGFloat = 2
+
+        
+        let leftNode = SKNode()
+        leftNode.position = CGPoint(x: frame.minX, y: frame.midY)
+        leftNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: thickness, height: frame.height))
+        leftNode.physicsBody?.isDynamic = false
+        leftNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+        leftNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        leftNode.physicsBody?.contactTestBitMask = 0
+        addChild(leftNode)
+
+        
+        let rightNode = SKNode()
+        rightNode.position = CGPoint(x: frame.maxX, y: frame.midY)
+        rightNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: thickness, height: frame.height))
+        rightNode.physicsBody?.isDynamic = false
+        rightNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+        rightNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        rightNode.physicsBody?.contactTestBitMask = 0
+        addChild(rightNode)
+
+        
+        let bottomNode = SKNode()
+        bottomNode.position = CGPoint(x: frame.midX, y: frame.minY)
+        bottomNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
+        bottomNode.physicsBody?.isDynamic = false
+        bottomNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+        bottomNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        bottomNode.physicsBody?.contactTestBitMask = 0
+        addChild(bottomNode)
     }
 }
 
