@@ -77,11 +77,11 @@ public class SKPlate: GKEntity {
         }
         
         // Verifying for bottom bun to start stack
-//        guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
-//        else {
-//            print("Bottom bun needed to start stacking")
-//            return false
-//        }
+        guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
+        else {
+            print("Bottom bun needed to start stacking")
+            return false
+        }
         
         // Cant stack potatoes
         guard ingredient.ingredient.type != .potato
