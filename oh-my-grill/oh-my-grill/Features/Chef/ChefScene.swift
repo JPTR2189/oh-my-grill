@@ -72,13 +72,12 @@ public final class ChefScene: SKScene {
         let centerPoint = CGPoint(x: frame.midX, y: frame.midY)
         initialIngredient.setPosition(to: centerPoint)
         
-//        entityManager?.add(entity: initialIngredient)
         
         viewModel.scene = self
         
-        viewModel.criarBancada()
-        viewModel.criarPratoRedondo()
-        viewModel.criarPratoRedondo(isPotato: true)
+        viewModel.createBench()
+        viewModel.createRoundedDish()
+        viewModel.createRoundedDish(isPotato: true)
                 
         
     }

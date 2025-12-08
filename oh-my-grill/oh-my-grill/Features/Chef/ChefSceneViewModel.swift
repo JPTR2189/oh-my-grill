@@ -22,7 +22,7 @@ class ChefSceneViewModel {
     let opcoes = ["burger-cheesed-shade", "tomato-sliced-shade", "lettuce-sliced-shade", "potato-cooked-shade", "bun-top-shade",  "bun-bottom-shade"]
 
 
-    func criarPratoRedondo(isPotato: Bool = false) {
+    func createRoundedDish(isPotato: Bool = false) {
 
         
 
@@ -65,18 +65,13 @@ class ChefSceneViewModel {
 
     }
     
-    func componenteIngrediente(nome: String, posicaoIngrediente: CGFloat) {
+    func createIngredientComponent(nome: String, posicaoIngrediente: CGFloat) {
         
         let tamanho = nome == "potato-cooked-shade" ? CGSize(width: 125  , height: 90) : CGSize(width: 90 , height: 90)
         
         let ingrediente = SKSpriteNode(texture: SKTexture(imageNamed: nome), color: .clear, size: tamanho)
         ingrediente.position = CGPoint(x: scene.frame.minX + posicaoIngrediente, y: scene.frame.minY + 50)
-//        ingrediente.addDropShadow(
-//            opacity: 0.1,
-//            offset: CGSize(width: 0, height: -10),
-//            radius: 10,
-//            layer: 1
-//        )
+
 
         let contador = SKShapeNode(rectOf:  CGSize(width: 23, height: 23), cornerRadius: 20)
         contador.position = CGPoint(x: scene.frame.minX + (posicaoIngrediente + 40), y: scene.frame.minY + 80)
@@ -96,7 +91,7 @@ class ChefSceneViewModel {
 
     }
     
-    func criarBancada() {
+    func createBench() {
         
         var startX = CGFloat(100)
         let bancada = SKShapeNode(rectOf: CGSize(width: 676, height: 96), cornerRadius: 8)
@@ -109,7 +104,7 @@ class ChefSceneViewModel {
         
         for ingrediente in opcoes {
             
-            componenteIngrediente(nome: ingrediente, posicaoIngrediente: startX)
+            createIngredientComponent(nome: ingrediente, posicaoIngrediente: startX)
             startX += 100
 
         }
