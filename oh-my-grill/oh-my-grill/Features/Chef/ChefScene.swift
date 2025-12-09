@@ -17,6 +17,8 @@ public final class ChefScene: SKScene {
     // Entity manager
     private var entityManager: EntityManager?
     
+    private var burgers: [SKBurger] = []
+    
     // Dragging-related variables
     private var isDragging = false
     private var currentDrag: GKEntity?
@@ -30,16 +32,19 @@ public final class ChefScene: SKScene {
     
     // Ingredient spawning
     private var isSpawning: Bool = false
-    private let spawningInterval: TimeInterval = 10 // Go back to 10 after testing
+    private let spawningInterval: TimeInterval = 3 // 10
     private let spawnerKey: String = "ingredientSpawner"
     
     // Plate node
     private var plate: SKPlate?
     
+    var checkIsSendable: (_ burger: SKBurger) -> Bool
+    
     
     //MARK: Initializers
-    public init(size: CGSize, session: GameSession) {
+    public init(size: CGSize, session: GameSession, check: @escaping (SKBurger) -> Bool) {
         self.session = session
+        self.checkIsSendable = check
         super.init(size: size)
     }
     
@@ -48,9 +53,10 @@ public final class ChefScene: SKScene {
     }
     
     override public func didMove(to view: SKView) {
-        
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
+        
+        addBounds()
         
         physicsWorld.contactDelegate = self
 
@@ -76,9 +82,21 @@ public final class ChefScene: SKScene {
         // Plate
         let plate = SKPlate()
         self.plate = plate
-        let centerPoint: CGPoint = .init(x: frame.midX, y: frame.midY)
+        let centerPoint: CGPoint = .init(x: frame.midX, y: (frame.maxY / 3))
         plate.node?.position = centerPoint
         entityManager?.add(entity: plate)
+        
+        
+        // Test
+        let initialIngs: [Ingredient] = [
+            .init(type: .bottomBun, state: .base),
+            .init(type: .burger, state: .base),
+            .init(type: .topBun, state: .base),
+        ]
+        
+        for ing in initialIngs {
+            dropIngredient(ing)
+        }
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -90,24 +108,7 @@ public final class ChefScene: SKScene {
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
         
-        guard let entities = entityManager?.getEntities() else { return }
         
-        for entity in entities {
-            
-            var ingredient: Ingredient?
-            
-            if let ingredientNode = entity as? SKIngredient {
-                ingredient = ingredientNode.ingredient
-            }
-            
-            if let node = entity.component(ofType: GKSKNodeComponent.self)?.node {
-                if let side = exitSide(for: node) {
-                    print("Ball from \(session.myID.rawValue) exited to the \(side)")
-                    
-                    sendParcelHorizontally(side: side, node: node, entity: entity, ingredient: ingredient)
-                }
-            }
-        }
     }
     
     public func spawnBall(at point: CGPoint, goingTo side: EdgeSide) {
@@ -127,14 +128,16 @@ public final class ChefScene: SKScene {
     }
     
     private func dropRandomIngredient() {
-        let x: CGFloat = CGFloat.random(in: frame.minX...frame.maxX)
-        let y: CGFloat = frame.maxY
-        let point = CGPoint(x: x, y: y)
         let ingredient = Ingredient.getRandom()
         
-//        print("Dropping: \(ingredient.state.rawValue) \(ingredient.type.displayName)")
-        
-        let ingredientNode = SKIngredient(for: ingredient)
+        dropIngredient(ingredient)
+    }
+    
+    func dropIngredient(_ ing: Ingredient) {
+        let x: CGFloat = CGFloat.random(in: (frame.minX + 20)...(frame.maxX - 20))
+        let y: CGFloat = frame.maxY
+        let point = CGPoint(x: x, y: y)
+        let ingredientNode = SKIngredient(for: ing)
         ingredientNode.setPosition(to: point)
         entityManager?.add(entity: ingredientNode)
         ingredientNode.body?.applyForce(.init(dx: 0, dy: -20000))
@@ -147,17 +150,6 @@ public final class ChefScene: SKScene {
             SKIngredient(for: .init(type: .cheese, state: .base)),
             SKIngredient(for: .init(type: .topBun, state: .base))
         ]
-        
-        for ingredient in burger {
-            let x: CGFloat = CGFloat.random(in: frame.minX...frame.maxX)
-            let y: CGFloat = frame.maxY
-            let point = CGPoint(x: x, y: y)
-            
-            ingredient.setPosition(to: point)
-            entityManager?.add(entity: ingredient)
-            ingredient.body?.applyForce(.init(dx: 0, dy: -20000))
-        }
-        
     }
     
     public func startSpawning() {
@@ -178,6 +170,51 @@ public final class ChefScene: SKScene {
     public func stopSpawning() {
         isSpawning = false
         self.removeAction(forKey: spawnerKey)
+    }
+    
+    private func addBounds() {
+        let thickness: CGFloat = 2
+
+        
+        let leftNode = SKNode()
+        leftNode.position = CGPoint(x: frame.minX, y: frame.midY)
+        leftNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: thickness, height: frame.height))
+        leftNode.physicsBody?.isDynamic = false
+        leftNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+        leftNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        leftNode.physicsBody?.contactTestBitMask = 0
+        addChild(leftNode)
+
+        
+        let rightNode = SKNode()
+        rightNode.position = CGPoint(x: frame.maxX, y: frame.midY)
+        rightNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: thickness, height: frame.height))
+        rightNode.physicsBody?.isDynamic = false
+        rightNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+        rightNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        rightNode.physicsBody?.contactTestBitMask = 0
+        addChild(rightNode)
+
+        
+        let bottomNode = SKNode()
+        bottomNode.position = CGPoint(x: frame.midX, y: frame.minY)
+        bottomNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
+        bottomNode.physicsBody?.isDynamic = false
+        bottomNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+        bottomNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        bottomNode.physicsBody?.contactTestBitMask = 0
+        addChild(bottomNode)
+        
+        
+        let gatewayNode = SKNode()
+        gatewayNode.name = "gateway"
+        gatewayNode.position = CGPoint(x: frame.midX, y: frame.maxY)
+        gatewayNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
+        gatewayNode.physicsBody?.isDynamic = false
+        gatewayNode.physicsBody?.categoryBitMask = PhysicsCategory.gateWay
+        gatewayNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel | PhysicsCategory.burger
+        gatewayNode.physicsBody?.contactTestBitMask = PhysicsCategory.burger
+        addChild(gatewayNode)
     }
 }
 
@@ -329,7 +366,6 @@ extension ChefScene {
             node.run(SKAction.scale(to: 0.2, duration: 0.4))
             node.run(SKAction.sequence([fadeOut, remove])) {
                 manager.remove(entity: entity)
-                print("Ingredient deleted!")
             }
         }
     }
@@ -360,21 +396,26 @@ extension ChefScene: SKPhysicsContactDelegate {
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB
         
-        print("Contact")
-        
         guard let nodeA = bodyA.node, let nodeB = bodyB.node else { return }
         
         if(nodeA.name == SKPlate.name || nodeB.name == SKIngredient.name) {
             if let plate = nodeA.entity as? SKPlate,
                let ingredient = nodeB.entity as? SKIngredient,
                let managet = entityManager {
-                let stacked = plate.stackIngredient(ingredient, manager: managet)
-                
-                print("Stacked: \(stacked)")
-                
-//                
+                plate.stackIngredient(ingredient, manager: managet)
             }
-            
+        }
+        
+        if(nodeA.name == "gateway" || nodeB.name == SKBurger.name) {
+            if let burger = nodeB.entity as? SKBurger {
+                let canGO = checkIsSendable(burger)
+                print("Match found for burger: \(canGO)")
+                if canGO {
+                    currentDrag = nil
+                    burger.body?.collisionBitMask = 0
+                    burger.body?.applyForce(.init(dx: 0, dy: 10000))
+                }
+            }
         }
     }
 }

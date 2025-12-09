@@ -18,7 +18,8 @@ struct ChefView: View {
         _scene = State(
             wrappedValue: ChefScene(
                 size: .init(width: 800, height: 800),
-                session: vm.session
+                session: vm.session,
+                check: vm.check(_:)
             )
 
         )

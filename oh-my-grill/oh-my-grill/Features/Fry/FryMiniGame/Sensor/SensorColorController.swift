@@ -8,41 +8,32 @@
 import Foundation
 import SwiftUI
 
-class SensorViewModel {
-     
-    func backgroundColor(for value: Double) -> Color {
-        // SAFE ZONE
-        let minSafe = 0.500000
-        let maxSafe = 0.600000
-        
-        if value >= minSafe && value <= maxSafe {
+class SensorColorController {
+    
+    // SAFE ZONE
+    let minSafe: Double = 0.45
+    let maxSafe: Double = 0.57
+    
+    func backgroundColor(for normalizedValue: Double) -> Color {
+        // Se o valor (0.0 a 1.0) estiver dentro da zona, é VERDE
+        if normalizedValue >= minSafe && normalizedValue <= maxSafe {
             return Color.green
         }
         
-        // 2. Calcular a Distância
+        // Se estiver fora, calcula o gradiente para vermelho
         let distance: Double
-        if value < minSafe {
-            distance = minSafe - value
+        if normalizedValue < minSafe {
+            distance = minSafe - normalizedValue
         } else {
-            distance = value - maxSafe
+            distance = normalizedValue - maxSafe
         }
         
-
         let maxDangerDistance = 0.20
-        
         let intensity = min(distance / maxDangerDistance, 1.0)
         
-        // 4. Mistura de Cores (Verde -> Amarelo -> Vermelho)
-       
-        
         let redComponent = min(intensity * 2.0, 1.0)
-        
-        // Se intensity for menor que 0.5, mantemos o verde em 1.0
         let greenComponent = max(1.0 - (intensity - 0.5) * 2.0, 0.0)
         
         return Color(red: redComponent, green: greenComponent, blue: 0)
     }
-
-    
-    
 }

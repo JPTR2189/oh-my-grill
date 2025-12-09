@@ -85,6 +85,10 @@ class OrdersService {
         }
     }
     
+    public func popOrder(_ order: Order) {
+        orders.removeAll(where: { $0.id == order.id })
+    }
+    
 }
 
 

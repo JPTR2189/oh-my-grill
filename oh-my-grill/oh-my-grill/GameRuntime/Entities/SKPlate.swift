@@ -59,42 +59,41 @@ public class SKPlate: GKEntity {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func stackIngredient(_ ingredient: SKIngredient, manager: EntityManager) -> Bool {
-        print("Trying to stack \(ingredient.ingredient.type.displayName)")
+    public func stackIngredient(_ ingredient: SKIngredient, manager: EntityManager) {
 
         /* Preconditions */
         // Extracting plate node
         guard let plateNode = node else {
-            print("Critical error on SKPlate: Couldnt find SKNode")
-            return false
+//            print("Critical error on SKPlate: Couldnt find SKNode")
+            return
         }
         
         // Extracting ingredient node
         guard let ingredientNode = ingredient.node
         else {
-            print("Couldnt extract node frm ingredient")
-            return false
+//            print("Couldnt extract node frm ingredient")
+            return
         }
         
         // Verifying for bottom bun to start stack
         guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
         else {
-            print("Bottom bun needed to start stacking")
-            return false
+//            print("Bottom bun needed to start stacking")
+            return
         }
         
         // Cant stack potatoes
         guard ingredient.ingredient.type != .potato
         else {
-            print("Cant stack potatoes")
-            return false
+//            print("Cant stack potatoes")
+            return
         }
         
         // Stack ended with top bun
         if let lastType = stack.last?.ingredient.type {
             guard lastType != .topBun else {
-                print("Cant stack after a top bun")
-                return false
+//                print("Cant stack after a top bun")
+                return
             }
         }
         /***/
@@ -127,7 +126,7 @@ public class SKPlate: GKEntity {
         
         
         guard ingredient.ingredient.type == .topBun
-        else { return true }
+        else { return }
         
         let burger = SKBurger(fromStack: stack)
         
@@ -141,7 +140,7 @@ public class SKPlate: GKEntity {
         }
         stack.removeAll()
         
-        return true
+        return
     }
 }
 

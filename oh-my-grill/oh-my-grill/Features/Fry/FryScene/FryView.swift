@@ -17,6 +17,8 @@ struct FryView: View {
     
     @State var firstEntry: Bool
     
+    @State private var goToFeedback = false
+    
     let initialScene: FryScene?
     
     init(vm: FryViewModelProtocol, entry: Bool = false) {
@@ -52,14 +54,18 @@ struct FryView: View {
             }
             .ignoresSafeArea()
             .onAppear {
+                vm.session.setNotificationHandler(self)
                 initialScene?.onFryerCollision = startMiniGame(_:)
-                
             }
             .sheet(isPresented: $vm.nextView) {
                 if let ingredient = currentFry {
-                    CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
+                    FryMinigameView(viewModel: FryMinigameViewModel(session: vm.session), ingredient: ingredient)
                         .interactiveDismissDisabled()
-                    //TODO: Call the Fry miniGame
+                }
+            }
+            .navigationDestination(isPresented: $goToFeedback) {
+                if let round = vm.session.finishedRound {
+                    FeedbackView(round: round)
                 }
             }
         }
@@ -69,5 +75,17 @@ struct FryView: View {
     func startMiniGame(_ ingredient: SKIngredient) {
         currentFry = ingredient
         vm.nextView = true
+    }
+}
+
+extension FryView: MPCNotificationDelegate {
+    func notify(_ notification: MPCNotifications) {
+        switch notification {
+        case .roundFinished:
+            vm.session.finishRound()
+            goToFeedback = true
+        default:
+            break
+        }
     }
 }
