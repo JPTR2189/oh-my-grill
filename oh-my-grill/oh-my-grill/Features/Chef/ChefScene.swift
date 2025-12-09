@@ -24,6 +24,19 @@ public final class ChefScene: SKScene {
     private var currentDrag: GKEntity?
     private var targetPoint: CGPoint?
     
+    // Ingredients table Node
+    private let ingredientsTableNode: SKSpriteNode = SKSpriteNode(
+        imageNamed: "ingredientsTable"
+    )
+    
+    // Ingredient spawning point
+    private var topBunSpawnPoint: CGPoint {
+        return CGPoint(x: frame.minX + 200, y: frame.minY + 80)
+    }
+    private var bottomBunSpawnPoint: CGPoint {
+        return CGPoint(x: frame.minX + 80, y: frame.minY + 80)
+    }
+    
     // Trash Can Node
     private let trashCanNode: SKSpriteNode = SKSpriteNode(imageNamed: "trashCan")
     
@@ -95,9 +108,28 @@ public final class ChefScene: SKScene {
             .init(type: .topBun, state: .base),
         ]
         
-        for ing in initialIngs {
-            dropIngredient(ing)
-        }
+//        for ing in initialIngs {
+//            dropIngredient(ing)
+//        }
+        
+        
+        //MARK: Ingredients table
+        
+        self.entityManager = EntityManager(scene: self)
+        
+        print("First entry on CutScene")
+        
+        ingredientsTableNode.name = "ingredientsTable"
+        ingredientsTableNode.position = CGPoint(
+            x: frame.minX + 100,
+            y: frame.minY + 30
+        )
+        ingredientsTableNode.zPosition = 1
+        ingredientsTableNode.xScale = -1
+        addChild(ingredientsTableNode)
+        
+        replenishIngredient(type: .burger)
+        replenishIngredient(type: .cheese)
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -109,7 +141,67 @@ public final class ChefScene: SKScene {
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
         
+        replenishIngredient(type: .topBun)
+        replenishIngredient(type: .bottomBun)
         
+    }
+    
+    private func replenishIngredient(type: IngredientType) {
+
+        let point: CGPoint
+        switch type {
+        case .topBun:
+            point = topBunSpawnPoint
+        case .bottomBun:
+            point = bottomBunSpawnPoint
+        default:
+            return
+        }
+        let entities = entityManager?.getEntities() ?? []
+
+        let ingredientExists = entities.contains { entity in
+            if let node = entity.component(ofType: GKSKNodeComponent.self)?
+                .node,
+                node.name == type.rawValue
+            {
+                return true
+            }
+            return false
+        }
+
+        if ingredientExists {
+            return
+        }
+
+        let ingredientToSpawn = Ingredient(type: type, state: .base)
+        let ingredientNode = SKIngredient(for: ingredientToSpawn)
+        ingredientNode.setPosition(to: point)
+
+        guard
+            let node = ingredientNode.component(ofType: GKSKNodeComponent.self)?
+                .node
+        else {
+            return
+        }
+
+        node.name = type.rawValue
+        node.zPosition = 5
+        node.alpha = 0.0
+
+        let initialScale = node.xScale
+        
+        node.xScale = 0.3
+        node.yScale = 0.3
+
+        let fadeInAction = SKAction.fadeIn(withDuration: 0.3)
+        let scaleUpAction = SKAction.scale(to: initialScale, duration: 0.3)
+        let spawnAnimation = SKAction.group([fadeInAction, scaleUpAction])
+
+        entityManager?.add(entity: ingredientNode)
+
+        print("REPLANISHING")
+
+        node.run(spawnAnimation)
     }
     
     public func spawnIngredient(_ ingredient: Ingredient) {
@@ -409,8 +501,10 @@ extension ChefScene: SKPhysicsContactDelegate {
                 print("Match found for burger: \(canGO)")
                 if canGO {
                     currentDrag = nil
+                    endDrag()
                     burger.body?.collisionBitMask = 0
-                    burger.body?.applyForce(.init(dx: 0, dy: 10000))
+                    burger.body?.velocity = .init(dx: 0, dy: 0)
+                    burger.body?.applyForce(.init(dx: 0, dy: 100000))
                 }
             }
         }
