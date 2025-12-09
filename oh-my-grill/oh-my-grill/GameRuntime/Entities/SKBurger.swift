@@ -40,15 +40,17 @@ public class SKBurger: GKEntity {
         
         let node = SKNode()
         node.name = SKBurger.name
+        node.zPosition = 1
         
         let body = SKPhysicsBody(rectangleOf: size)
         
         body.affectedByGravity = false
         body.isDynamic = true
-        body.collisionBitMask = PhysicsCategory.wall | PhysicsCategory.gateWay | PhysicsCategory.plate
-        body.contactTestBitMask = PhysicsCategory.plate | PhysicsCategory.gateWay
-        body.linearDamping = 1
-        body.angularDamping = 1
+        body.categoryBitMask = PhysicsCategory.burger
+        body.collisionBitMask = PhysicsCategory.wall | PhysicsCategory.gateWay  | PhysicsCategory.burger | PhysicsCategory.parcel
+        body.contactTestBitMask = 0
+        body.linearDamping = 7
+        body.angularDamping = 7
         
         node.physicsBody = body
         
