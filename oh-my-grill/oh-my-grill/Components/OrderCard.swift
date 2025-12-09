@@ -61,7 +61,7 @@ struct OrderCard: View {
                 // FRIES
                 if order.meal.hasFries {
                     VStack(spacing: 2) {
-                        Image("potato-fried") // nome correto aqui
+                        Image(.potatoCooked) // nome correto aqui
                             .resizable()
                             .scaledToFit()
                             .frame(width: 22, height: 22)
@@ -100,8 +100,4 @@ struct OrderCard: View {
         let seconds = totalSeconds % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-}
-
-#Preview {
-    OrderCard(order: Order(meal: Meal(ingredients: [Ingredient(type: .bun, state: .base)], hasFries: true)))
 }

@@ -52,7 +52,7 @@ struct FryMinigameView: View {
                         
                     }
                     
-                    Image(viewModel.potatoIsFried ? .potatoFried : .potatoBase)
+                    Image(viewModel.potatoIsFried ? .potatoCooked : .potatoBase)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 428, height: 208)

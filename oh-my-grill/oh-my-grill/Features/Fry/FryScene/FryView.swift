@@ -1,5 +1,5 @@
 //
-//  CutView.swift
+//  FryView.swift
 //  oh-my-grill
 //
 //  Created by Maria Santellano on 27/11/25.
@@ -8,21 +8,21 @@
 import SwiftUI
 import SpriteKit
 
-struct CutView: View {
+struct FryView: View {
     
-    @State var vm: CutViewModel
-    @State var scene: CutScene
+    @State var vm: FryViewModelProtocol
+    @State var scene: FryScene
     
-    @State var currentCut: SKIngredient?
+    @State var currentFry: SKIngredient?
     
     @State var firstEntry: Bool
     
-    let initialScene: CutScene?
+    let initialScene: FryScene?
     
-    init(vm: CutViewModel, entry: Bool = false) {
+    init(vm: FryViewModelProtocol, entry: Bool = false) {
         self.vm = vm
         self.firstEntry = entry
-        self.initialScene = CutScene(size: .init(width: 800, height: 800), session: vm.session)
+        self.initialScene = FryScene(size: .init(width: 800, height: 800), session: vm.session)
         _scene = State(wrappedValue: initialScene!)
     }
     
@@ -52,13 +52,14 @@ struct CutView: View {
             }
             .ignoresSafeArea()
             .onAppear {
-                initialScene?.onKnifeCollision = startMiniGame(_:)
+                initialScene?.onFryerCollision = startMiniGame(_:)
                 
             }
             .sheet(isPresented: $vm.nextView) {
-                if let ingredient = currentCut {
+                if let ingredient = currentFry {
                     CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
                         .interactiveDismissDisabled()
+                    //TODO: Call the Fry miniGame
                 }
             }
         }
@@ -66,7 +67,7 @@ struct CutView: View {
     }
     
     func startMiniGame(_ ingredient: SKIngredient) {
-        currentCut = ingredient
+        currentFry = ingredient
         vm.nextView = true
     }
 }

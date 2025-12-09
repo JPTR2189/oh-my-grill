@@ -55,6 +55,9 @@ public final class GameSession {
     //orders
     private var orderTimer: Timer?
     
+    //Grill
+    var showTimer = false
+    
     
     // Initializer
     public init(transport: any TransportSessionProtocol, config: GameConfigPayload) {
