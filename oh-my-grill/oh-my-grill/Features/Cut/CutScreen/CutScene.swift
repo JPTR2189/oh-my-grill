@@ -21,7 +21,6 @@ public final class CutScene: SKScene {
     private var currentDrag: GKEntity?
     private var targetPoint: CGPoint?
 
-    //CHAT
     public var onKnifeCollision: ((SKIngredient) -> Void)?
 
     // Ingredients table Node
@@ -81,7 +80,6 @@ public final class CutScene: SKScene {
         addChild(knifeNode)
 
         //MARK: Ingredients table
-
         self.entityManager = EntityManager(scene: self)
 
         print("First entry on CutScene")
@@ -216,8 +214,11 @@ extension CutScene {
     private func sendParcelHorizontally(
         side: EdgeSide,
         node: SKNode,
-        entity: GKEntity
+        entity: GKEntity,
     ) {
+        guard let skIngredient = entity as? SKIngredient else {
+                return
+            }
         entityManager?.remove(entity: entity)
         let dxFromCenter = node.position.x - frame.midX
         let mirroredDx = -dxFromCenter
@@ -225,7 +226,8 @@ extension CutScene {
         let payload = GamePayload(
             x: mirroredDx,
             y: node.position.y,
-            side: side
+            side: side,
+            ingredient: skIngredient.ingredient
         )
 
         session.sendParcelHorizontally(payload)

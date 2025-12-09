@@ -62,10 +62,12 @@ public class SKIngredient: GKEntity {
         node.physicsBody = SKPhysicsBody(circleOfRadius: bodySize)
         node.physicsBody?.affectedByGravity = false
         node.physicsBody?.categoryBitMask = PhysicsCategory.parcel
-        node.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        node.physicsBody?.collisionBitMask = PhysicsCategory.parcel | PhysicsCategory.wall | PhysicsCategory.gateWay | PhysicsCategory.plate
         node.physicsBody?.contactTestBitMask = 0
         node.physicsBody?.linearDamping = 7
         node.physicsBody?.angularDamping = 7
+        
+        node.zPosition = 1
         
         addComponent(GKSKNodeComponent(node: node))
         
@@ -85,4 +87,8 @@ public class SKIngredient: GKEntity {
     deinit {
         print("\(self.ingredient.type.displayName) deinited")
     }
+}
+
+extension SKIngredient {
+    static let name = "ingredient"
 }

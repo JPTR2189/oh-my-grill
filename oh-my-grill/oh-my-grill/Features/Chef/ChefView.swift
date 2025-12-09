@@ -20,6 +20,7 @@ struct ChefView: View {
                 size: .init(width: 800, height: 800),
                 session: vm.session
             )
+
         )
     }
 
@@ -34,26 +35,34 @@ struct ChefView: View {
                     options: [.ignoresSiblingOrder]
                 )
                 .ignoresSafeArea()
+                
+                HStack(alignment: .top, spacing: 0){
+                    
+                    HStack(spacing: 9) {
+                        
+                        ForEach(vm.orders) { order in
+                            OrderCard(order: order)
+                                .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity),
+                                removal: .opacity.animation(.easeOut(duration: 0.2))))
+                                
+                                .zIndex(1)
+                        }
 
-                HStack(alignment: .top) {
-
-                    if let order = vm.orders.first {
-                        OrderCard(order: order)
-                            .padding(.leading, 45)
+                        
+                        
                     }
-
+                    .animation(.spring(response: 0.5, dampingFraction: 0.8), value: vm.orders.map { $0.id })
+                    
+                    OrdersCount(quantity: vm.moreOrders, Isvisible: vm.moreOrders > 0)
+                        .padding(.top, 26)
+                    
                     Spacer()
 
                     if let round = vm.round {
                         RoundInfo(round: round)
                     }
                 }
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .top
-                )
-
+//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
             .ignoresSafeArea()
 
@@ -72,7 +81,9 @@ struct ChefView: View {
 
         .onAppear {
             scene.startSpawning()
+//            scene.dropBurger()
             vm.session.setNotificationHandler(self)
+            vm.startGame()
         }
         .onDisappear {
             scene.stopSpawning()
@@ -80,6 +91,7 @@ struct ChefView: View {
         .ignoresSafeArea(.all)
     }
 }
+
 
 // MARK: - Notification delegate
 extension ChefView: MPCNotificationDelegate {
@@ -109,3 +121,9 @@ extension ChefView: MPCNotificationDelegate {
     }
 
 }
+
+#Preview {
+    let vm = ChefViewModel(session: GameSession(transport: TransportSession(userName: "Teste"), config: GameConfigPayload(mode: .classic, players: ["1"], roles: ["2": .chef])))
+    ChefView(vm: vm)
+}
+

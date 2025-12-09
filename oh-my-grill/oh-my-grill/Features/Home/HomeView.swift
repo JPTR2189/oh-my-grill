@@ -20,7 +20,7 @@ struct HomeView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-                
+               
                 //MARK: Conteúdo
                 VStack(spacing: 25) {
                     Image(.logo)
@@ -32,10 +32,13 @@ struct HomeView: View {
                         buttonAction: {
                             start = true
                         },
-                        text: "Start Game",
+                        text: "Start Game"
                     )
                 }
                 .padding(.top, 30)
+            }
+            .onAppear {
+                SoundManager.instance.playMusic(type: .menu)
             }
             .navigationDestination(isPresented: $start) {
                 NewGameView(viewModel: NewGameViewModel())

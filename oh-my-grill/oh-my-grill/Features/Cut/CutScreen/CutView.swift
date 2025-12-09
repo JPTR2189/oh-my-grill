@@ -23,9 +23,6 @@ struct CutView: View {
         self.vm = vm
         self.firstEntry = entry
         self.initialScene = CutScene(size: .init(width: 800, height: 800), session: vm.session)
-        
-        //Identifies the knife collision and calls the next scene
-        
         _scene = State(wrappedValue: initialScene!)
     }
     
@@ -55,13 +52,13 @@ struct CutView: View {
             }
             .ignoresSafeArea()
             .onAppear {
-//                vm.session.setNotificationHandler(self)
                 initialScene?.onKnifeCollision = startMiniGame(_:)
                 
             }
             .sheet(isPresented: $vm.nextView) {
                 if let ingredient = currentCut {
                     CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
+                        .interactiveDismissDisabled()
                 }
             }
         }
@@ -73,21 +70,3 @@ struct CutView: View {
         vm.nextView = true
     }
 }
-
-// MARK: - Notification Delegate
-//extension CutView: MPCNotificationDelegate {
-//    func notify(_ notification: MPCNotifications) {
-//        print("Notification received")
-//        
-//        switch notification {
-//            
-//        case .ingredient(let payload):
-//            currentCut = SKIngredient(for: payload.ingredient)
-//            vm.nextView = true
-//            
-//        default: break
-//        }
-//    }
-//    
-//    
-//}

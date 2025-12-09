@@ -1,10 +1,3 @@
-//
-//  GameView.swift
-//  oh-my-grill
-//
-//  Created by João Pedro Teixeira de Carvalho on 25/11/25.
-//
-
 import SwiftUI
 import SpriteKit
 
@@ -32,9 +25,12 @@ struct GameView: View {
                 }
             }
         }
-        .onAppear {
-            session.setNotificationHandler(self)
-        }
+//        .onAppear {
+//            session.setNotificationHandler(self)
+//            
+//            SoundManager.instance.playMusic(type: .game)
+//        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -59,4 +55,3 @@ extension GameView: MPCNotificationDelegate {
         }
     }
 }
-
