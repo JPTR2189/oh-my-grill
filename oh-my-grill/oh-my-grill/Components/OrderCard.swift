@@ -20,7 +20,7 @@ struct OrderCard: View {
             // Cabeçalho: Nome + imagem do combo
             HStack {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("Order 10")
+                    Text("Combo")
                         .font(.custom("Poppins Regular", size: 16))
                         .foregroundColor(.texasBrown)
                     
