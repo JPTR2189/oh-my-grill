@@ -29,7 +29,7 @@ struct GrillMiniGameView: View {
                         Text("Grill the meat")
                             .font(.custom("Toy Block Maestro", size: 56))
                         
-                        Text("Flip your phone to cook your meat.")
+                        Text("Rotate your phone to cook your meat.")
                             .font(.custom("Poppins Regular", size: 15))
                     }
                     .foregroundStyle(.texasBeige)

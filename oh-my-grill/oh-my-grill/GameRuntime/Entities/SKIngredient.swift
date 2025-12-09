@@ -12,6 +12,7 @@ import GameplayKit
 public class SKIngredient: GKEntity {
     
     let bodySize: CGFloat = 40
+    var isCooking: Bool = false
     
     var ingredient: Ingredient {
         didSet {
