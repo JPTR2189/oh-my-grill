@@ -100,21 +100,9 @@ extension ChefView: MPCNotificationDelegate {
         switch notification {
         case .gameMove(let payload):
 
-            let dx = CGFloat(payload.x)
-            let sign: CGFloat = dx >= 0 ? 1 : -1
-
-            let newDistance = max(0, abs(dx) - 21)
-
-            let newX = scene.frame.midX + sign * newDistance
-
-            let point = CGPoint(x: newX, y: CGFloat(payload.y))
             print("Parcel entered \(vm.session.myRole)'s view")
-            //            scene.spawnBall(at: point, goingTo: payload.side)
-            scene.spawnIngredient(
-                payload.ingredient,
-                at: point,
-                goingTo: payload.side
-            )
+            
+            scene.spawnIngredient(payload.ingredient)
 
         default:
             break

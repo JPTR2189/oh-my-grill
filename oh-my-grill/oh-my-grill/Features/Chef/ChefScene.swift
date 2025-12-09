@@ -82,7 +82,7 @@ public final class ChefScene: SKScene {
         // Plate
         let plate = SKPlate()
         self.plate = plate
-        let centerPoint: CGPoint = .init(x: frame.midX, y: (frame.maxY / 3))
+        let centerPoint: CGPoint = .init(x: (frame.maxX / 3) * 2, y: (frame.maxY / 3))
         plate.node?.position = centerPoint
         entityManager?.add(entity: plate)
         
@@ -90,7 +90,8 @@ public final class ChefScene: SKScene {
         // Test
         let initialIngs: [Ingredient] = [
             .init(type: .bottomBun, state: .base),
-            .init(type: .burger, state: .base),
+            .init(type: .topBun, state: .base),
+            .init(type: .bottomBun, state: .base),
             .init(type: .topBun, state: .base),
         ]
         
@@ -111,20 +112,16 @@ public final class ChefScene: SKScene {
         
     }
     
-    public func spawnBall(at point: CGPoint, goingTo side: EdgeSide) {
-        let ball = Ball()
-        ball.setPosition(to: point)
-        entityManager?.add(entity: ball)
-        let direction: CGFloat = side == .right ? 1 : -1
-        ball.body?.applyForce(.init(dx: 10000 * direction, dy: 0))
-    }
-    
-    public func spawnIngredient(_ ingredient: Ingredient, at point: CGPoint, goingTo side: EdgeSide) {
+    public func spawnIngredient(_ ingredient: Ingredient) {
         let ingredient = SKIngredient(for: ingredient)
-        ingredient.setPosition(to: point)
+        
+        let x = frame.maxX / 3
+        let y = frame.minY + 30
+        
+        ingredient.setPosition(to: .init(x: x, y: y))
         entityManager?.add(entity: ingredient)
-        let direction: CGFloat = side == .right ? 1 : -1
-        ingredient.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
+        
+        ingredient.body?.applyForce(.init(dx: 0, dy: 10000))
     }
     
     private func dropRandomIngredient() {

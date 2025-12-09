@@ -37,7 +37,7 @@ struct FeedbackView: View {
                     )
                     ButtonComponent(
                         buttonAction: {},
-                        text: "\(round.points / 50) orders placed",
+                        text: "\(round.points / 10) orders placed",
                         isNotButton: true
                     )
                 }
