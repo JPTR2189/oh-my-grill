@@ -16,7 +16,7 @@ final class OrderGenerator {
 
     private func generateMeal() -> Meal {
         let ingredients = generateIngredients()
-        let hasFries = true
+        let hasFries = false
         return Meal(ingredients: ingredients, hasFries: hasFries)
     }
 

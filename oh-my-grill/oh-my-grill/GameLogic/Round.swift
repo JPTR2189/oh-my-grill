@@ -11,7 +11,13 @@ import Foundation
 public class Round {
     public var number: Int
     public var minPoints: Int
-    public var points: Int
+    
+    public var points: Int {
+        didSet {
+            print("Points: \(points)")
+        }
+    }
+    
     public var time: TimeInterval
     public var status: RoundStatus
     public var feedback: Feedback

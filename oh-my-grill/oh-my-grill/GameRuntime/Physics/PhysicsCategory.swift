@@ -13,4 +13,5 @@ public struct PhysicsCategory {
     static let parcel: UInt32 = 1 << 1
     static let gateWay: UInt32 = 1 << 2
     static let plate: UInt32 = 1 << 3
+    static let burger: UInt32 = 1 << 4
 }

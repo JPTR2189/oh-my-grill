@@ -16,7 +16,6 @@ class ChefViewModel {
     
     private var delegate: OrdersServiceDelegateProtocol?
     private var service: OrdersService = OrdersService()
-    
 
     init(session: GameSession) {
         self.session = session
@@ -33,6 +32,34 @@ class ChefViewModel {
         self.service.startTimer()
         self.service.addOrder()
     }
+    
+    public func check(_ burger: SKBurger) -> Bool {
+        
+        var hasMatch = false
+        
+        print("\n\nChecking burger order")
+        for order in service.orders {
+            let orderIngredients = order.meal.ingredients.sorted { $0.type.rawValue < $1.type.rawValue }.map { $0.type.rawValue }
+            let burgerIngredients = burger.stack.sorted { $0.ingredient.type.rawValue < $1.ingredient.type.rawValue }.map { $0.ingredient.type.rawValue }
+            
+            print("Order: \(orderIngredients)")
+            print("Burger: \(burgerIngredients)")
+            
+            if orderIngredients.count != burgerIngredients.count { continue }
+            
+            hasMatch = true
+            for i in 0..<orderIngredients.count {
+                if orderIngredients[i] != burgerIngredients[i] { hasMatch = false; break }
+            }
+            
+            if hasMatch {
+                service.popOrder(order)
+                session.currentRound?.points += 10
+                break
+            }
+        }
+        return hasMatch
+    }
 }
 
 extension ChefViewModel: OrdersServiceDelegateProtocol {
@@ -40,10 +67,4 @@ extension ChefViewModel: OrdersServiceDelegateProtocol {
         self.orders = orders
         self.moreOrders = moreOrders
     }
-    
-  
-        
-    
-    
 }
-
