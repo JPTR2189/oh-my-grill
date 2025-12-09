@@ -59,9 +59,8 @@ struct FryView: View {
             }
             .sheet(isPresented: $vm.nextView) {
                 if let ingredient = currentFry {
-                    CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
+                    FryMinigameView(viewModel: FryMinigameViewModel(session: vm.session), ingredient: ingredient)
                         .interactiveDismissDisabled()
-                    //TODO: Call the Fry miniGame
                 }
             }
             .navigationDestination(isPresented: $goToFeedback) {

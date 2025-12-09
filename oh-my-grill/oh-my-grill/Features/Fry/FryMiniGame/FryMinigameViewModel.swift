@@ -6,11 +6,11 @@
 //
 
 import Foundation
+internal import UIKit
 
 @Observable
 class FryMinigameViewModel: FryMinigameViewModelProtocol {
-    
-    
+
     var sensorColor: SensorColorController = SensorColorController()
     var sensorController: CMMotionController = CMMotionController()
     let session: GameSession
@@ -59,6 +59,8 @@ class FryMinigameViewModel: FryMinigameViewModelProtocol {
         greenZoneSide = greenZoneSide == 0 ? 1 : 0
         
         if greenZoneWidth <= Double(sensorBarWidth) {
+            HapticManager.instance.impact(style: .heavy)
+
             self.greenZoneWidth += 1
             
             self.safeZoneOffset = greenZoneSide == 0 ? self.safeZoneOffset - 1 : self.safeZoneOffset
@@ -67,6 +69,7 @@ class FryMinigameViewModel: FryMinigameViewModelProtocol {
         
         else {
             potatoIsFried = true
+            HapticManager.instance.notification(type: .success)
         }
     }
     
