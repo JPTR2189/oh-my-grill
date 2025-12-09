@@ -11,6 +11,9 @@ struct ProgressTimer: View {
     @State private var progress: CGFloat = 0
     let duration: TimeInterval
     let lineWidth: CGFloat
+    let startColor: Color
+    let endColor: Color
+
     let onFinished: () -> Void
 
     var body: some View {
@@ -22,7 +25,7 @@ struct ProgressTimer: View {
             Circle()
                 .trim(from: 0, to: progress)
                 .stroke(
-                    progress < 1 ? Color.yellow : Color.green,
+                    progress < 1 ? startColor : endColor,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))

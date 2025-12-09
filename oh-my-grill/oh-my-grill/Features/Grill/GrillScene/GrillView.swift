@@ -15,7 +15,6 @@ struct GrillView: View {
     
     @State var currentGrill: SKIngredient?
     
-    @State private var showTimer = false
     @State private var grilledIngredient: SKIngredient?
     @State private var isSecondSide = false
     
@@ -47,20 +46,23 @@ struct GrillView: View {
                 .ignoresSafeArea()
                 
                 // MARK: Timer Overlay
-                if showTimer {
+                if vm.session.showTimer {
                     ProgressTimer(
                         duration: 3.0,
-                        lineWidth: 12
+                        lineWidth: 12,
+                        startColor: isSecondSide ? .green : .yellow,
+                        endColor: isSecondSide ? .red : .green
                     ) {
-                        showTimer = false
+                        vm.session.showTimer = false
                         
                         if !isSecondSide {
                             currentGrill = grilledIngredient
                             vm.nextView = true
                             isSecondSide = true
                         } else {
-                            grilledIngredient?.ingredient.state = .cooked
-                            grilledIngredient?.isCooking = false
+                            if grilledIngredient?.ingredient.state != .cheesed {
+                                    grilledIngredient?.ingredient.state = .burnt
+                                }
                         }
                     }
                     .frame(width: 30, height: 30)
@@ -85,7 +87,7 @@ struct GrillView: View {
             }
             .sheet(isPresented: $vm.nextView, onDismiss: secondSideTimer) {
                 if let ingredient = currentGrill {
-                    GrillMiniGameView(vm: GrillMiniGameViewModel(session: vm.session, ingredient: ingredient))
+                    GrillMiniGameView(vm: GrillMiniGameViewModel(session: vm.session, ingredient: ingredient)).interactiveDismissDisabled()
                 }
             }
         }
@@ -96,16 +98,15 @@ struct GrillView: View {
         grilledIngredient = ingredient
         isSecondSide = false
         grilledIngredient?.isCooking = true
-        showTimer = true
+        vm.session.showTimer = true
     }
     
     func secondSideTimer() {
         guard let ingredient = grilledIngredient,
               ingredient.ingredient.state == .cooked
         else { return }
-
-        showTimer = true
-        grilledIngredient?.isCooking = true
+        grilledIngredient?.isCooking = false
+        vm.session.showTimer = true
     }
 
 }

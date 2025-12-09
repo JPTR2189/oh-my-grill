@@ -374,6 +374,8 @@ extension GrillScene {
                         let scaleDown = SKAction.scale(to: 1.0, duration: 0.1)
                         burgerNode.run(.sequence([scaleUp, scaleDown]))
                         
+                        session.showTimer = false
+                        
                         releaseIngredientFromGrill(burgerNode)
                         
                         entityManager?.remove(entity: entity)
