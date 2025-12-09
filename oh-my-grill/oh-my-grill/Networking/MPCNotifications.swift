@@ -19,4 +19,5 @@ public enum MPCNotifications: Codable {
     case gameMove(GamePayload)
     case assignment(AssignmentPayload)
     case ingredient(IngredientPayload)
+    case roundFinished
 }
