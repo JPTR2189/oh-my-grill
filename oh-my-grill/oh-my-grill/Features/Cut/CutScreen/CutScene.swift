@@ -101,6 +101,8 @@ public final class CutScene: SKScene {
                 print(entity)
             }
         }
+        
+        addBounds()
     }
 
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -119,15 +121,8 @@ public final class CutScene: SKScene {
         for entity in entities {
             if let node = entity.component(ofType: GKSKNodeComponent.self)?.node
             {
-                if let side = exitSide(for: node) {
-                    print(
-                        "Ball from \(session.myID.rawValue) exited to the \(side)"
-                    )
-                    sendParcelHorizontally(
-                        side: side,
-                        node: node,
-                        entity: entity
-                    )
+                if node.position.y >= frame.maxY {
+                    sendParcelHorizontally(side: .none, node: node, entity: entity)
                 }
             }
         }
