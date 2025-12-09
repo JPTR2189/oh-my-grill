@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FeedbackView: View {
     let round: Round
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         ZStack {
@@ -51,7 +52,8 @@ struct FeedbackView: View {
                 HStack {
                     Spacer()
                     Button {
-                        // action
+                        HapticManager.instance.notification(type: .success)
+                        UIApplication.shared.switchToHome(view: HomeView())
                     } label: {
                         Image(systemName: "chevron.right")
                             .font(.title2)
