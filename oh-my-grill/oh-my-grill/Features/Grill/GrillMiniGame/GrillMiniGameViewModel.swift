@@ -8,6 +8,7 @@
 import Foundation
 import Observation
 import CoreMotion
+internal import UIKit
 
 @Observable
 class GrillMiniGameViewModel {
@@ -69,6 +70,7 @@ class GrillMiniGameViewModel {
         lastRoll = roll
 
         if abs(accumulated) >= (230 * .pi / 180) {
+            HapticManager.instance.notification(type: .success)
             didRotate360 = true
             service.stopUpdates()
         }

@@ -29,9 +29,10 @@ struct NewGameView: View {
                     VStack(spacing: 8) {
                         Text("NEW MATCH")
                             .font(.custom("Toy Block Maestro", size: 55))
-                        Text(
-                            "Type your name and enter a existing match/create\nyour own to start playing!"
-                        )
+                        VStack {
+                            Text("Type your name and enter a existing match/create")
+                            Text("our own to start playing!")
+                        }
                         .font(.custom("Poppins Regular", size: 15))
                         .multilineTextAlignment(.center)
                     }
@@ -68,7 +69,7 @@ struct NewGameView: View {
                                 )
                                 gotoHost = true
                             },
-                            text: "Create",
+                            text: String(localized: "Create"),
                             paddingHorizontal: 38
                         )
                         
@@ -80,7 +81,7 @@ struct NewGameView: View {
                                 )
                                 gotoJoin = true
                             },
-                            text: "Join",
+                            text: String(localized: "Join"),
                         )
                     }
                 }

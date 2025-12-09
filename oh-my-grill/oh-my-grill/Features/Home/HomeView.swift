@@ -32,7 +32,7 @@ struct HomeView: View {
                         buttonAction: {
                             start = true
                         },
-                        text: "Start Game"
+                        text: String(localized: "Start Game")
                     )
                 }
                 .padding(.top, 30)

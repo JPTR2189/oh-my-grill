@@ -63,7 +63,7 @@ struct HostView: View {
                     
                     ButtonComponent (
                         buttonAction: { vc.startGame() },
-                        text: "START GAME",
+                        text: String(localized: "START GAME"),
                         isDisabled: vc.players != vc.playerLimit
                     )
                     

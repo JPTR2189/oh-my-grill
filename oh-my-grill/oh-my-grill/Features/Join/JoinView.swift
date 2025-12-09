@@ -111,7 +111,7 @@ struct JoinView: View {
                         buttonAction: {
                             vc.tryToJoin(withPassword: vc.rawPassword)
                         },
-                        text: "Start Game",
+                        text: String(localized: "Start Game"),
                     )
                 }
             }
