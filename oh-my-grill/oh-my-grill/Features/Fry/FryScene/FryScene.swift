@@ -209,6 +209,9 @@ extension FryScene {
         node: SKNode,
         entity: GKEntity
     ) {
+        guard let skIngredient = entity as? SKIngredient else {
+                return
+            }
         entityManager?.remove(entity: entity)
         let dxFromCenter = node.position.x - frame.midX
         let mirroredDx = -dxFromCenter
@@ -216,7 +219,8 @@ extension FryScene {
         let payload = GamePayload(
             x: mirroredDx,
             y: node.position.y,
-            side: side
+            side: side,
+            ingredient: skIngredient.ingredient
         )
 
         session.sendParcelHorizontally(payload)

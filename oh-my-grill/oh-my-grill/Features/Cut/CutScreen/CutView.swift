@@ -58,6 +58,7 @@ struct CutView: View {
             .sheet(isPresented: $vm.nextView) {
                 if let ingredient = currentCut {
                     CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
+                        .interactiveDismissDisabled()
                 }
             }
         }
