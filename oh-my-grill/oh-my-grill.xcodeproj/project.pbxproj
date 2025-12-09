@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A3CCDF622EE88F9200FD6DF1 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A3CCDF612EE88F9200FD6DF1 /* Localizable.xcstrings */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		FF842C882ECD072B0029963B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A3CCDF612EE88F9200FD6DF1 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		FF842C7A2ECD072A0029963B /* oh-my-grill.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "oh-my-grill.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF842C872ECD072B0029963B /* oh-my-grillTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "oh-my-grillTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF842C912ECD072B0029963B /* oh-my-grillUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "oh-my-grillUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +93,7 @@
 		FF842C712ECD072A0029963B = {
 			isa = PBXGroup;
 			children = (
+				A3CCDF612EE88F9200FD6DF1 /* Localizable.xcstrings */,
 				FF842C7C2ECD072A0029963B /* oh-my-grill */,
 				FF842C8A2ECD072B0029963B /* oh-my-grillTests */,
 				FF842C942ECD072B0029963B /* oh-my-grillUITests */,
@@ -205,6 +211,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"pt-BR",
 			);
 			mainGroup = FF842C712ECD072A0029963B;
 			minimizedProjectReferenceProxies = 1;
@@ -225,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3CCDF622EE88F9200FD6DF1 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +350,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -399,6 +408,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -410,7 +420,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = PZH5AQ9Q86;
+				DEVELOPMENT_TEAM = 35TR9MZ343;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "oh-my-grill/Info.plist";
@@ -448,7 +458,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = PZH5AQ9Q86;
+				DEVELOPMENT_TEAM = 35TR9MZ343;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "oh-my-grill/Info.plist";

@@ -9,7 +9,6 @@ import CoreMotion
 import Foundation
 import Combine
 import SwiftUI
-import UIKit
 
 @Observable
 class CutMiniGameViewModel: CutMiniGameViewModelProtocol {
