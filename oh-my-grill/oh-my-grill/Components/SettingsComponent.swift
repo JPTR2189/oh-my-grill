@@ -32,7 +32,7 @@ struct SettingsComponent: View {
             
             
             type.text
-                .foregroundStyle(.white)
+                .foregroundStyle(.texasBlack)
         }
         
     }
