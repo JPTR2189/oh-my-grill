@@ -11,9 +11,10 @@ struct RoundNumber: View {
     let round: Round
 
     var body: some View {
-        VStack(alignment: .center, spacing: 8) {
+        VStack(alignment: .center, spacing: 2) {
             Text("Round")
                 .font(.custom("Poppins", size: 16))
+                .fontWeight(.semibold)
                 .foregroundStyle(.texasBeige)
             Text("\(round.number)")
                 .font(.custom("Toy Block Maestro", size: 60))
@@ -32,5 +33,5 @@ struct RoundNumber: View {
 }
 
 #Preview {
-    RoundNumber(round: Round(number: 1, minPoints: 1000))
+    RoundNumber(round: Round(number: 2, minPoints: 1000))
 }

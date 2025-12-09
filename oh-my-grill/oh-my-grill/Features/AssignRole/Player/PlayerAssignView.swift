@@ -73,8 +73,6 @@ struct PlayerAssignView: View {
             .fullScreenCover(isPresented: $nextView) {
                 if let session = vm.gameSession {
                     ChefView(vm: ChefViewModel(session: session))
-                    //GrillView(vm: GrillViewModel(session: session))
-                    //CutView(vm: CutViewModel(session: session))
                 }
             }
         }
