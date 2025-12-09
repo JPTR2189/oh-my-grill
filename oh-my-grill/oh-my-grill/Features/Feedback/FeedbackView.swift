@@ -9,8 +9,7 @@ import SwiftUI
 
 struct FeedbackView: View {
     let round: Round
-    @Environment(\.dismiss) var dismiss
-
+    
     var body: some View {
         ZStack {
             // MARK: Background

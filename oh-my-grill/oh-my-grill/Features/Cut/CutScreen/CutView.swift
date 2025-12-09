@@ -17,6 +17,8 @@ struct CutView: View {
     
     @State var firstEntry: Bool
     
+    @State private var goToFeedback = false
+    
     let initialScene: CutScene?
     
     init(vm: CutViewModel, entry: Bool = false) {
@@ -52,13 +54,18 @@ struct CutView: View {
             }
             .ignoresSafeArea()
             .onAppear {
+                vm.session.setNotificationHandler(self)
                 initialScene?.onKnifeCollision = startMiniGame(_:)
-                
             }
             .sheet(isPresented: $vm.nextView) {
                 if let ingredient = currentCut {
                     CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
                         .interactiveDismissDisabled()
+                }
+            }
+            .navigationDestination(isPresented: $goToFeedback) {
+                if let round = vm.session.finishedRound {
+                    FeedbackView(round: round)
                 }
             }
         }
@@ -68,5 +75,17 @@ struct CutView: View {
     func startMiniGame(_ ingredient: SKIngredient) {
         currentCut = ingredient
         vm.nextView = true
+    }
+}
+
+extension CutView: MPCNotificationDelegate {
+    func notify(_ notification: MPCNotifications) {
+        switch notification {
+        case .roundFinished:
+            vm.session.finishRound()
+            goToFeedback = true
+        default:
+            break
+        }
     }
 }

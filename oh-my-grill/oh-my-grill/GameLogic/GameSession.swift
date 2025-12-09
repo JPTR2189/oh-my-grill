@@ -114,8 +114,8 @@ public final class GameSession {
         @MainActor
         private func roundDidFinish(_ round: Round) {
             finishedRound = round
-    
             orderTimer?.invalidate()
+            sendNotification(.roundFinished)
         }
     
     
@@ -124,6 +124,8 @@ public final class GameSession {
             round.invalidateTimer()
             round.getFeedback()
             orderTimer?.invalidate()
+            
+            finishedRound = round
         }
 }
 

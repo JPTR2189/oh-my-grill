@@ -20,6 +20,8 @@ struct GrillView: View {
     
     @State var firstEntry: Bool
     
+    @State private var goToFeedback = false
+    
     let initialScene: GrillScene?
     
     init(vm: GrillViewModel, entry: Bool = false) {
@@ -32,7 +34,7 @@ struct GrillView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack{
             ZStack (alignment: .topTrailing) {
                 
                 // MARK: Sprite Scene
@@ -61,8 +63,8 @@ struct GrillView: View {
                             isSecondSide = true
                         } else {
                             if grilledIngredient?.ingredient.state != .cheesed {
-                                    grilledIngredient?.ingredient.state = .burnt
-                                }
+                                grilledIngredient?.ingredient.state = .burnt
+                            }
                         }
                     }
                     .frame(width: 30, height: 30)
@@ -82,7 +84,7 @@ struct GrillView: View {
             }
             .ignoresSafeArea()
             .onAppear {
-//                vm.session.setNotificationHandler(self)
+                vm.session.setNotificationHandler(self)
                 initialScene?.onGrillCollision = startMiniGame(_:)
             }
             .sheet(isPresented: $vm.nextView, onDismiss: secondSideTimer) {
@@ -90,8 +92,12 @@ struct GrillView: View {
                     GrillMiniGameView(vm: GrillMiniGameViewModel(session: vm.session, ingredient: ingredient)).interactiveDismissDisabled()
                 }
             }
+            .navigationDestination(isPresented: $goToFeedback) {
+                if let round = vm.session.finishedRound {
+                    FeedbackView(round: round)
+                }
+            }
         }
-        
     }
     
     func startMiniGame(_ ingredient: SKIngredient) {
@@ -108,7 +114,19 @@ struct GrillView: View {
         grilledIngredient?.isCooking = false
         vm.session.showTimer = true
     }
+}
 
+
+extension GrillView: MPCNotificationDelegate {
+    func notify(_ notification: MPCNotifications) {
+        switch notification {
+        case .roundFinished:
+            vm.session.finishRound()
+            goToFeedback = true
+        default:
+            break
+        }
+    }
 }
 
 //#Preview {
