@@ -8,10 +8,10 @@
 import SpriteKit
 import GameplayKit
 
-public final class ChefScene: SKScene {
+public final class ChaosChefScene: SKScene {
     // MARK: Properties
     
-    private var viewModel = ChefSceneViewModel()
+    private var viewModel = ChaosChefSceneViewModel()
     private var session: GameSession
     
     // Entity manager
@@ -23,19 +23,6 @@ public final class ChefScene: SKScene {
     private var isDragging = false
     private var currentDrag: GKEntity?
     private var targetPoint: CGPoint?
-    
-    // Ingredients table Node
-    private let ingredientsTableNode: SKSpriteNode = SKSpriteNode(
-        imageNamed: "ingredientsTable"
-    )
-    
-    // Ingredient spawning point
-    private var topBunSpawnPoint: CGPoint {
-        return CGPoint(x: frame.minX + 200, y: frame.minY + 80)
-    }
-    private var bottomBunSpawnPoint: CGPoint {
-        return CGPoint(x: frame.minX + 80, y: frame.minY + 80)
-    }
     
     // Trash Can Node
     private let trashCanNode: SKSpriteNode = SKSpriteNode(imageNamed: "trashCan")
@@ -112,24 +99,9 @@ public final class ChefScene: SKScene {
 //            dropIngredient(ing)
 //        }
         
-        
-        //MARK: Ingredients table
-        
         self.entityManager = EntityManager(scene: self)
         
         print("First entry on CutScene")
-        
-        ingredientsTableNode.name = "ingredientsTable"
-        ingredientsTableNode.position = CGPoint(
-            x: frame.minX + 100,
-            y: frame.minY + 30
-        )
-        ingredientsTableNode.zPosition = 1
-        ingredientsTableNode.xScale = -1
-        addChild(ingredientsTableNode)
-        
-        replenishIngredient(type: .burger)
-        replenishIngredient(type: .cheese)
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -140,68 +112,6 @@ public final class ChefScene: SKScene {
     
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
-        
-        replenishIngredient(type: .topBun)
-        replenishIngredient(type: .bottomBun)
-        
-    }
-    
-    private func replenishIngredient(type: IngredientType) {
-
-        let point: CGPoint
-        switch type {
-        case .topBun:
-            point = topBunSpawnPoint
-        case .bottomBun:
-            point = bottomBunSpawnPoint
-        default:
-            return
-        }
-        let entities = entityManager?.getEntities() ?? []
-
-        let ingredientExists = entities.contains { entity in
-            if let node = entity.component(ofType: GKSKNodeComponent.self)?
-                .node,
-                node.name == type.rawValue
-            {
-                return true
-            }
-            return false
-        }
-
-        if ingredientExists {
-            return
-        }
-
-        let ingredientToSpawn = Ingredient(type: type, state: .base)
-        let ingredientNode = SKIngredient(for: ingredientToSpawn)
-        ingredientNode.setPosition(to: point)
-
-        guard
-            let node = ingredientNode.component(ofType: GKSKNodeComponent.self)?
-                .node
-        else {
-            return
-        }
-
-        node.name = type.rawValue
-        node.zPosition = 5
-        node.alpha = 0.0
-
-        let initialScale = node.xScale
-        
-        node.xScale = 0.3
-        node.yScale = 0.3
-
-        let fadeInAction = SKAction.fadeIn(withDuration: 0.3)
-        let scaleUpAction = SKAction.scale(to: initialScale, duration: 0.3)
-        let spawnAnimation = SKAction.group([fadeInAction, scaleUpAction])
-
-        entityManager?.add(entity: ingredientNode)
-
-        print("REPLANISHING")
-
-        node.run(spawnAnimation)
     }
     
     public func spawnIngredient(_ ingredient: Ingredient) {
@@ -263,7 +173,7 @@ public final class ChefScene: SKScene {
 }
 
 // MARK: - Auxiliar Funcs
-extension ChefScene {
+extension ChaosChefScene {
     private func exitSide(for node: SKNode, minExitVelocity velocity: CGFloat = 1) -> EdgeSide? {
         guard let body = node.physicsBody else { return nil }
         
@@ -303,7 +213,7 @@ extension ChefScene {
 }
 
 // MARK: - Touch Input & Drag Mechanics
-extension ChefScene {
+extension ChaosChefScene {
     
     override public func touchesBegan(
         _ touches: Set<UITouch>,
@@ -434,7 +344,7 @@ extension ChefScene {
 }
 
 // MARK: - Contact delegate
-extension ChefScene: SKPhysicsContactDelegate {
+extension ChaosChefScene: SKPhysicsContactDelegate {
     
     public func didBegin(_ contact: SKPhysicsContact) {
         let bodyA = contact.bodyA
@@ -447,7 +357,6 @@ extension ChefScene: SKPhysicsContactDelegate {
                let ingredient = nodeB.entity as? SKIngredient,
                let managet = entityManager {
                 plate.stackIngredient(ingredient, manager: managet)
-                HapticManager.instance.notification(type: .success)
             }
         }
         
