@@ -98,6 +98,12 @@ struct ChaosGrillView: View {
                     FeedbackView(round: round)
                 }
             }
+            .onAppear {
+                scene.startSpawning()
+            }
+            .onDisappear {
+                scene.stopSpawning()
+            }
         }
     }
     

@@ -30,6 +30,7 @@ public final class ChaosChefScene: SKScene {
     // Background node
     private let backgroundNode = SKSpriteNode(imageNamed: "chefBackground")
     
+
     // Ingredient spawning
     private var isSpawning: Bool = false
     private let spawningInterval: TimeInterval = 3 // 10
@@ -56,7 +57,7 @@ public final class ChaosChefScene: SKScene {
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
         
-        addBounds(withGateway: true)
+        addChaosBounds(withGateway: true)
         
         physicsWorld.contactDelegate = self
 

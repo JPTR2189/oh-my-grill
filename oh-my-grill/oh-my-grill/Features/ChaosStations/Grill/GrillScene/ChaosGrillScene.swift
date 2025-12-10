@@ -29,6 +29,47 @@ public final class ChaosGrillScene: SKScene {
     // Background node
     private let backgroundNode = SKSpriteNode(imageNamed: "backgroundStation")
     
+    // Ingredient spawning
+    private var isSpawning: Bool = false
+    private let spawningInterval: TimeInterval = 3 // 10
+    private let spawnerKey: String = "ingredientSpawner"
+    
+    public func startSpawning() {
+        isSpawning = true
+        
+        let wait = SKAction.wait(forDuration: spawningInterval)
+        let spawn = SKAction.run { [weak self] in
+            guard let self = self, self.isSpawning else { return }
+            self.dropRandomIngredient()
+        }
+        
+        let sequence = SKAction.sequence([spawn, wait])
+        let forever = SKAction.repeatForever(sequence)
+        
+        self.run(forever, withKey: spawnerKey)
+    }
+    
+    public func stopSpawning() {
+        isSpawning = false
+        self.removeAction(forKey: spawnerKey)
+    }
+    
+    private func dropRandomIngredient() {
+        let ingredient = Ingredient.getRandom()
+        
+        dropIngredient(ingredient)
+    }
+    
+    func dropIngredient(_ ing: Ingredient) {
+        let x: CGFloat = CGFloat.random(in: (frame.minX + 20)...(frame.maxX - 20))
+        let y: CGFloat = frame.maxY
+        let point = CGPoint(x: x, y: y)
+        let ingredientNode = SKIngredient(for: ing)
+        ingredientNode.setPosition(to: point)
+        entityManager?.add(entity: ingredientNode)
+        ingredientNode.body?.applyForce(.init(dx: 0, dy: -20000))
+    }
+    
     //MARK: Initializers
     public init(
         size: CGSize,
@@ -79,7 +120,7 @@ public final class ChaosGrillScene: SKScene {
             }
         }
         
-        addBounds()
+        addChaosBounds()
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {

@@ -83,7 +83,7 @@ struct ChaosChefView: View {
         }
 
         .onAppear {
-//            scene.startSpawning()
+            scene.startSpawning()
 //            scene.dropBurger()
             vm.session.setNotificationHandler(self)
             vm.startGame()

@@ -68,6 +68,12 @@ struct ChaosCutView: View {
                     FeedbackView(round: round)
                 }
             }
+            .onAppear {
+                scene.startSpawning()
+            }
+            .onDisappear {
+                scene.stopSpawning()
+            }
         }
         
     }
