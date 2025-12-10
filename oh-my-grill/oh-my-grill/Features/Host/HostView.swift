@@ -44,6 +44,7 @@ struct HostView: View {
                     VStack(spacing: 8) {
                         Text("ROOM CODE")
                             .font(.custom("Toy Block Maestro", size: 55))
+                            .accessibilityIdentifier("hostTitle")
                         Text(
                             "Share the room code so your friends can join!"
                         )

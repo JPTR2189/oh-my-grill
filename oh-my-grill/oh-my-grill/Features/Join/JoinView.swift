@@ -33,6 +33,7 @@ struct JoinView: View {
                     VStack(spacing: 8) {
                         Text("Enter the game")
                             .font(.custom("Toy Block Maestro", size: 40))
+                            .accessibilityIdentifier("joinTitle")
                         Text(
                             "Enter the room code to start the game."
                         )
