@@ -29,6 +29,7 @@ struct NewGameView: View {
                     VStack(spacing: 8) {
                         Text("NEW MATCH")
                             .font(.custom("Toy Block Maestro", size: 55))
+                            .accessibilityIdentifier("newGameTitle")
                         VStack {
                             Text("Type your name and enter a existing match/create")
                             Text("our own to start playing!")
@@ -38,10 +39,11 @@ struct NewGameView: View {
                     }
                     .foregroundColor(.texasBlack)
                     
-            TextField(
+                    TextField(
                         "USERNAME",
                         text: $viewModel.username
                     )
+                    .accessibilityIdentifier("USERNAME")
                     .font(.custom("Toy Block Maestro", size: 23))
                     .foregroundStyle(.white)
                     .tint(.texasWhite)
@@ -72,6 +74,7 @@ struct NewGameView: View {
                             text: String(localized: "Create"),
                             paddingHorizontal: 38
                         )
+                        .accessibilityIdentifier("hostButton")
                         
                         ButtonComponent (
                             buttonAction: {
@@ -83,6 +86,7 @@ struct NewGameView: View {
                             },
                             text: String(localized: "Join"),
                         )
+                        .accessibilityIdentifier("joinButton")
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

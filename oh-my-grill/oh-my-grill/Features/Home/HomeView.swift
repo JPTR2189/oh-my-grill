@@ -57,6 +57,7 @@ struct HomeView: View {
                         },
                         text: String(localized: "Start Game")
                     )
+                    .accessibilityIdentifier("startGameButton")
                 }
                 .padding(.top, 30)
                 
