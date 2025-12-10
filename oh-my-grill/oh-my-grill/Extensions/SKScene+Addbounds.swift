@@ -55,4 +55,40 @@ extension SKScene {
             addChild(gatewayNode)
         }
     }
+    
+    func addChaosBounds(withGateway: Bool = false) {
+        let thickness: CGFloat = 2
+        
+        let bottomNode = SKNode()
+        bottomNode.position = CGPoint(x: frame.midX, y: frame.minY)
+        bottomNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
+        bottomNode.physicsBody?.isDynamic = false
+        bottomNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+        bottomNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+        bottomNode.physicsBody?.contactTestBitMask = 0
+        addChild(bottomNode)
+        
+        if withGateway  {
+            if withGateway {
+                let gatewayNode = SKNode()
+                gatewayNode.name = "gateway"
+                gatewayNode.position = CGPoint(x: frame.midX, y: frame.maxY)
+                gatewayNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
+                gatewayNode.physicsBody?.isDynamic = false
+                gatewayNode.physicsBody?.categoryBitMask = PhysicsCategory.gateWay
+                gatewayNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel | PhysicsCategory.burger
+                gatewayNode.physicsBody?.contactTestBitMask = PhysicsCategory.burger
+                addChild(gatewayNode)
+            }
+        } else {
+            let topNode = SKNode()
+                topNode.position = CGPoint(x: frame.midX, y: frame.maxY)
+                topNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
+                topNode.physicsBody?.isDynamic = false
+                topNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+                topNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
+                topNode.physicsBody?.contactTestBitMask = 0
+                addChild(topNode)
+        }
+    }
 }
