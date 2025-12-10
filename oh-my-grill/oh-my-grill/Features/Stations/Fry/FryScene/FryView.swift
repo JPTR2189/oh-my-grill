@@ -81,7 +81,8 @@ struct FryView: View {
 extension FryView: MPCNotificationDelegate {
     func notify(_ notification: MPCNotifications) {
         switch notification {
-        case .roundFinished:
+        case .roundFinished(let payload):
+            vm.session.currentRound?.points = payload.points
             vm.session.finishRound()
             goToFeedback = true
         default:

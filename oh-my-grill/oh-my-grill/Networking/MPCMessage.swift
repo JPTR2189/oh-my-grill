@@ -45,3 +45,8 @@ public struct AssignmentPayload: Codable {
 public struct IngredientPayload: Codable {
     public let ingredient: Ingredient
 }
+
+// Used to notify player that the round ended
+public struct RoundEndedPayload: Codable {
+    public let points: Int
+}
