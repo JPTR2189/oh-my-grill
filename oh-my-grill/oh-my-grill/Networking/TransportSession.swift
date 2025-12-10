@@ -31,7 +31,7 @@ public final class TransportSession: NSObject, ObservableObject,
     fileprivate var peerName: String
     public var passwordLength: Int = 4
     // MARK: VOLTA PRA 4 ANTES DE SUBIRRRRRRRR
-    public var playersNumber: Int = 3
+    public var playersNumber: Int = 4
     
 
     // HMAC
