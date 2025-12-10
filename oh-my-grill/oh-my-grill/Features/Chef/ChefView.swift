@@ -61,6 +61,7 @@ struct ChefView: View {
 
                     if let round = vm.round {
                         RoundInfo(round: round)
+                            .disabled(true)
                     }
                 }
 //                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
