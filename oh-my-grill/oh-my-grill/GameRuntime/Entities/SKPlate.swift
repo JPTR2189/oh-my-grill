@@ -1,0 +1,149 @@
+//
+//  SKPlate.swift
+//  oh-my-grill
+//
+//  Created by João Pedro Teixeira de Carvalho on 02/12/25.
+//
+
+import Foundation
+import SpriteKit
+import GameplayKit
+
+public class SKPlate: GKEntity {
+    
+    let bodySize: CGFloat = 30
+    
+    var ready: Bool = false
+    
+    let rootNode = SKNode()
+    let plateSprite = SKSpriteNode(imageNamed: "plate")
+    
+    var node: SKNode? {
+        component(ofType: GKSKNodeComponent.self)?.node
+    }
+    
+    var body: SKPhysicsBody? {
+        node?.physicsBody
+    }
+    
+    var stack: [SKIngredient] = []
+    
+    let baseOffset: CGFloat = 15
+    let stackingOffset: CGFloat = 8
+    
+    override init() {
+        super.init()
+        
+        plateSprite.setScale(3.5)
+        rootNode.addChild(plateSprite)
+        
+        rootNode.zPosition = -1
+        
+        rootNode.name = "plate"
+        
+        rootNode.physicsBody = SKPhysicsBody(circleOfRadius: bodySize)
+        rootNode.physicsBody?.affectedByGravity = false
+        rootNode.physicsBody?.isDynamic = false
+        rootNode.physicsBody?.categoryBitMask = PhysicsCategory.plate
+        rootNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel | PhysicsCategory.wall | PhysicsCategory.gateWay
+        rootNode.physicsBody?.contactTestBitMask = PhysicsCategory.parcel
+        rootNode.physicsBody?.linearDamping = 7
+        rootNode.physicsBody?.angularDamping = 7
+        
+        rootNode.zPosition = 0
+        
+        addComponent(GKSKNodeComponent(node: rootNode))
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func stackIngredient(_ ingredient: SKIngredient, manager: EntityManager) {
+
+        /* Preconditions */
+        // Extracting plate node
+        guard let plateNode = node else {
+//            print("Critical error on SKPlate: Couldnt find SKNode")
+            return
+        }
+        
+        // Extracting ingredient node
+        guard let ingredientNode = ingredient.node
+        else {
+//            print("Couldnt extract node frm ingredient")
+            return
+        }
+        
+        // Verifying for bottom bun to start stack
+        guard !(stack.count == 0 && ingredient.ingredient.type != .bottomBun)
+        else {
+//            print("Bottom bun needed to start stacking")
+            return
+        }
+        
+        // Cant stack potatoes
+        guard ingredient.ingredient.type != .potato
+        else {
+//            print("Cant stack potatoes")
+            return
+        }
+        
+        // Stack ended with top bun
+        if let lastType = stack.last?.ingredient.type {
+            guard lastType != .topBun else {
+//                print("Cant stack after a top bun")
+                return
+            }
+        }
+        /***/
+        
+        
+        ingredient.removeComponent(ofType: DraggableComponent.self)
+        
+        
+        if let body = ingredientNode.physicsBody {
+            body.categoryBitMask = 0
+            body.collisionBitMask = 0
+            body.contactTestBitMask = 0
+            body.isDynamic = false
+            body.angularVelocity = 0
+        }
+        
+        
+        let offset: CGFloat = baseOffset + CGFloat(stack.count) * stackingOffset
+        
+        var targetPosition: CGPoint = plateNode.position
+        targetPosition.y += offset
+        
+        let moveAction = SKAction.move(to: targetPosition, duration: 0.0)
+        ingredientNode.run(moveAction)
+
+        ingredientNode.zPosition = CGFloat(stack.count) + 10
+        
+        
+        stack.append(ingredient)
+        
+        
+        guard ingredient.ingredient.type == .topBun
+        else { return }
+        
+        let burger = SKBurger(fromStack: stack)
+        
+        if let burgerNode = burger.node {
+            burgerNode.position = plateNode.position
+            manager.add(entity: burger)
+        }
+        
+        for ing in stack {
+            manager.remove(entity: ing)
+        }
+        stack.removeAll()
+        
+        return
+    }
+}
+
+extension SKPlate {
+    static let name = "plate"
+}
