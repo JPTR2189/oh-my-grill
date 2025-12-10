@@ -1,5 +1,5 @@
 //
-//  FryView.swift
+//  CutView.swift
 //  oh-my-grill
 //
 //  Created by Maria Santellano on 27/11/25.
@@ -8,23 +8,23 @@
 import SwiftUI
 import SpriteKit
 
-struct FryView: View {
+struct ChaosCutView: View {
     
-    @State var vm: FryViewModelProtocol
-    @State var scene: FryScene
+    @State var vm: ChaosCutViewModel
+    @State var scene: ChaosCutScene
     
-    @State var currentFry: SKIngredient?
+    @State var currentCut: SKIngredient?
     
     @State var firstEntry: Bool
     
     @State private var goToFeedback = false
     
-    let initialScene: FryScene?
+    let initialScene: ChaosCutScene?
     
-    init(vm: FryViewModelProtocol, entry: Bool = false) {
+    init(vm: ChaosCutViewModel, entry: Bool = false) {
         self.vm = vm
         self.firstEntry = entry
-        self.initialScene = FryScene(size: .init(width: 800, height: 800), session: vm.session)
+        self.initialScene = ChaosCutScene(size: .init(width: 800, height: 800), session: vm.session)
         _scene = State(wrappedValue: initialScene!)
     }
     
@@ -55,11 +55,11 @@ struct FryView: View {
             .ignoresSafeArea()
             .onAppear {
                 vm.session.setNotificationHandler(self)
-                initialScene?.onFryerCollision = startMiniGame(_:)
+                initialScene?.onKnifeCollision = startMiniGame(_:)
             }
             .sheet(isPresented: $vm.nextView) {
-                if let ingredient = currentFry {
-                    FryMinigameView(viewModel: FryMinigameViewModel(session: vm.session), ingredient: ingredient)
+                if let ingredient = currentCut {
+                    CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
                         .interactiveDismissDisabled()
                 }
             }
@@ -68,20 +68,27 @@ struct FryView: View {
                     FeedbackView(round: round)
                 }
             }
+            .onAppear {
+                scene.startSpawning()
+            }
+            .onDisappear {
+                scene.stopSpawning()
+            }
         }
         
     }
     
     func startMiniGame(_ ingredient: SKIngredient) {
-        currentFry = ingredient
+        currentCut = ingredient
         vm.nextView = true
     }
 }
 
-extension FryView: MPCNotificationDelegate {
+extension ChaosCutView: MPCNotificationDelegate {
     func notify(_ notification: MPCNotifications) {
         switch notification {
-        case .roundFinished:
+        case .roundFinished(let payload):
+            vm.session.currentRound?.points = payload.points
             vm.session.finishRound()
             goToFeedback = true
         default:

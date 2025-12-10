@@ -15,12 +15,35 @@ struct HomeView: View {
         
         NavigationStack {
             ZStack(alignment: .center) {
-                //MARK: Fundo
+                
+                // MARK: Fundo
                 Image(.backgroundOut)
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-               
+                
+                // MARK: Botão de configuração
+                
+                VStack{
+                    HStack{
+                        Spacer()
+                        
+                        NavigationLink {
+                            SettingsView()
+                                .navigationBarBackButtonHidden(true)
+                        } label: {
+                            SettingsButtonComponent()
+                                
+                        }
+                        
+                        .simultaneousGesture(TapGesture().onEnded {
+                            HapticManager.instance.notification(type: .success)
+                        })
+                    }
+                    
+                    Spacer()
+                }
+                
                 //MARK: Conteúdo
                 VStack(spacing: 25) {
                     Image(.logo)
@@ -34,11 +57,28 @@ struct HomeView: View {
                         },
                         text: String(localized: "Start Game")
                     )
+                    .accessibilityIdentifier("startGameButton")
                 }
                 .padding(.top, 30)
+                
+                
             }
             .onAppear {
-                SoundManager.instance.playMusic(type: .menu)
+                if  UserDefaults.standard.object(forKey: "isFirstTime") == nil {
+                    
+                    
+                    UserDefaults.standard.set(false, forKey: "isFirstTime")
+                    SoundManager.instance.playMusic(type: .menu)
+
+                    
+                }
+                
+                else {
+                    if UserDefaults.standard.bool(forKey: "isMusicOn") {
+                        SoundManager.instance.playMusic(type: .menu)
+                    }
+                    
+                }
             }
             .navigationDestination(isPresented: $start) {
                 NewGameView(viewModel: NewGameViewModel())

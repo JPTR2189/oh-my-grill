@@ -65,6 +65,7 @@ struct ChefView: View {
                     }
                 }
 //                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .allowsHitTesting(false)
             }
             .ignoresSafeArea()
 

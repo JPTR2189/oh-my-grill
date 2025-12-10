@@ -447,6 +447,7 @@ extension ChefScene: SKPhysicsContactDelegate {
                let ingredient = nodeB.entity as? SKIngredient,
                let managet = entityManager {
                 plate.stackIngredient(ingredient, manager: managet)
+                HapticManager.instance.notification(type: .success)
             }
         }
         
