@@ -27,6 +27,11 @@ final class HostAssignViewModel: ObservableObject, HostAssignViewModelProtocol {
                 dict[pair.key.displayName] = pair.value
             }
 
+            print("\nSending assignment update")
+            print("From: \(oldValue.map{ ($0.key, $0.value) })")
+            print("To: \(assignedRoles.map{ ($0.key, $0.value) })")
+            
+            
             let payload = AssignmentPayload(playerByRole: rolesByID)
             transport.send(.assignment(payload))
         }

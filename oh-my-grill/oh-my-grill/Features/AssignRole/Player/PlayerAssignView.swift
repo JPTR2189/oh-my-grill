@@ -17,6 +17,8 @@ struct PlayerAssignView: View {
     
     @State private var nextView: Bool = false
     
+    @State private var refreshID: UUID = UUID()
+    
     var body: some View {
         NavigationStack {
             ZStack(alignment: .center) {
@@ -97,6 +99,7 @@ struct PlayerAssignView: View {
         .onAppear {
             vm.transport.setNotificationHandler(self)
         }
+        .id(refreshID)
     }
 }
 
@@ -112,6 +115,7 @@ extension PlayerAssignView: MPCNotificationDelegate {
         case .assignment(let payload):
             print(payload.playerByRole)
             vm.assignedRoles = payload.playerByRole
+            refreshID = UUID()
             
         default: break
         }
