@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsComponent: View {
     
     let type: SettingsButtonType
+    let active: Bool
     
     var body: some View {
         
@@ -17,7 +18,7 @@ struct SettingsComponent: View {
         VStack(spacing: 24) {
             RoundedRectangle(cornerRadius: 18)
                 .frame(width: 100, height: 90)
-                .foregroundStyle(.accent)
+                .foregroundStyle(active ? .accent : .gray)
                 .background(
                     RoundedRectangle(cornerRadius: 18)
                         .frame(width: 100, height: 90)
@@ -27,6 +28,7 @@ struct SettingsComponent: View {
                 .overlay(
                     type.image
                         .font(.system(size: 36))
+                        .foregroundStyle(.white)
                         
                 )
             
@@ -65,5 +67,5 @@ enum SettingsButtonType {
 }
 
 #Preview {
-    SettingsComponent(type: .haptics)
+    SettingsComponent(type: .haptics, active: false)
 }

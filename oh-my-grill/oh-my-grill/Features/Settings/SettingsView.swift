@@ -8,6 +8,15 @@
 import SwiftUI
 
 struct SettingsView: View {
+    
+    // SAVE MUSIC STATE
+    @AppStorage("isMusicOn") var isMusicOn: Bool = true
+    
+    // SAVE HAPTICS STATE
+    @AppStorage("isHapticsOn") var isHapticsOn: Bool = true
+
+    
+    
     var body: some View {
         
         ZStack {
@@ -40,8 +49,36 @@ struct SettingsView: View {
                 
                 // (BUTTONS)
                 HStack(spacing: 40){
-                    SettingsComponent(type: .music)
-                    SettingsComponent(type: .haptics)
+                    Button(action: {
+                        
+                        isMusicOn.toggle()
+                        
+                        SoundManager.instance.toogleMusic(isOn: isMusicOn, musicType: .game)
+                        SoundManager.instance.toogleMusic(isOn: isMusicOn, musicType: .menu)
+                        
+                        
+                        HapticManager.instance.notification(type: .success)
+                        
+                        
+                    }) {
+                        SettingsComponent(type: .music, active: isMusicOn)
+                        
+                            
+                    }
+                    
+                    Button(action: {
+                        
+                        isHapticsOn.toggle()
+                        
+                        if isHapticsOn {
+                            HapticManager.instance.notification(type: .success)
+                        }
+                        
+                    }) {
+                        SettingsComponent(type: .haptics, active: isHapticsOn)
+                            
+                            
+                    }
                 }
             }
             
