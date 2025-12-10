@@ -48,4 +48,16 @@ class SoundManager {
         player?.stop()
         currentMusic = nil
     }
+    
+    func toogleMusic(isOn: Bool, musicType: MusicType) {
+        
+        if isOn {
+            playMusic(type: musicType)
+        }
+        
+        else {
+            stopMusic()
+        }
+        
+    }
 }
