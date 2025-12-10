@@ -72,7 +72,25 @@ struct PlayerAssignView: View {
             .navigationBarBackButtonHidden(true)
             .fullScreenCover(isPresented: $nextView) {
                 if let session = vm.gameSession {
-                    ChefView(vm: ChefViewModel(session: session))
+                    
+                    if let role = vm.gameSession?.myRole {
+                        switch role {
+                        case .chef:
+                            ChefView(vm: ChefViewModel(session: session))
+                            
+                        case .cuttingBoard:
+                            CutView(vm: CutViewModel(session: session))
+                            
+                        case .grill:
+                            GrillView(vm: GrillViewModel(session: session))
+                            
+                        case .fryer:
+                            FryView(vm: FryViewModel(session: session))
+                            
+                        case .notSet:
+                            EmptyView()
+                        }
+                    }
                 }
             }
         }

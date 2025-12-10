@@ -24,6 +24,19 @@ public final class ChefScene: SKScene {
     private var currentDrag: GKEntity?
     private var targetPoint: CGPoint?
     
+    // Ingredients table Node
+    private let ingredientsTableNode: SKSpriteNode = SKSpriteNode(
+        imageNamed: "ingredientsTable"
+    )
+    
+    // Ingredient spawning point
+    private var topBunSpawnPoint: CGPoint {
+        return CGPoint(x: frame.minX + 200, y: frame.minY + 80)
+    }
+    private var bottomBunSpawnPoint: CGPoint {
+        return CGPoint(x: frame.minX + 80, y: frame.minY + 80)
+    }
+    
     // Trash Can Node
     private let trashCanNode: SKSpriteNode = SKSpriteNode(imageNamed: "trashCan")
     
@@ -56,7 +69,7 @@ public final class ChefScene: SKScene {
         self.size = view.bounds.size
         self.scaleMode = .resizeFill
         
-        addBounds()
+        addBounds(withGateway: true)
         
         physicsWorld.contactDelegate = self
 
@@ -82,21 +95,41 @@ public final class ChefScene: SKScene {
         // Plate
         let plate = SKPlate()
         self.plate = plate
-        let centerPoint: CGPoint = .init(x: frame.midX, y: (frame.maxY / 3))
+        let centerPoint: CGPoint = .init(x: (frame.maxX / 3) * 2, y: (frame.maxY / 3))
         plate.node?.position = centerPoint
         entityManager?.add(entity: plate)
         
         
         // Test
-        let initialIngs: [Ingredient] = [
-            .init(type: .bottomBun, state: .base),
-            .init(type: .burger, state: .base),
-            .init(type: .topBun, state: .base),
-        ]
+//        let initialIngs: [Ingredient] = [
+//            .init(type: .bottomBun, state: .base),
+//            .init(type: .topBun, state: .base),
+//            .init(type: .bottomBun, state: .base),
+//            .init(type: .topBun, state: .base),
+//        ]
         
-        for ing in initialIngs {
-            dropIngredient(ing)
-        }
+//        for ing in initialIngs {
+//            dropIngredient(ing)
+//        }
+        
+        
+        //MARK: Ingredients table
+        
+        self.entityManager = EntityManager(scene: self)
+        
+        print("First entry on CutScene")
+        
+        ingredientsTableNode.name = "ingredientsTable"
+        ingredientsTableNode.position = CGPoint(
+            x: frame.minX + 100,
+            y: frame.minY + 30
+        )
+        ingredientsTableNode.zPosition = 1
+        ingredientsTableNode.xScale = -1
+        addChild(ingredientsTableNode)
+        
+        replenishIngredient(type: .burger)
+        replenishIngredient(type: .cheese)
     }
     
     override public func didChangeSize(_ oldSize: CGSize) {
@@ -108,23 +141,79 @@ public final class ChefScene: SKScene {
     public override func update(_ currentTime: TimeInterval) {
         handleMovementUpdate()
         
+        replenishIngredient(type: .topBun)
+        replenishIngredient(type: .bottomBun)
         
     }
     
-    public func spawnBall(at point: CGPoint, goingTo side: EdgeSide) {
-        let ball = Ball()
-        ball.setPosition(to: point)
-        entityManager?.add(entity: ball)
-        let direction: CGFloat = side == .right ? 1 : -1
-        ball.body?.applyForce(.init(dx: 10000 * direction, dy: 0))
+    private func replenishIngredient(type: IngredientType) {
+
+        let point: CGPoint
+        switch type {
+        case .topBun:
+            point = topBunSpawnPoint
+        case .bottomBun:
+            point = bottomBunSpawnPoint
+        default:
+            return
+        }
+        let entities = entityManager?.getEntities() ?? []
+
+        let ingredientExists = entities.contains { entity in
+            if let node = entity.component(ofType: GKSKNodeComponent.self)?
+                .node,
+                node.name == type.rawValue
+            {
+                return true
+            }
+            return false
+        }
+
+        if ingredientExists {
+            return
+        }
+
+        let ingredientToSpawn = Ingredient(type: type, state: .base)
+        let ingredientNode = SKIngredient(for: ingredientToSpawn)
+        ingredientNode.setPosition(to: point)
+
+        guard
+            let node = ingredientNode.component(ofType: GKSKNodeComponent.self)?
+                .node
+        else {
+            return
+        }
+
+        node.name = type.rawValue
+        node.zPosition = 5
+        node.alpha = 0.0
+
+        let initialScale = node.xScale
+        
+        node.xScale = 0.3
+        node.yScale = 0.3
+
+        let fadeInAction = SKAction.fadeIn(withDuration: 0.3)
+        let scaleUpAction = SKAction.scale(to: initialScale, duration: 0.3)
+        let spawnAnimation = SKAction.group([fadeInAction, scaleUpAction])
+
+        entityManager?.add(entity: ingredientNode)
+
+        print("REPLANISHING")
+
+        node.run(spawnAnimation)
     }
     
-    public func spawnIngredient(_ ingredient: Ingredient, at point: CGPoint, goingTo side: EdgeSide) {
+    public func spawnIngredient(_ ingredient: Ingredient) {
         let ingredient = SKIngredient(for: ingredient)
-        ingredient.setPosition(to: point)
+        
+        let x = frame.maxX / 3
+        let y = frame.minY + 30
+        
+        ingredient.setPosition(to: .init(x: x, y: y))
         entityManager?.add(entity: ingredient)
-        let direction: CGFloat = side == .right ? 1 : -1
-        ingredient.body?.applyForce(.init(dx: 7500 * direction, dy: 0))
+        
+        ingredient.body?.applyForce(.init(dx: 0, dy: 10000))
     }
     
     private func dropRandomIngredient() {
@@ -170,51 +259,6 @@ public final class ChefScene: SKScene {
     public func stopSpawning() {
         isSpawning = false
         self.removeAction(forKey: spawnerKey)
-    }
-    
-    private func addBounds() {
-        let thickness: CGFloat = 2
-
-        
-        let leftNode = SKNode()
-        leftNode.position = CGPoint(x: frame.minX, y: frame.midY)
-        leftNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: thickness, height: frame.height))
-        leftNode.physicsBody?.isDynamic = false
-        leftNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
-        leftNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
-        leftNode.physicsBody?.contactTestBitMask = 0
-        addChild(leftNode)
-
-        
-        let rightNode = SKNode()
-        rightNode.position = CGPoint(x: frame.maxX, y: frame.midY)
-        rightNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: thickness, height: frame.height))
-        rightNode.physicsBody?.isDynamic = false
-        rightNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
-        rightNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
-        rightNode.physicsBody?.contactTestBitMask = 0
-        addChild(rightNode)
-
-        
-        let bottomNode = SKNode()
-        bottomNode.position = CGPoint(x: frame.midX, y: frame.minY)
-        bottomNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
-        bottomNode.physicsBody?.isDynamic = false
-        bottomNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
-        bottomNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel
-        bottomNode.physicsBody?.contactTestBitMask = 0
-        addChild(bottomNode)
-        
-        
-        let gatewayNode = SKNode()
-        gatewayNode.name = "gateway"
-        gatewayNode.position = CGPoint(x: frame.midX, y: frame.maxY)
-        gatewayNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: thickness))
-        gatewayNode.physicsBody?.isDynamic = false
-        gatewayNode.physicsBody?.categoryBitMask = PhysicsCategory.gateWay
-        gatewayNode.physicsBody?.collisionBitMask = PhysicsCategory.parcel | PhysicsCategory.burger
-        gatewayNode.physicsBody?.contactTestBitMask = PhysicsCategory.burger
-        addChild(gatewayNode)
     }
 }
 
@@ -412,8 +456,10 @@ extension ChefScene: SKPhysicsContactDelegate {
                 print("Match found for burger: \(canGO)")
                 if canGO {
                     currentDrag = nil
+                    endDrag()
                     burger.body?.collisionBitMask = 0
-                    burger.body?.applyForce(.init(dx: 0, dy: 10000))
+                    burger.body?.velocity = .init(dx: 0, dy: 0)
+                    burger.body?.applyForce(.init(dx: 0, dy: 100000))
                 }
             }
         }

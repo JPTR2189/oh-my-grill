@@ -69,7 +69,6 @@ class FryMinigameViewModel: FryMinigameViewModelProtocol {
         
         else {
             potatoIsFried = true
-            HapticManager.instance.notification(type: .success)
         }
     }
     

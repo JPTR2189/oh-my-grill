@@ -76,6 +76,7 @@ struct GrillView: View {
                 VStack {
                     if let round = vm.round {
                         RoundNumber(round: round)
+                            .disabled(true)
                     }
                 }
                 .padding(.top, 0)
