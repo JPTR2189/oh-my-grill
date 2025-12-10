@@ -115,7 +115,8 @@ public final class GameSession {
         private func roundDidFinish(_ round: Round) {
             finishedRound = round
             orderTimer?.invalidate()
-            sendNotification(.roundFinished)
+            let payload = RoundEndedPayload(points: currentRound?.points ?? 0)
+            sendNotification(.roundFinished(payload))
         }
     
     
