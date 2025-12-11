@@ -1,0 +1,382 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@" : {
+      "shouldTranslate" : false
+    },
+    "%lld" : {
+      "shouldTranslate" : false
+    },
+    "%lld+" : {
+      "shouldTranslate" : false
+    },
+    "%lldx" : {
+      "shouldTranslate" : false
+    },
+    "1x" : {
+      "shouldTranslate" : false
+    },
+    "Add ball" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionar bola"
+          }
+        }
+      }
+    },
+    "Better luck and more speed next time." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mais sorte e rapidez na próxima vez!"
+          }
+        }
+      }
+    },
+    "Choose your game mode." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha o modo de jogo."
+          }
+        }
+      }
+    },
+    "Combo" : {
+      "shouldTranslate" : false
+    },
+    "Connected: %lld / %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Connected: %1$lld / %2$lld"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conectado: %1$lld / %2$lld"
+          }
+        }
+      }
+    },
+    "Create" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Criar"
+          }
+        }
+      }
+    },
+    "Customize the game to your liking for the best experience." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customize o jogo conforme sua preferência para uma melhor experiência."
+          }
+        }
+      }
+    },
+    "Enter the game" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entre no jogo"
+          }
+        }
+      }
+    },
+    "Enter the room code to start the game." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digite o código da sala para começar o jogo."
+          }
+        }
+      }
+    },
+    "Fast Cut" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corte Rápido"
+          }
+        }
+      }
+    },
+    "FRY THE POTATOES" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frite as Batatas"
+          }
+        }
+      }
+    },
+    "Grill the meat" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grelhe a carne"
+          }
+        }
+      }
+    },
+    "Haptics" : {
+      "shouldTranslate" : false
+    },
+    "Join" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrar"
+          }
+        }
+      }
+    },
+    "Keep it up and do it faster and faster." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha o ritmo e acelere ainda mais!"
+          }
+        }
+      }
+    },
+    "Lobby" : {
+      "shouldTranslate" : false
+    },
+    "Make a cut moviment with your phone" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faça um movimento de corte com seu celular"
+          }
+        }
+      }
+    },
+    "MODE" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MODO"
+          }
+        }
+      }
+    },
+    "Music" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Música"
+          }
+        }
+      }
+    },
+    "NEW MATCH" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NOVA PARTIDA"
+          }
+        }
+      }
+    },
+    "Players:  %lld / %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Players:  %1$lld / %2$lld"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jogadores:  %1$lld / %2$lld"
+          }
+        }
+      }
+    },
+    "ROOM CODE" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CÓDIGO DA SALA"
+          }
+        }
+      }
+    },
+    "Rotate your phone to cook your meat." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gire seu celular para grelhar a carne. "
+          }
+        }
+      }
+    },
+    "Round" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Round"
+          }
+        }
+      }
+    },
+    "Round %lld completed" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Round %lld completo"
+          }
+        }
+      }
+    },
+    "Round %lld failed" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Round %lld falhou"
+          }
+        }
+      }
+    },
+    "SETTINGS" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CONFIGURAÇÕES"
+          }
+        }
+      }
+    },
+    "Share the room code so your friends can join!" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartilhe o código da sala com seus amigos para eles entrarem!"
+          }
+        }
+      }
+    },
+    "Sound FX" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Efeitos Sonoros "
+          }
+        }
+      }
+    },
+    "Start Game" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar Partida"
+          }
+        }
+      }
+    },
+    "START GAME" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "INICIAR PARTIDA"
+          }
+        }
+      }
+    },
+    "Tilt your phone and fry the potatoes, being careful not to burn them." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incline seu celular e frite as batatas, mas tome cuidado para não queimá-las."
+          }
+        }
+      }
+    },
+    "Type your name and enter an existing match or create" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digite seu nome e o entre em uma sala ou crie"
+          }
+        }
+      }
+    },
+    "USERNAME" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NOME"
+          }
+        }
+      }
+    },
+    "Wait for host define your function" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espero o host definir sua função"
+          }
+        }
+      }
+    },
+    "Wait for the host to start the game!" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espero o host iniciar a partida!"
+          }
+        }
+      }
+    },
+    "your own to start playing!" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "a sua própria para começar a jogar!"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

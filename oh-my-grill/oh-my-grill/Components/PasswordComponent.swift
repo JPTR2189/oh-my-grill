@@ -48,6 +48,7 @@ struct PasswordComponent: View {
     var body: some View {
         Button {
             HapticManager.instance.notification(type: .success)
+            SoundEffectsManager.instance.playClick()
 
             self.buttonAction?()
         } label: {

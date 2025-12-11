@@ -47,7 +47,7 @@ enum SettingsButtonType {
     var image: Image {
         switch self {
             
-        case .sound: Image(systemName: "music.note.fill")
+        case .sound: Image(systemName: "music.note")
             
         case .music: Image(systemName: "speaker.wave.3.fill")
             
