@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "PãoBaixo 12.png",
+      "filename" : "normal.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "PãoBaixo 13.png",
+      "filename" : "normal 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "PãoBaixo 11.png",
+      "filename" : "normal 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
