@@ -138,6 +138,16 @@
     "Haptics" : {
       "shouldTranslate" : false
     },
+    "Host left the game" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Host saiu do jogo"
+          }
+        }
+      }
+    },
     "Join" : {
       "localizations" : {
         "pt-BR" : {
@@ -197,6 +207,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "NOVA PARTIDA"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
@@ -313,6 +333,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "INICIAR PARTIDA"
+          }
+        }
+      }
+    },
+    "The host lost connection to the game. Sending you to the home page" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Host perdeu a conexão com o jogo. Levando você para o menu"
           }
         }
       }

@@ -5,33 +5,37 @@
 //  Created by Maria Santellano on 27/11/25.
 //
 
-import SwiftUI
 import SpriteKit
+import SwiftUI
 
 struct CutView: View {
-    
+
     @State var vm: CutViewModel
     @State var scene: CutScene
-    
+
     @State var currentCut: SKIngredient?
-    
+
     @State var firstEntry: Bool
-    
+
     @State private var goToFeedback = false
-    
+    @State private var showAlert = false
+
     let initialScene: CutScene?
-    
+
     init(vm: CutViewModel, entry: Bool = false) {
         self.vm = vm
         self.firstEntry = entry
-        self.initialScene = CutScene(size: .init(width: 800, height: 800), session: vm.session)
+        self.initialScene = CutScene(
+            size: .init(width: 800, height: 800),
+            session: vm.session
+        )
         _scene = State(wrappedValue: initialScene!)
     }
-    
+
     var body: some View {
         NavigationStack {
-            ZStack (alignment: .topTrailing) {
-                
+            ZStack(alignment: .topTrailing) {
+
                 // MARK: Sprite Scene
                 SpriteView(
                     scene: {
@@ -41,7 +45,7 @@ struct CutView: View {
                     options: [.ignoresSiblingOrder]
                 )
                 .ignoresSafeArea()
-                
+
                 //MARK: Round Info
                 VStack {
                     if let round = vm.round {
@@ -60,8 +64,11 @@ struct CutView: View {
             }
             .sheet(isPresented: $vm.nextView) {
                 if let ingredient = currentCut {
-                    CutMiniGameView(vm: CutMiniGameViewModel(session: vm.session), ingredient: ingredient)
-                        .interactiveDismissDisabled()
+                    CutMiniGameView(
+                        vm: CutMiniGameViewModel(session: vm.session),
+                        ingredient: ingredient
+                    )
+                    .interactiveDismissDisabled()
                 }
             }
             .navigationDestination(isPresented: $goToFeedback) {
@@ -69,10 +76,19 @@ struct CutView: View {
                     FeedbackView(round: round, session: vm.session)
                 }
             }
+            .alert("Host left the game", isPresented: $showAlert) {
+                Button("OK", role: .cancel) {
+                    UIApplication.shared.switchToHome(view: HomeView())
+                }
+            } message: {
+                Text(
+                    "The host lost connection to the game. Sending you to the home page"
+                )
+            }
         }
-        
+
     }
-    
+
     func startMiniGame(_ ingredient: SKIngredient) {
         currentCut = ingredient
         vm.nextView = true
@@ -86,6 +102,11 @@ extension CutView: MPCNotificationDelegate {
             vm.session.currentRound?.points = payload.points
             vm.session.finishRound()
             goToFeedback = true
+
+        case .endGame:
+            print("End game")
+            showAlert = true
+
         default:
             break
         }

@@ -64,7 +64,6 @@ struct ChefView: View {
                             .disabled(true)
                     }
                 }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .allowsHitTesting(false)
             }
             .ignoresSafeArea()
@@ -90,6 +89,7 @@ struct ChefView: View {
         }
         .onDisappear {
             scene.stopSpawning()
+            vm.session.sendNotification(.endGame)
         }
         .ignoresSafeArea(.all)
     }

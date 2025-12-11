@@ -121,7 +121,7 @@ public final class CutScene: SKScene {
         for entity in entities {
             if let node = entity.component(ofType: GKSKNodeComponent.self)?.node
             {
-                if node.position.y >= frame.maxY {
+                if node.calculateAccumulatedFrame().minY > frame.maxY {
                     sendParcelHorizontally(side: .none, node: node, entity: entity)
                 }
             }

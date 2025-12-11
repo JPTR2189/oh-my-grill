@@ -5,38 +5,42 @@
 //  Created by Barbara da Silva Dapper on 02/12/25.
 //
 
-import SwiftUI
 import SpriteKit
+import SwiftUI
 
 struct GrillView: View {
-    
+
     @State var vm: GrillViewModel
     @State var scene: GrillScene
-    
+
     @State var currentGrill: SKIngredient?
-    
+
     @State private var grilledIngredient: SKIngredient?
     @State private var isSecondSide = false
-    
+
     @State var firstEntry: Bool
-    
+
     @State private var goToFeedback = false
-    
+    @State private var showAlert = false
+
     let initialScene: GrillScene?
-    
+
     init(vm: GrillViewModel, entry: Bool = false) {
         self.vm = vm
         self.firstEntry = entry
-        self.initialScene = GrillScene(size: .init(width: 800, height: 800), session: vm.session)
-        
+        self.initialScene = GrillScene(
+            size: .init(width: 800, height: 800),
+            session: vm.session
+        )
+
         //Identifies the grill collision and calls the next scene
         _scene = State(wrappedValue: initialScene!)
     }
-    
+
     var body: some View {
-        NavigationStack{
-            ZStack (alignment: .topTrailing) {
-                
+        NavigationStack {
+            ZStack(alignment: .topTrailing) {
+
                 // MARK: Sprite Scene
                 SpriteView(
                     scene: {
@@ -46,7 +50,7 @@ struct GrillView: View {
                     options: [.ignoresSiblingOrder]
                 )
                 .ignoresSafeArea()
-                
+
                 // MARK: Timer Overlay
                 if vm.session.showTimer {
                     ProgressTimer(
@@ -56,7 +60,7 @@ struct GrillView: View {
                         endColor: isSecondSide ? .red : .green
                     ) {
                         vm.session.showTimer = false
-                        
+
                         if !isSecondSide {
                             currentGrill = grilledIngredient
                             vm.nextView = true
@@ -71,7 +75,7 @@ struct GrillView: View {
                     .padding(.top, 155)
                     .padding(.trailing, 340)
                 }
-                
+
                 //MARK: Round Info
                 VStack {
                     if let round = vm.round {
@@ -91,7 +95,12 @@ struct GrillView: View {
             }
             .sheet(isPresented: $vm.nextView, onDismiss: secondSideTimer) {
                 if let ingredient = currentGrill {
-                    GrillMiniGameView(vm: GrillMiniGameViewModel(session: vm.session, ingredient: ingredient)).interactiveDismissDisabled()
+                    GrillMiniGameView(
+                        vm: GrillMiniGameViewModel(
+                            session: vm.session,
+                            ingredient: ingredient
+                        )
+                    ).interactiveDismissDisabled()
                 }
             }
             .navigationDestination(isPresented: $goToFeedback) {
@@ -99,25 +108,33 @@ struct GrillView: View {
                     FeedbackView(round: round, session: vm.session)
                 }
             }
+            .alert("Host left the game", isPresented: $showAlert) {
+                Button("OK", role: .cancel) {
+                    UIApplication.shared.switchToHome(view: HomeView())
+                }
+            } message: {
+                Text(
+                    "The host lost connection to the game. Sending you to the home page"
+                )
+            }
         }
     }
-    
+
     func startMiniGame(_ ingredient: SKIngredient) {
         grilledIngredient = ingredient
         isSecondSide = false
         grilledIngredient?.isCooking = true
         vm.session.showTimer = true
     }
-    
+
     func secondSideTimer() {
         guard let ingredient = grilledIngredient,
-              ingredient.ingredient.state == .cooked
+            ingredient.ingredient.state == .cooked
         else { return }
         grilledIngredient?.isCooking = false
         vm.session.showTimer = true
     }
 }
-
 
 extension GrillView: MPCNotificationDelegate {
     func notify(_ notification: MPCNotifications) {
@@ -126,6 +143,11 @@ extension GrillView: MPCNotificationDelegate {
             vm.session.currentRound?.points = payload.points
             vm.session.finishRound()
             goToFeedback = true
+
+        case .endGame:
+            print("End game")
+            showAlert = true
+
         default:
             break
         }
