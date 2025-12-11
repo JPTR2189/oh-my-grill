@@ -9,13 +9,27 @@ import Foundation
 
 class OrdersService {
     
+    private var previousRound: Int = 1
     private var timer: Timer?
     private var secondsToSpawn: Int = 0
+    private var spawnInterval: Int = 10
     var delegate: OrdersServiceDelegateProtocol?
     private let generator: OrderGenerator = OrderGenerator()
     private var moreOrders: Int = 0
+    var session: GameSession
+    
+
 
     var orders: [Order] = []
+    
+    var currentRound: Int {
+        session.getRoundNumber
+    }
+
+    
+    init(session: GameSession) {
+        self.session = session
+    }
     
     func startTimer() {
         secondsToSpawn = 0
@@ -24,9 +38,22 @@ class OrdersService {
         
             guard let self else { return }
             
+            // Diminui o tempo de spawn a cada intervalo
+            if previousRound != currentRound {
+                
+                if spawnInterval > 4 {
+                    
+                    spawnInterval = max(4, spawnInterval - 2)
+                    
+                    
+                }
+                
+                previousRound = currentRound
+            }
+            
             self.secondsToSpawn += 1
             
-            if self.secondsToSpawn == 10{
+            if self.secondsToSpawn >= spawnInterval {
                 stopTimer()
                 startTimer()
                 

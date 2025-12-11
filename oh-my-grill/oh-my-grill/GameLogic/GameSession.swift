@@ -30,6 +30,9 @@ public final class GameSession {
     private let players: [PlayerID]
     private(set) var roles: [PlayerID: StationRole]
     
+    public var getRoundNumber: Int {
+        self.roundNumber
+    }
     
     public var myID: PlayerID {
         PlayerID(rawValue: transport.myPeerID.displayName)
