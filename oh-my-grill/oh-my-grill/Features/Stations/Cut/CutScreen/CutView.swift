@@ -48,6 +48,7 @@ struct CutView: View {
                         RoundNumber(round: round)
                     }
                 }
+                .allowsHitTesting(false)
                 .padding(.top, 0)
                 .padding(.trailing, 0)
                 .padding(.leading, 0)
