@@ -34,22 +34,12 @@ class OrdersService {
     func startTimer() {
         secondsToSpawn = 0
         
+        
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true,) {[weak self] _ in
         
             guard let self else { return }
             
-            // Diminui o tempo de spawn a cada intervalo
-            if previousRound != currentRound {
-                
-                if spawnInterval > 4 {
-                    
-                    spawnInterval = max(4, spawnInterval - 2)
-                    
-                    
-                }
-                
-                previousRound = currentRound
-            }
+           
             
             self.secondsToSpawn += 1
             
@@ -62,13 +52,26 @@ class OrdersService {
 
             }
   
+            
+        // Diminui o tempo de spawn a cada intervalo
+        if previousRound != currentRound {
+            
+            if spawnInterval > 4 && previousRound > 1{
+                
+                spawnInterval = max(4, spawnInterval - 2)
+                
+            }
+            
+            previousRound = currentRound
+        }
+        
+      
         }
         
     }
     
     func stopTimer() {
         timer?.invalidate()
-        timer = nil
     }
     
     func addOrder() {
@@ -95,6 +98,10 @@ class OrdersService {
     func updateOrders(orders: [Order], moreOrders: Int) {
         delegate?.updateOrders(orders, moreOrders)
         
+    }
+    
+    func clearOrdersList() {
+        orders.removeAll()
     }
     
     func removeExpiredOrder(for order: Order) {
