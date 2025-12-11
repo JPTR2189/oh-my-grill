@@ -124,8 +124,16 @@ struct FryMinigameView: View {
                 ingredient.ingredient.cook()
                 dismiss()
             }
-        .onChange(of: viewModel.session.finishedRound != nil) {
-            dismiss()
+        // MARK: Navigation
+        .navigationDestination(
+            isPresented: Binding(
+                get: { viewModel.session.finishedRound != nil },
+                set: { _ in viewModel.session.finishedRound = nil }
+            )
+        ) {
+            if let round = viewModel.session.finishedRound {
+                FeedbackView(round: round, session: viewModel.session)
+            }
         }
         
     

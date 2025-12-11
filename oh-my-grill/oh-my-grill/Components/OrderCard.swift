@@ -47,10 +47,18 @@ struct OrderCard: View {
                     let count = groupedIngredients[type]?.count ?? 0
                     
                     VStack(spacing: 2) { // mais coladinho
-                        Image("\(type.rawValue)-base")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 22, height: 22) // menor para caber numa linha
+                        
+                        if allowedTypes == [.burger] {
+                            Image("\(type.rawValue)-cheesed")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 22, height: 22)
+                        } else {
+                            Image("\(type.rawValue)-sliced")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 22, height: 22) // menor para caber numa linha
+                        }
                         
                         Text("\(count)x")
                             .font(.custom("Poppins Regular", size: 16))

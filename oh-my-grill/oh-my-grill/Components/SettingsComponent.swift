@@ -42,10 +42,12 @@ struct SettingsComponent: View {
 
 enum SettingsButtonType {
     
-    case music, haptics
+    case sound, music, haptics
 
     var image: Image {
         switch self {
+            
+        case .sound: Image(systemName: "music.note.fill")
             
         case .music: Image(systemName: "speaker.wave.3.fill")
             
@@ -57,6 +59,8 @@ enum SettingsButtonType {
     
     var text: Text {
         switch self {
+            
+        case .sound: Text("Sound FX")
             
         case .music: Text("Music")
             

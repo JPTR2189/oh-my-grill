@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    // SAVE SOUND STATE
+    @AppStorage("isSoundOn") var isSoundOn: Bool = true
+    
     // SAVE MUSIC STATE
     @AppStorage("isMusicOn") var isMusicOn: Bool = true
     
@@ -49,6 +52,20 @@ struct SettingsView: View {
                 
                 // (BUTTONS)
                 HStack(spacing: 40){
+                    
+                    Button(action: {
+                        isSoundOn.toggle()
+
+                        if isSoundOn {
+                            SoundEffectsManager.instance.playClick()
+                        }
+
+                        HapticManager.instance.notification(type: .success)
+                    }) {
+                        SettingsComponent(type: .sound, active: isSoundOn)
+                    }
+
+                    
                     Button(action: {
                         
                         isMusicOn.toggle()
@@ -56,7 +73,9 @@ struct SettingsView: View {
                         SoundManager.instance.toogleMusic(isOn: isMusicOn, musicType: .game)
                         SoundManager.instance.toogleMusic(isOn: isMusicOn, musicType: .menu)
                         
-                        
+                        if isSoundOn {
+                            SoundEffectsManager.instance.playClick()
+                        }
                         HapticManager.instance.notification(type: .success)
                         
                         
@@ -69,6 +88,10 @@ struct SettingsView: View {
                     Button(action: {
                         
                         isHapticsOn.toggle()
+                        
+                        if isSoundOn {
+                            SoundEffectsManager.instance.playClick()
+                        }
                         
                         if isHapticsOn {
                             HapticManager.instance.notification(type: .success)
