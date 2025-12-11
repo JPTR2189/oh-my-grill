@@ -33,7 +33,7 @@ public final class ChaosChefScene: SKScene {
 
     // Ingredient spawning
     private var isSpawning: Bool = false
-    private let spawningInterval: TimeInterval = 3 // 10
+    private let spawningInterval: TimeInterval = 6 // 10
     private let spawnerKey: String = "ingredientSpawner"
     
     // Plate node

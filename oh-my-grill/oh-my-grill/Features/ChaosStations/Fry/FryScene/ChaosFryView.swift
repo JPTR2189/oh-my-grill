@@ -46,11 +46,15 @@ struct ChaosFryView: View {
                 VStack {
                     if let round = vm.round {
                         RoundNumber(round: round)
+                            .disabled(true)
+
                     }
                 }
                 .padding(.top, 0)
                 .padding(.trailing, 0)
                 .padding(.leading, 0)
+                .allowsHitTesting(false)
+
             }
             .ignoresSafeArea()
             .onAppear {
