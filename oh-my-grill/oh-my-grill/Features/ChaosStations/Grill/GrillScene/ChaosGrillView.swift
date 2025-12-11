@@ -79,6 +79,7 @@ struct ChaosGrillView: View {
                             .disabled(true)
                     }
                 }
+                .allowsHitTesting(false)
                 .padding(.top, 0)
                 .padding(.trailing, 0)
                 .padding(.leading, 0)

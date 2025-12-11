@@ -78,6 +78,7 @@ struct GrillView: View {
                         RoundNumber(round: round)
                             .disabled(true)
                     }
+                        .allowsHitTesting(false)
                 }
                 .padding(.top, 0)
                 .padding(.trailing, 0)
