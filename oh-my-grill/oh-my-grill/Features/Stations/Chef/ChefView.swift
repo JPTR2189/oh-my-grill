@@ -81,16 +81,20 @@ struct ChefView: View {
                 }
             }
         }
-
+        .onChange(of: vm.session.getRoundNumber) {
+            vm.resetRound()
+        }
         .onAppear {
 //            scene.startSpawning()
 //            scene.dropBurger()
             vm.session.setNotificationHandler(self)
             vm.startGame()
+            
         }
         .onDisappear {
             scene.stopSpawning()
         }
+        
         .ignoresSafeArea(.all)
     }
 }

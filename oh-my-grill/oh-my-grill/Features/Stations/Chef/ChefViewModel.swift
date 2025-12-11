@@ -35,6 +35,12 @@ class ChefViewModel {
         self.service.addOrder()
     }
     
+    func resetRound() {
+        service.stopTimer()
+        service.clearOrdersList()
+        startGame()
+    }
+    
     public func check(_ burger: SKBurger) -> Bool {
         
         var hasMatch = false
