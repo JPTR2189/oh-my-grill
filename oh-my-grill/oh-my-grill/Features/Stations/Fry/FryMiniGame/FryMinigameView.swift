@@ -124,6 +124,11 @@ struct FryMinigameView: View {
                 ingredient.ingredient.cook()
                 dismiss()
             }
+        .onChange(of: viewModel.session.finishedRound != nil) {
+            dismiss()
+        }
+        
+    
         .onAppear {
             // Loop do Jogo
             Timer.scheduledTimer(withTimeInterval: 1.0/60.0, repeats: true) { _ in
@@ -135,6 +140,8 @@ struct FryMinigameView: View {
         .onDisappear {
             viewModel.sensorController.stopMotionUpdates()
         }
+        
+        
     }
 }
 

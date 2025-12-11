@@ -66,7 +66,7 @@ struct ChaosCutView: View {
             }
             .navigationDestination(isPresented: $goToFeedback) {
                 if let round = vm.session.finishedRound {
-                    FeedbackView(round: round)
+                    FeedbackView(round: round, session: vm.session)
                 }
             }
             .onAppear {

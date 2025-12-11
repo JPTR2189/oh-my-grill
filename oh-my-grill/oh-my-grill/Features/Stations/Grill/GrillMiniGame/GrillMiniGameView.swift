@@ -51,6 +51,18 @@ struct GrillMiniGameView: View {
                     dismiss()
                 }
             }
+            
+            // MARK: Navigation
+            .navigationDestination(
+                isPresented: Binding(
+                    get: { vm.session.finishedRound != nil },
+                    set: { _ in vm.session.finishedRound = nil }
+                )
+            ) {
+                if let round = vm.session.finishedRound {
+                    FeedbackView(round: round)
+                }
+            }
         }
     }
 }
