@@ -15,6 +15,7 @@ public enum MPCNotifications: Codable {
     case wrongPassword
     case accepted
     case refresh
+    case endGame
     case gameConfig(GameConfigPayload)
     case gameMove(GamePayload)
     case assignment(AssignmentPayload)
