@@ -38,6 +38,7 @@ struct HomeView: View {
                         
                         .simultaneousGesture(TapGesture().onEnded {
                             HapticManager.instance.notification(type: .success)
+                            SoundEffectsManager.instance.playClick()
                         })
                     }
                     
