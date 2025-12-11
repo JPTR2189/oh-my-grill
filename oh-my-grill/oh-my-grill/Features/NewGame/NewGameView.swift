@@ -31,8 +31,8 @@ struct NewGameView: View {
                             .font(.custom("Toy Block Maestro", size: 55))
                             .accessibilityIdentifier("newGameTitle")
                         VStack {
-                            Text("Type your name and enter a existing match/create")
-                            Text("our own to start playing!")
+                            Text("Type your name and enter an existing match or create")
+                            Text("your own to start playing!")
                         }
                         .font(.custom("Poppins Regular", size: 15))
                         .multilineTextAlignment(.center)
@@ -102,6 +102,9 @@ struct NewGameView: View {
                 if let transport = viewModel.transport {
                     JoinView(transport: transport)
                 }
+            }
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }
         .onDisappear {
