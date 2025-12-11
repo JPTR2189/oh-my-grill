@@ -69,7 +69,7 @@ class FryMinigameViewModel: FryMinigameViewModelProtocol {
         
         else {
             potatoIsFried = true
-            SoundEffectsManager.instance.playMiniGame()
+            SoundEffectsManager.instance.playSuccess()
         }
     }
     
