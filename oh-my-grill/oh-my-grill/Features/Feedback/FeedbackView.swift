@@ -23,12 +23,21 @@ struct FeedbackView: View {
             // MARK: Conteúdo
             VStack(alignment: .center, spacing: 24) {
                 VStack(alignment: .center, spacing: 8) {
-                    Text("Round \(round.number) completed")
-                        .font(.custom("Toy Block Maestro", size: 55))
-                        .foregroundStyle(.texasBlack)
-                    Text("Keep it up and do it faster and faster.")
-                        .font(.custom("Poppins Regular", size: 15))
-                        .foregroundStyle(.texasBlack)
+                    if round.feedback == .success {
+                        Text("Round \(round.number) completed")
+                            .font(.custom("Toy Block Maestro", size: 55))
+                            .foregroundStyle(.texasBlack)
+                        Text("Keep it up and do it faster and faster.")
+                            .font(.custom("Poppins Regular", size: 15))
+                            .foregroundStyle(.texasBlack)
+                    } else {
+                        Text("Round \(round.number) failed")
+                            .font(.custom("Toy Block Maestro", size: 55))
+                            .foregroundStyle(.texasBlack)
+                        Text("Better luck and more speed next time.")
+                            .font(.custom("Poppins Regular", size: 15))
+                            .foregroundStyle(.texasBlack)
+                    }
                 }
 
                 VStack(alignment: .center, spacing: 24) {
@@ -86,6 +95,13 @@ struct FeedbackView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            if round.feedback == .success {
+                SoundEffectsManager.instance.playSuccess()
+            } else {
+                SoundEffectsManager.instance.playFail()
+            }
+        }
     }
 }
 

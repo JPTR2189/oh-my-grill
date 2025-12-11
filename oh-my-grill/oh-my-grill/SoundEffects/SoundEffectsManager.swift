@@ -7,14 +7,19 @@
 
 import Foundation
 import AVFoundation
+import SwiftUI
 
 class SoundEffectsManager {
     static let instance = SoundEffectsManager()
 
+    @AppStorage("isSoundOn") private var isSoundOn: Bool = true
+
     private var player: AVAudioPlayer?
 
-    func playClick() {
-        guard let url = Bundle.main.url(forResource: "click", withExtension: "wav") else {
+    private func playSound(named name: String, ext: String = "wav") {
+        guard isSoundOn else { return }
+
+        guard let url = Bundle.main.url(forResource: name, withExtension: ext) else {
             print("Sound file not found")
             return
         }
@@ -27,49 +32,8 @@ class SoundEffectsManager {
             print("error playing sound: \(error)")
         }
     }
-    
-    func playMiniGame() {
-        guard let url = Bundle.main.url(forResource: "minigame", withExtension: "wav") else {
-            print("Sound file not found")
-            return
-        }
 
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.prepareToPlay()
-            player?.play()
-        } catch {
-            print("error playing sound: \(error)")
-        }
-    }
-    
-    func playSuccess() {
-        guard let url = Bundle.main.url(forResource: "success", withExtension: "wav") else {
-            print("Sound file not found")
-            return
-        }
-
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.prepareToPlay()
-            player?.play()
-        } catch {
-            print("error playing sound: \(error)")
-        }
-    }
-    
-    func playFail() {
-        guard let url = Bundle.main.url(forResource: "fail", withExtension: "wav") else {
-            print("Sound file not found")
-            return
-        }
-
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.prepareToPlay()
-            player?.play()
-        } catch {
-            print("error playing sound: \(error)")
-        }
-    }
+    func playClick() { playSound(named: "click") }
+    func playSuccess() { playSound(named: "success") }
+    func playFail() { playSound(named: "fail") }
 }
