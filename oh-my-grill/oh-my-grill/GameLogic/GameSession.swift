@@ -52,8 +52,6 @@ public final class GameSession {
     private var roundNumber: Int = 1
     public var finishedRound: Round?
     
-    //orders
-    private var orderTimer: Timer?
     
     //Grill
     var showTimer = false
@@ -114,7 +112,6 @@ public final class GameSession {
         @MainActor
         private func roundDidFinish(_ round: Round) {
             finishedRound = round
-            orderTimer?.invalidate()
             let payload = RoundEndedPayload(points: currentRound?.points ?? 0)
             sendNotification(.roundFinished(payload))
         }
@@ -124,7 +121,6 @@ public final class GameSession {
             guard let round = currentRound else { return }
             round.invalidateTimer()
             round.getFeedback()
-            orderTimer?.invalidate()
             
             finishedRound = round
         }
