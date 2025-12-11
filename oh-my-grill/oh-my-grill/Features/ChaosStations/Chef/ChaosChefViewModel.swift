@@ -15,10 +15,11 @@ class ChaosChefViewModel {
     var gameIsRunning = false
     
     private var delegate: OrdersServiceDelegateProtocol?
-    private var service: OrdersService = OrdersService()
+    private var service: OrdersService
 
     init(session: GameSession) {
         self.session = session
+        self.service = OrdersService(session: session)
         self.orders = []
         self.service.delegate = self
     }

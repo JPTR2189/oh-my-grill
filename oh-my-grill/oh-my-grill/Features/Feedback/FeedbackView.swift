@@ -9,6 +9,8 @@ import SwiftUI
 
 struct FeedbackView: View {
     let round: Round
+    let session: GameSession
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ZStack {
@@ -52,7 +54,8 @@ struct FeedbackView: View {
                     Spacer()
                     Button {
                         HapticManager.instance.notification(type: .success)
-                        UIApplication.shared.switchToHome(view: HomeView())
+                        session.startNewRound()
+                        dismiss()
                     } label: {
                         Image(systemName: "chevron.right")
                             .font(.title2)
