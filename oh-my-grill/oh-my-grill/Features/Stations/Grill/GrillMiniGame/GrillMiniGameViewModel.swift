@@ -71,7 +71,7 @@ class GrillMiniGameViewModel {
 
         if abs(accumulated) >= (230 * .pi / 180) {
             HapticManager.instance.notification(type: .success)
-            SoundEffectsManager.instance.playMiniGame()
+            SoundEffectsManager.instance.playSuccess()
             didRotate360 = true
             service.stopUpdates()
         }
