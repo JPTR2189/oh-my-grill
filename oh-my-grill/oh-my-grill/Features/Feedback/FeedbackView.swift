@@ -54,8 +54,14 @@ struct FeedbackView: View {
                     Spacer()
                     Button {
                         HapticManager.instance.notification(type: .success)
-                        session.startNewRound()
-                        dismiss()
+                        
+                        if round.points >= round.minPoints {
+                            session.startNewRound()
+                            dismiss()
+                        } else {
+                            UIApplication.shared.switchToHome(view: HomeView())
+                        }
+                        
                     } label: {
                         Image(systemName: "chevron.right")
                             .font(.title2)

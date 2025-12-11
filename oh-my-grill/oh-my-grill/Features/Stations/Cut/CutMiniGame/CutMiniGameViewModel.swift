@@ -76,6 +76,7 @@ class CutMiniGameViewModel: CutMiniGameViewModelProtocol {
                     self.gestureComplete = true
 
                     HapticManager.instance.notification(type: .success)
+                    SoundEffectsManager.instance.playMiniGame()
                 }
             }
         }

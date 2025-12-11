@@ -13,6 +13,7 @@ struct BackButtonComponent: View {
     var body: some View {
         Button {
             HapticManager.instance.notification(type: .success)
+            SoundEffectsManager.instance.playClick()
 
             dismiss()
         } label: {

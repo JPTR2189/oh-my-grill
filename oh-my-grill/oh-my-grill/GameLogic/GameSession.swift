@@ -96,7 +96,7 @@ public final class GameSession {
     }
     
     public func startNewRound() {
-            let minRequiredPoints = 150
+            let minRequiredPoints = 50
     
             let newRound = Round(
                 number: roundNumber,

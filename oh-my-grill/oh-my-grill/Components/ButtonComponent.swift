@@ -35,6 +35,7 @@ struct ButtonComponent: View {
         } else {
             Button {
                 HapticManager.instance.notification(type: .success)
+                SoundEffectsManager.instance.playClick()
                 
                 buttonAction()
             } label: {
